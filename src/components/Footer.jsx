@@ -1,6 +1,7 @@
 import React from 'react';
 import { Envelope, Phone, MapPin, InstagramLogo, YoutubeLogo, FacebookLogo, LinkedinLogo } from 'phosphor-react';
 import logoBraspexDark from '../assets/logo-braspex-dark.png'; // Usaremos esta versão do logo
+import logoBraspex from '../assets/logo-braspex.png'; // Logo padrão
 
 const Footer = () => {
   return (
@@ -9,9 +10,9 @@ const Footer = () => {
         {/* Coluna 1: Logo e Descrição */}
         <div className="col-span-1 md:col-span-2">
           <img 
-            src={logoBraspexDark} // Usando a versão escura que se destaca no fundo azul
+            src={logoBraspexDark} // Usando a versão escura para melhor contraste
             alt="BRASPEX Logo" 
-            className="h-20 w-auto mb-6" // Ajustado o tamanho da logo no rodapé
+            className="h-20 w-auto mb-6 drop-shadow-lg" // Adiciona leve sombra para destacar
           />
           <p className="text-gray-300 leading-relaxed max-w-md">
             A Braspex é uma empresa líder na industrialização de kits hidráulicos e sistemas de climatização,

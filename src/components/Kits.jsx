@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, CheckCircle, Drop, Wind, Gear, CaretLeft, CaretRight } from 'phosphor-react';
-import kitsbraspex from '../assets/kitsbraspex.png';
-import imagemppr from '../assets/imagemppr.jpg.png';
-import imagempert from '../assets/imagempert.png';
-import multicamadaairtecno from '../assets/multicamadaairtecno.png';
-import chassismetalicos from '../assets/chassismetalicos.png';
+// Imagens agora estão na pasta public
+const kitsbraspex = "/kitsbraspex.png";
+const imagemppr = "/imagemppr.png";
+const imagempert = "/imagempert.png";
+const multicamadaairtecno = "/multicamadaairtecno.png";
+const chassismetalicos = "/chassismetalicos.png";
 
 const Kits = () => {
   const [modalImage, setModalImage] = useState(null);
