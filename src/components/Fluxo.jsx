@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { 
   FileText, 
-  Settings, 
+  Gear, 
   Factory, 
   CheckCircle, 
   Truck, 
   Wrench,
   Clock
-} from 'lucide-react';
+} from 'phosphor-react';
 
 const Fluxo = () => {
   const [activeStep, setActiveStep] = useState(1);
@@ -16,7 +16,6 @@ const Fluxo = () => {
     {
       id: 1,
       icon: <FileText className="w-6 h-6" />,
-      emoji: "📋",
       title: "Recebimento do Projeto",
       shortTitle: "Projeto",
       content: {
@@ -33,8 +32,7 @@ const Fluxo = () => {
     },
     {
       id: 2,
-      icon: <Settings className="w-6 h-6" />,
-      emoji: "🔧",
+      icon: <Gear className="w-6 h-6" />,
       title: "Compatibilização Técnica",
       shortTitle: "Compatibilização",
       content: {
@@ -52,7 +50,6 @@ const Fluxo = () => {
     {
       id: 3,
       icon: <Factory className="w-6 h-6" />,
-      emoji: "🏭",
       title: "Produção em Fábrica",
       shortTitle: "Produção",
       content: {
@@ -70,7 +67,6 @@ const Fluxo = () => {
     {
       id: 4,
       icon: <CheckCircle className="w-6 h-6" />,
-      emoji: "✅",
       title: "Teste de Qualidade",
       shortTitle: "Testes",
       content: {
@@ -88,7 +84,6 @@ const Fluxo = () => {
     {
       id: 5,
       icon: <Truck className="w-6 h-6" />,
-      emoji: "🚚",
       title: "Entrega Rastreável",
       shortTitle: "Entrega",
       content: {

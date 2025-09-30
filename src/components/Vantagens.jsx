@@ -1,14 +1,14 @@
 import React from 'react';
 import { 
   Lock, 
-  Zap, 
+  Lightning, 
   Ruler, 
   Factory, 
   Wrench, 
   Recycle, 
   Users, 
   Target 
-} from 'lucide-react';
+} from 'phosphor-react';
 
 const Vantagens = () => {
   const vantagens = [
@@ -18,7 +18,7 @@ const Vantagens = () => {
       description: "Todos os componentes são rastreáveis e seguros"
     },
     {
-      icon: <Zap className="w-8 h-8" />,
+      icon: <Lightning className="w-8 h-8" />,
       title: "Agilidade",
       description: "Instalação até 3x mais rápida que sistemas convencionais"
     },

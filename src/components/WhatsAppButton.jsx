@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageSquare } from 'lucide-react'; // Ícone para o WhatsApp
+import { WhatsappLogo } from 'phosphor-react'; // Ícone para o WhatsApp
 
 const WhatsAppButton = () => {
   // Coloque aqui o número de WhatsApp da sua empresa
@@ -18,7 +18,7 @@ const WhatsAppButton = () => {
       className="fixed bottom-6 right-6 bg-[#25D366] text-white p-4 rounded-full shadow-lg hover:bg-[#128C7E] transition-all duration-300 hover:scale-110 z-50 flex items-center justify-center"
       title="Fale Conosco pelo WhatsApp"
     >
-      <MessageSquare className="w-8 h-8" />
+      <WhatsappLogo className="w-8 h-8" />
     </a>
   );
 };

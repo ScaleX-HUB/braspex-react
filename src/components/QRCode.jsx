@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import QRCodeLib from 'qrcode';
-import { Play, Smartphone } from 'lucide-react';
+import { Play, DeviceMobile } from 'phosphor-react';
 
 const QRCodeSection = () => {
   const canvasRef = useRef(null);
@@ -57,7 +57,7 @@ const QRCodeSection = () => {
           <div className="text-white max-w-md">
             <div className="flex items-center gap-4 mb-6">
               <div className="w-12 h-12 bg-[#FFD027] rounded-full flex items-center justify-center">
-                <Smartphone className="w-6 h-6 text-[#005563]" />
+                <DeviceMobile className="w-6 h-6 text-[#005563]" />
               </div>
               <div className="text-left">
                 <h3 className="text-xl font-bold mb-1">Como usar</h3>

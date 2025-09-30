@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Phone, MapPin, Instagram, Youtube, Facebook, Linkedin } from 'lucide-react';
+import { Envelope, Phone, MapPin, InstagramLogo, YoutubeLogo, FacebookLogo, LinkedinLogo } from 'phosphor-react';
 import logoBraspexDark from '../assets/logo-braspex-dark.png'; // Usaremos esta versão do logo
 
 const Footer = () => {
@@ -24,7 +24,7 @@ const Footer = () => {
           <h4 className="text-xl font-bold text-[#FFD027] mb-6">Contato</h4>
           <ul className="space-y-4 text-gray-300">
             <li className="flex items-center">
-              <Mail className="w-5 h-5 mr-3 text-gray-400" />
+              <Envelope className="w-5 h-5 mr-3 text-gray-400" />
               <a href="mailto:contato@braspex.com" className="hover:text-white transition-colors">contato@braspex.com</a>
             </li>
             <li className="flex items-center">
@@ -47,16 +47,13 @@ const Footer = () => {
           <h4 className="text-xl font-bold text-[#FFD027] mb-6">Redes Sociais</h4>
           <div className="flex space-x-4">
             <a href="https://www.instagram.com/braspexoficial/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#FFD027] transition-colors">
-              <Instagram className="w-7 h-7" />
+              <InstagramLogo className="w-7 h-7" />
             </a>
             <a href="https://www.youtube.com/@braspexoficial" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#FFD027] transition-colors">
-              <Youtube className="w-7 h-7" />
-            </a>
-            <a href="https://www.facebook.com/braspexoficial" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#FFD027] transition-colors">
-              <Facebook className="w-7 h-7" />
+              <YoutubeLogo className="w-7 h-7" />
             </a>
             <a href="https://www.linkedin.com/company/braspex/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#FFD027] transition-colors">
-              <Linkedin className="w-7 h-7" />
+              <LinkedinLogo className="w-7 h-7" />
             </a>
           </div>
         </div>
@@ -64,7 +61,7 @@ const Footer = () => {
 
       <div className="border-t border-gray-700 mt-16 pt-8 text-center text-gray-400">
         <p>&copy; {new Date().getFullYear()} Braspex. Todos os direitos reservados.</p>
-        <p className="mt-2 text-sm">Desenvolvido por Converseia.Tech</p>
+        <p className="mt-2 text-sm">Desenvolvido por ConverseIA Tech</p>
       </div>
     </footer>
   );

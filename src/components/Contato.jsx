@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, Globe, MapPin, Send, User, Building, MessageSquare } from 'lucide-react';
+import { Envelope, Phone, Globe, MapPin, PaperPlaneTilt, User, Buildings, ChatCircle } from 'phosphor-react';
 
 const Contato = () => {
   const [formData, setFormData] = useState({
@@ -36,29 +36,25 @@ const Contato = () => {
 
   const contactInfo = [
     {
-      icon: <Mail className="w-6 h-6" />,
-      emoji: "📧",
+      icon: <Envelope className="w-6 h-6" />,
       label: "E-mail",
       value: "braspexne@gmail.com ",
       href: "mailto:braspexne@gmail.com "
     },
     {
       icon: <Phone className="w-6 h-6" />,
-      emoji: "📞",
       label: "Telefone",
       value: "(81) 3342-1022",
       href: "http://wa.me/5581986431000"
     },
     {
       icon: <Globe className="w-6 h-6" />,
-      emoji: "🌐",
       label: "Website",
       value: "www.braspex.com.br",
       href: "https://www.braspexne.com.br"
     },
     {
       icon: <MapPin className="w-6 h-6" />,
-      emoji: "📍",
       label: "Endereço",
       value: "Porta Larga – Jaboatão dos Guararapes/PE",
       href: "https://share.google/fuX1aRpit49zobeYR"
@@ -161,7 +157,7 @@ const Contato = () => {
                     Empresa
                   </label>
                   <div className="relative">
-                    <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <Buildings className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <input
                       type="text"
                       id="empresa"
@@ -181,7 +177,7 @@ const Contato = () => {
                     E-mail *
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <Envelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <input
                       type="email"
                       id="email"
@@ -219,7 +215,7 @@ const Contato = () => {
                   Mensagem *
                 </label>
                 <div className="relative">
-                  <MessageSquare className="absolute left-3 top-4 text-gray-400 w-5 h-5" />
+                  <ChatCircle className="absolute left-3 top-4 text-gray-400 w-5 h-5" />
                   <textarea
                     id="mensagem"
                     name="mensagem"
@@ -237,7 +233,7 @@ const Contato = () => {
                 type="submit"
                 className="w-full bg-[#005563] text-white py-4 px-6 rounded-lg font-semibold hover:bg-[#007A8A] transition-all duration-300 flex items-center justify-center gap-3 hover:shadow-lg hover:-translate-y-0.5"
               >
-                <Send className="w-5 h-5" />
+                <PaperPlaneTilt className="w-5 h-5" />
                 Enviar Mensagem
               </button>
             </form>
