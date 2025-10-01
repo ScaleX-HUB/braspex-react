@@ -47,22 +47,6 @@ const Fluxo = () => {
       }
     },
     { 
-      id: 3, 
-      icon: <Factory className="w-7 h-7" />, 
-      shortTitle: "Produção", 
-      content: { 
-        title: "Produção em Fábrica",
-        timeframe: "5-10 dias úteis",
-        description: "Fabricação dos kits em ambiente controlado, seguindo rigorosos padrões de qualidade e utilizando equipamentos de última geração.",
-        items: [
-          "Ambiente controlado de produção",
-          "Equipamentos de alta precisão",
-          "Controle de qualidade contínuo",
-          "Rastreabilidade de componentes"
-        ]
-      }
-    },
-    { 
       id: 4, 
       icon: <CheckCircle className="w-7 h-7" />, 
       shortTitle: "Testes", 
@@ -75,6 +59,22 @@ const Fluxo = () => {
           "Verificação de conexões",
           "Checklist de qualidade",
           "Documentação técnica"
+        ]
+      }
+    },
+    { 
+      id: 3, 
+      icon: <Factory className="w-7 h-7" />, 
+      shortTitle: "Produção", 
+      content: { 
+        title: "Produção em Fábrica",
+        timeframe: "5-10 dias úteis",
+        description: "Fabricação dos kits em ambiente controlado, seguindo rigorosos padrões de qualidade e utilizando equipamentos de última geração.",
+        items: [
+          "Ambiente controlado de produção",
+          "Equipamentos de alta precisão",
+          "Controle de qualidade contínuo",
+          "Rastreabilidade de componentes"
         ]
       }
     },
@@ -174,36 +174,52 @@ const Fluxo = () => {
           ))}
         </div>
 
-        {/* Versão Mobile - Grid com 2 colunas */}
-        <div className="md:hidden grid grid-cols-2 gap-6 mb-12">
-          {steps.map((step) => (
-            <div key={step.id} className="flex flex-col items-center">
-              <button
-                onClick={() => setActiveStep(step.id)}
-                className={`flex flex-col items-center transition-all duration-300 relative z-10`}
-              >
-                <div
-                  className={`flex flex-col items-center justify-center rounded-full border-2 transition-all duration-500 ${
-                    activeStep === step.id
-                      ? 'w-20 h-20 bg-[#005563] border-[#005563] text-white shadow-xl scale-110'
-                      : 'w-16 h-16 bg-white border-gray-300 text-gray-400 hover:border-gray-400'
-                  }`}
+        {/* Versão Mobile - Grid com 2 colunas + linhas conectoras */}
+        <div className="md:hidden relative mb-12">
+          {/* SVG com linhas conectoras */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
+            {/* Projeto → Compatibilização (horizontal com espaçamento) */}
+            <line x1="35" y1="16.5" x2="65" y2="16.5" stroke="#d1d5db" strokeWidth="0.3" />
+            {/* Compatibilização → Produção (vertical com espaçamento) */}
+            <line x1="75" y1="26" x2="75" y2="40" stroke="#d1d5db" strokeWidth="0.3" />
+            {/* Produção → Testes (horizontal com espaçamento) */}
+            <line x1="65" y1="49.5" x2="35" y2="49.5" stroke="#d1d5db" strokeWidth="0.3" />
+            {/* Testes → Entrega (vertical com espaçamento) */}
+            <line x1="25" y1="59" x2="25" y2="73" stroke="#d1d5db" strokeWidth="0.3" />
+            {/* Entrega → Suporte (horizontal com espaçamento) */}
+            <line x1="35" y1="82.5" x2="65" y2="82.5" stroke="#d1d5db" strokeWidth="0.3" />
+          </svg>
+          
+          <div className="grid grid-cols-2 gap-6 relative z-10">
+            {steps.map((step) => (
+              <div key={step.id} className="flex flex-col items-center">
+                <button
+                  onClick={() => setActiveStep(step.id)}
+                  className={`flex flex-col items-center transition-all duration-300 relative z-10`}
                 >
-                  {React.cloneElement(step.icon, {
-                    className: activeStep === step.id ? "w-6 h-6 text-white" : "w-5 h-5 text-gray-500"
-                  })}
-                </div>
-                {/* Label abaixo sempre no mobile */}
-                <span className={`mt-3 text-center transition-all duration-300 ${
-                  activeStep === step.id 
-                    ? 'text-sm font-bold text-gray-800' 
-                    : 'text-xs font-semibold text-gray-600'
-                }`}>
-                  {step.shortTitle}
-                </span>
-              </button>
-            </div>
-          ))}
+                  <div
+                    className={`flex flex-col items-center justify-center rounded-full border-2 transition-all duration-500 ${
+                      activeStep === step.id
+                        ? 'w-20 h-20 bg-[#005563] border-[#005563] text-white shadow-xl scale-110'
+                        : 'w-16 h-16 bg-white border-gray-300 text-gray-400 hover:border-gray-400'
+                    }`}
+                  >
+                    {React.cloneElement(step.icon, {
+                      className: activeStep === step.id ? "w-6 h-6 text-white" : "w-5 h-5 text-gray-500"
+                    })}
+                  </div>
+                  {/* Label abaixo sempre no mobile */}
+                  <span className={`mt-3 text-center transition-all duration-300 ${
+                    activeStep === step.id 
+                      ? 'text-sm font-bold text-gray-800' 
+                      : 'text-xs font-semibold text-gray-600'
+                  }`}>
+                    {step.shortTitle}
+                  </span>
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Linha vertical fixa no meio do card - maior e mais para cima */}

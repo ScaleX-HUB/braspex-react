@@ -6,6 +6,8 @@ import parceria4 from '../assets/parceria4.png';
 import parceria5 from '../assets/parceria5.png';
 
 const Parceiros = () => {
+  // Estado para controlar o efeito de toque nas imagens no mobile
+  const [activeImg, setActiveImg] = React.useState(null);
   // Carrossel infinito: quando chega ao fim, volta ao início
   React.useEffect(() => {
     const carousel = carouselRef.current;
@@ -46,14 +48,20 @@ const Parceiros = () => {
     startX.current = e.pageX - carouselRef.current.offsetLeft;
     scrollLeft.current = carouselRef.current.scrollLeft;
     carouselRef.current.classList.add('dragging');
+    // Pausa animação
+    document.querySelector('.animate-scroll').style.animationPlayState = 'paused';
   };
   const handleMouseLeave = () => {
     isDragging.current = false;
     carouselRef.current.classList.remove('dragging');
+    // Retoma animação
+    document.querySelector('.animate-scroll').style.animationPlayState = 'running';
   };
   const handleMouseUp = () => {
     isDragging.current = false;
     carouselRef.current.classList.remove('dragging');
+    // Retoma animação
+    document.querySelector('.animate-scroll').style.animationPlayState = 'running';
   };
   const handleMouseMove = (e) => {
     if (!isDragging.current) return;
@@ -69,10 +77,14 @@ const Parceiros = () => {
     startX.current = e.touches[0].pageX - carouselRef.current.offsetLeft;
     scrollLeft.current = carouselRef.current.scrollLeft;
     carouselRef.current.classList.add('dragging');
+    // Pausa animação
+    document.querySelector('.animate-scroll').style.animationPlayState = 'paused';
   };
   const handleTouchEnd = () => {
     isDragging.current = false;
     carouselRef.current.classList.remove('dragging');
+    // Retoma animação
+    document.querySelector('.animate-scroll').style.animationPlayState = 'running';
   };
   const handleTouchMove = (e) => {
     if (!isDragging.current) return;
@@ -108,12 +120,14 @@ const Parceiros = () => {
               <div 
                 key={index}
                 className="flex-shrink-0 w-56 h-40 flex items-center justify-center p-4"
+                onTouchStart={() => setActiveImg(index)}
+                onTouchEnd={() => setTimeout(() => setActiveImg(null), 200)}
               >
                 <img
                   src={parceiro.src}
                   alt={parceiro.alt}
                   draggable={false}
-                  className="max-w-full max-h-full object-contain filter grayscale hover:grayscale-0 hover:scale-125 transition-all duration-300"
+                  className={`max-w-full max-h-full object-contain filter transition-all duration-300 grayscale hover:grayscale-0 hover:scale-125 ${activeImg === index ? 'grayscale-0 scale-125 z-10' : ''}`}
                 />
               </div>
             ))}

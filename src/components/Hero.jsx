@@ -20,6 +20,8 @@ const Hero = () => {
   const handleIconTouchStart = (idx) => setActiveIcon(idx);
   const handleIconTouchEnd = () => setTimeout(() => setActiveIcon(null), 200);
 
+  // Detect mobile for backgroundAttachment fix
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   return (
     <section
       id="home"
@@ -28,7 +30,7 @@ const Hero = () => {
         backgroundImage: `linear-gradient(120deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.7) 100%), url(${heroImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        backgroundAttachment: 'fixed'
+        backgroundAttachment: isMobile ? 'scroll' : 'fixed'
       }}
     >
     <div className="relative z-20 w-full max-w-3xl mx-auto text-center flex flex-col items-center justify-center pt-8 md:pt-20 px-2 md:px-0">
