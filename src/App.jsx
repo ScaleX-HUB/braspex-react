@@ -23,7 +23,7 @@ function App() {
         <Comparacao />
         <Kits />
         <Fluxo />
-        <QRCodeSection />
+        {/* <QRCodeSection /> */}
         <Contato />
       </main>
       <Footer />

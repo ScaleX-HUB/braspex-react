@@ -26,18 +26,18 @@ const Footer = () => {
           <ul className="space-y-4 text-gray-300">
             <li className="flex items-center">
               <Envelope className="w-5 h-5 mr-3 text-gray-400" />
-              <a href="mailto:contato@braspex.com" className="hover:text-white transition-colors">contato@braspex.com</a>
+              <a href="mailto:braspexne@gmail.com" className="hover:text-white transition-colors">braspexne@gmail.com</a>
             </li>
             <li className="flex items-center">
               <Phone className="w-5 h-5 mr-3 text-gray-400" />
-              <a href="tel:+5581986431000" className="hover:text-white transition-colors">+55 (81) 98643-1000</a>
+              <a href="tel:+5581989635638" className="hover:text-white transition-colors">(81) 98963-5638</a>
             </li>
             <li className="flex items-start">
               <MapPin className="w-5 h-5 mr-3 text-gray-400 mt-1" />
               <span>
-                Rua Dr. Arthur Gonçalves, 260<br/>
-                Boa Viagem, Recife - PE<br/>
-                CEP: 51020-090
+                R. Prof. Paes Leme, 50<br/>
+                Piedade, Jaboatão dos Guararapes - PE<br/>
+                CEP: 54400-460
               </span>
             </li>
           </ul>
@@ -47,14 +47,8 @@ const Footer = () => {
         <div>
           <h4 className="text-xl font-bold text-[#FFD027] mb-6">Redes Sociais</h4>
           <div className="flex space-x-4">
-            <a href="https://www.instagram.com/braspexoficial/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#FFD027] transition-colors">
+            <a href="https://www.instagram.com/braspex.ne" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#FFD027] transition-colors">
               <InstagramLogo className="w-7 h-7" />
-            </a>
-            <a href="https://www.youtube.com/@braspexoficial" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#FFD027] transition-colors">
-              <YoutubeLogo className="w-7 h-7" />
-            </a>
-            <a href="https://www.linkedin.com/company/braspex/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#FFD027] transition-colors">
-              <LinkedinLogo className="w-7 h-7" />
             </a>
           </div>
         </div>

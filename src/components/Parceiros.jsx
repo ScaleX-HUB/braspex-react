@@ -33,12 +33,12 @@ const Parceiros = () => {
             {duplicatedParceiros.map((parceiro, index) => (
               <div 
                 key={index}
-                className="flex-shrink-0 w-40 h-24 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex items-center justify-center p-4"
+                className="flex-shrink-0 w-48 h-32 flex items-center justify-center p-4"
               >
                 <img
                   src={parceiro.src}
                   alt={parceiro.alt}
-                  className="max-w-full max-h-full object-contain filter grayscale hover:grayscale-0 transition-all duration-300"
+                  className="max-w-full max-h-full object-contain filter grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300"
                 />
               </div>
             ))}
@@ -46,7 +46,7 @@ const Parceiros = () => {
         </div>
         
         <div className="text-center mt-12">
-          <p className="text-gray-600 text-lg">
+          <p className="text-gray-600 text-lg font-poppins">
             Trabalhamos com os melhores fornecedores do mercado para garantir a qualidade dos nossos produtos.
           </p>
         </div>

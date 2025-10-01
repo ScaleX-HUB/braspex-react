@@ -54,12 +54,17 @@ const Kits = () => {
       id: "kit-ar",
       icon: <Wind className="w-8 h-8 text-green-500" />,
       title: "Kits de Ar-Condicionado",
+      description: "Sistemas de tubulação multicamada para instalações de ar-condicionado, oferecendo flexibilidade, resistência e facilidade de instalação para projetos residenciais e comerciais.",
       items: [
         {
           image: multicamadaairtecno,
           title: "AirTechno Multicamada",
-          description: "Para máquinas de 9000 Btus até 48000 Btus (com bitolas de 14mm a 20 mm).",
-          caption: "Kit AirTechno - Sistema Multicamada"
+          description: "Tubulação multicamada com cinco camadas especiais que combinam alumínio e polietileno, proporcionando alta resistência à pressão e flexibilidade para instalação em projetos de climatização.",
+          caption: "Kit AirTechno - Sistema Multicamada",
+          variations: [
+            "Kit Ar-Condicionado 9000 BTUs",
+            "Kit Ar-Condicionado 12000 BTUs"
+          ]
         }
       ]
     },
@@ -67,12 +72,17 @@ const Kits = () => {
       id: "kit-chassis",
       icon: <Gear className="w-8 h-8 text-gray-600" />,
       title: "Chassis Metálicos Industriais",
+      description: "Estruturas metálicas robustas e precisas, desenvolvidas para suporte de equipamentos hidráulicos e de climatização, garantindo segurança e durabilidade em instalações industriais e residenciais.",
       items: [
         {
           image: chassismetalicos,
           title: "Chassis Metálicos",
-          description: "Estruturas para chuveiros, aquecedores e travessas industriais, com acabamento premium e montagem precisa.",
-          caption: "Chassis Metálicos Industriais"
+          description: "Estruturas fabricadas em aço galvanizado com tratamento anticorrosivo, projetadas para chuveiros, aquecedores e travessas industriais com acabamento premium e montagem precisa.",
+          caption: "Chassis Metálicos Industriais",
+          variations: [
+            "Chassis para Chuveiros Residenciais",
+            "Chassis para Aquecedores Industriais"
+          ]
         }
       ]
     }
@@ -80,14 +90,24 @@ const Kits = () => {
 
   // Carrossel horizontal de kits
   const [activeIndex, setActiveIndex] = useState(0);
+  const [autoPlay, setAutoPlay] = useState(true);
   const intervalRef = useRef(null);
 
   useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % kitCategories.length);
-    }, 7000);
+    if (autoPlay) {
+      intervalRef.current = setInterval(() => {
+        setActiveIndex((prev) => (prev + 1) % kitCategories.length);
+      }, 7000);
+    } else {
+      clearInterval(intervalRef.current);
+    }
     return () => clearInterval(intervalRef.current);
-  }, [kitCategories.length]);
+  }, [kitCategories.length, autoPlay]);
+
+  const handleManualNavigation = (index) => {
+    setAutoPlay(false);
+    setActiveIndex(index);
+  };
 
   const activeKit = kitCategories[activeIndex];
 
@@ -104,57 +124,65 @@ const Kits = () => {
           </div>
 
           {/* Carrossel de Kits */}
-          <div className="scroll-mt-24 relative">
-            <div className="text-center mb-12">
-              <div className="flex items-center justify-center gap-4 mb-4">
-                <div className="text-4xl">{activeKit.icon}</div>
-                <h3 className="text-3xl md:text-4xl font-bold text-gray-900">
-                  {activeKit.title}
-                </h3>
-              </div>
-              {activeKit.description && (
-                <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                  {activeKit.description}
-                </p>
-              )}
-            </div>
-
-            {/* Setas laterais */}
+          <div className="scroll-mt-24 relative group/carousel">
+            {/* Setas de navegação - aparecem apenas no hover do container */}
             <button
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow transition-colors duration-200 border border-gray-200"
-              style={{marginLeft: '-32px'}}
-              onClick={() => setActiveIndex((activeIndex - 1 + kitCategories.length) % kitCategories.length)}
+              className="absolute -left-12 top-1/2 -translate-y-1/2 z-10 opacity-0 group-hover/carousel:opacity-100 transition-all duration-300 hover:scale-110"
+              onClick={() => handleManualNavigation((activeIndex - 1 + kitCategories.length) % kitCategories.length)}
               aria-label="Anterior"
             >
-              <CaretLeft className="w-6 h-6 text-gray-500" />
+              <CaretLeft className="w-8 h-8 text-[#FFD027] hover:text-yellow-500" />
             </button>
-            <div className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100 flex flex-col md:flex-row items-center" style={{minHeight:'360px', height:'360px'}}>
-              {/* Imagem */}
-              <div className="w-full md:w-1/2 flex items-center justify-center cursor-pointer bg-gray-50" style={{height:'360px', minHeight:'360px'}} onClick={() => openModal(activeKit.items[0])}>
-                <img
-                  src={activeKit.items[0].image}
-                  alt={activeKit.items[0].title}
-                  className="object-contain w-full h-full max-h-[320px] max-w-[320px] mx-auto transition-transform duration-300 group-hover:scale-105"
-                  style={{height:'320px', width:'320px', maxHeight:'320px', maxWidth:'320px'}}
-                />
+            <button
+              className="absolute -right-12 top-1/2 -translate-y-1/2 z-10 opacity-0 group-hover/carousel:opacity-100 transition-all duration-300 hover:scale-110"
+              onClick={() => handleManualNavigation((activeIndex + 1) % kitCategories.length)}
+              aria-label="Próximo"
+            >
+              <CaretRight className="w-8 h-8 text-[#FFD027] hover:text-yellow-500" />
+            </button>
+            
+            <div className="group flex flex-row items-stretch gap-8" style={{minHeight:'520px'}}>
+              {/* Imagem - sempre à esquerda */}
+              <div className="w-1/2 flex items-center justify-center cursor-pointer" onClick={() => openModal(activeKit.items[0])}>
+                <div className="border-2 border-[#120229] rounded-2xl p-1 bg-white shadow-lg transition-transform duration-300 hover:scale-105">
+                  <img
+                    src={activeKit.items[0].image}
+                    alt={activeKit.items[0].title}
+                    className="object-contain max-h-[450px] max-w-full rounded-xl"
+                  />
+                </div>
               </div>
-              {/* Conteúdo */}
-              <div className="w-full md:w-1/2 p-8 flex flex-col justify-center" style={{height:'360px', minHeight:'360px'}}>
-                <h4 className="text-2xl font-bold text-gray-900 mb-3">
+              {/* Conteúdo - sempre à direita */}
+              <div className="w-1/2 flex flex-col justify-start">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="text-4xl">{activeKit.icon}</div>
+                  <h3 className="text-3xl font-bold text-gray-900">
+                    {activeKit.title}
+                  </h3>
+                </div>
+                
+                {activeKit.description && (
+                  <p className="text-lg text-gray-600 leading-relaxed mb-8">
+                    {activeKit.description}
+                  </p>
+                )}
+
+                <h4 className="text-2xl font-bold text-gray-900 mb-4">
                   {activeKit.items[0].title}
                 </h4>
-                <p className="text-gray-600 leading-relaxed mb-6">
+                <p className="text-lg text-gray-600 leading-relaxed mb-8">
                   {activeKit.items[0].description}
                 </p>
+                
                 {/* Renderiza as variações se existirem */}
                 {activeKit.items[0].variations && (
                   <div>
-                    <h5 className="font-semibold text-gray-800 mb-3">Modelos Disponíveis:</h5>
-                    <ul className="space-y-2">
+                    <h5 className="text-xl font-semibold text-gray-800 mb-4">Modelos Disponíveis:</h5>
+                    <ul className="space-y-3">
                       {activeKit.items[0].variations.map((variation, vIndex) => (
-                        <li key={vIndex} className="flex items-center gap-2">
-                          <CheckCircle className="w-5 h-5 text-[#005563]" />
-                          <span className="text-gray-700">{variation}</span>
+                        <li key={vIndex} className="flex items-center gap-3">
+                          <CheckCircle className="w-6 h-6 text-[#005563]" />
+                          <span className="text-lg text-gray-700">{variation}</span>
                         </li>
                       ))}
                     </ul>
@@ -162,22 +190,14 @@ const Kits = () => {
                 )}
               </div>
             </div>
-            <button
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow transition-colors duration-200 border border-gray-200"
-              style={{marginRight: '-32px'}}
-              onClick={() => setActiveIndex((activeIndex + 1) % kitCategories.length)}
-              aria-label="Próximo"
-            >
-              <CaretRight className="w-6 h-6 text-gray-500" />
-            </button>
 
             {/* Bolinhas de navegação */}
             <div className="flex justify-center gap-4 mt-8">
               {kitCategories.map((cat, idx) => (
                 <button
                   key={cat.id}
-                  className={`w-4 h-4 rounded-full border-2 border-[#FFD027] transition-all duration-300 ${activeIndex === idx ? 'bg-[#FFD027] shadow-lg' : 'bg-white hover:bg-[#FFF7D1]'}`}
-                  onClick={() => setActiveIndex(idx)}
+                  className={`w-4 h-4 rounded-full border-1 border-[#FFD027] transition-all duration-300 ${activeIndex === idx ? 'bg-[#FFD027] shadow-lg' : 'bg-white hover:bg-[#FFF7D1]'}`}
+                  onClick={() => handleManualNavigation(idx)}
                   aria-label={cat.title}
                 />
               ))}

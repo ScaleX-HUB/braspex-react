@@ -62,50 +62,53 @@ const Comparacao = () => {
           <div className="w-24 h-1 bg-[#FFD027] mx-auto rounded-full mt-6"></div>
         </div>
 
-        {/* Chart */}
-        <div className="mb-16">
-          <div className="grid gap-8 max-w-4xl mx-auto">
-            {chartData.map((item, index) => (
-              <div key={index} className="bg-white p-6 rounded-2xl shadow-lg">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-lg font-semibold text-gray-900">
-                    {item.label}
-                  </h4>
-                  <span className="text-2xl font-bold text-[#005563]">
-                    {item.value}%
-                  </span>
+        {/* Comparação lado a lado */}
+        <div className="flex flex-col lg:flex-row items-stretch gap-12 mb-16">
+          {/* Charts - Esquerda */}
+          <div className="w-full lg:w-1/2 flex flex-col justify-between">
+            <div className="space-y-6 h-full flex flex-col justify-center">
+              {chartData.map((item, index) => (
+                <div key={index} className="flex-1 min-h-[50px] flex flex-col justify-center transition-all duration-300 hover:scale-105 cursor-pointer">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-lg font-semibold text-gray-900 transition-colors duration-300 hover:text-[#FFD027]">
+                      {item.label}
+                    </h4>
+                    <span className="text-2xl font-bold text-[#005563] transition-transform duration-300 hover:scale-110">
+                      {item.value}%
+                    </span>
+                  </div>
+                  <div className="relative w-full h-3 bg-gray-200 rounded-full overflow-hidden transition-all duration-300 hover:h-4">
+                    <div
+                      className={`h-full ${item.color} rounded-full transition-all duration-1000 ease-out hover:brightness-110`}
+                      style={{
+                        width: isVisible ? `${item.value}%` : '0%',
+                        transitionDelay: `${index * 200}ms`
+                      }}
+                    ></div>
+                  </div>
                 </div>
-                
-                <div className="relative w-full h-4 bg-gray-200 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full ${item.color} rounded-full transition-all duration-1000 ease-out`}
-                    style={{
-                      width: isVisible ? `${item.value}%` : '0%',
-                      transitionDelay: `${index * 200}ms`
-                    }}
-                  ></div>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
+
+          {/* Visual Comparison - Direita */}
+          <div className="w-full lg:w-1/2 flex items-center justify-center">
+            <div className="bg-white shadow-lg transition-transform duration-300 hover:scale-105 rounded-2xl overflow-hidden">
+              <img
+                src={comparacaoImg}
+                alt="Comparação visual entre instalação tradicional e Kits BRASPEX"
+                className="object-contain max-h-[450px] max-w-full border-2 border-[#FFD027] rounded-2xl"
+              />
+            </div>
           </div>
         </div>
 
-        {/* Visual Comparison */}
-        <div className="text-center">
-          <div className="bg-white p-8 rounded-2xl shadow-lg inline-block">
-            <img
-              src={comparacaoImg}
-              alt="Comparação visual entre instalação tradicional e Kits BRASPEX"
-              className="max-w-full h-auto rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
-            />
-          </div>
-          
-          <div className="mt-8 max-w-3xl mx-auto">
-            <p className="text-lg text-gray-600 leading-relaxed">
-              Os Kits BRASPEX revolucionam a construção civil com processos industrializados 
-              que garantem maior eficiência, qualidade superior e redução significativa de custos e prazos.
-            </p>
-          </div>
+        {/* Texto explicativo */}
+        <div className="text-center max-w-3xl mx-auto">
+          <p className="text-lg text-gray-600 leading-relaxed font-montserrat">
+            Os Kits BRASPEX revolucionam a construção civil com processos industrializados 
+            que garantem maior eficiência, qualidade superior e redução significativa de custos e prazos.
+          </p>
         </div>
       </div>
     </section>
