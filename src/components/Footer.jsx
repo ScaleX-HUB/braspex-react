@@ -5,7 +5,7 @@ import logoBraspex from '../assets/logo-braspex.png'; // Logo padrão
 
 const Footer = () => {
   return (
-    <footer className="bg-[#005563] text-white py-16">
+  <footer className="bg-[#005563] text-white pt-16 pb-6">
       <div className="max-w-6xl mx-auto px-5 grid grid-cols-1 md:grid-cols-4 gap-12">
         {/* Coluna 1: Logo e Descrição */}
         <div className="col-span-1 md:col-span-2 flex flex-col items-center md:items-start">
@@ -79,9 +79,11 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="border-t border-gray-700 mt-16 pt-8 text-center text-gray-400">
-        <p>&copy; {new Date().getFullYear()} Braspex. Todos os direitos reservados.</p>
-        <p className="mt-2 text-sm">Desenvolvido por ConverseIA Tech</p>
+      <div className="border-t border-gray-700 mt-16 pt-8 text-center">
+        <p className="text-lg font-bold text-white mb-1">&copy; {new Date().getFullYear()} Braspex. Todos os direitos reservados.</p>
+        <p className="mt-2 text-base font-semibold text-[#FFD027]">
+          Desenvolvido por <a href="https://www.linkedin.com/company/converseia" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">ConverseIA Tech</a>
+        </p>
         <div className="mt-4">
           <a 
             href="/admin" 
