@@ -8,13 +8,38 @@ const Footer = () => {
     <footer className="bg-[#005563] text-white py-16">
       <div className="max-w-6xl mx-auto px-5 grid grid-cols-1 md:grid-cols-4 gap-12">
         {/* Coluna 1: Logo e Descrição */}
-        <div className="col-span-1 md:col-span-2">
-          <img 
-            src={logoBraspexDark} // Usando a versão escura para melhor contraste
-            alt="BRASPEX Logo" 
-            className="h-20 w-auto mb-6 drop-shadow-lg" // Adiciona leve sombra para destacar
-          />
-          <p className="text-gray-300 leading-relaxed max-w-md">
+        <div className="col-span-1 md:col-span-2 flex flex-col items-center md:items-start">
+          <div className="flex justify-center md:justify-start w-full">
+            <div
+              className="logo-balloon bg-white rounded-full p-4 border border-gray-200 flex items-center justify-center mb-6 transition-all duration-300"
+              style={{
+                minWidth: '120px',
+                minHeight: '120px',
+                background: 'rgba(255,255,255,0.92)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                boxShadow: '0 10px 24px -8px rgba(0,0,0,0.13)'
+              }}
+            >
+              <img 
+                src={logoBraspex}
+                alt="BRASPEX Logo"
+                className="h-20 w-auto object-contain"
+                style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.08))' }}
+              />
+            </div>
+          </div>
+          <style>{`
+            .logo-balloon:hover {
+              background: rgba(255,255,255,1);
+              box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+              border-color: #FFD027;
+              backdrop-filter: blur(16px);
+              -webkit-backdrop-filter: blur(16px);
+              transform: scale(1.04);
+            }
+          `}</style>
+          <p className="text-gray-300 leading-relaxed max-w-md text-center md:text-left">
             A Braspex é uma empresa líder na industrialização de kits hidráulicos e sistemas de climatização,
             comprometida com a inovação, qualidade e sustentabilidade.
           </p>

@@ -93,7 +93,7 @@ const Comparacao = () => {
 
           {/* Visual Comparison - Direita */}
           <div className="w-full lg:w-1/2 flex items-center justify-center">
-            <div className="bg-white shadow-lg transition-transform duration-300 hover:scale-105 rounded-2xl overflow-hidden">
+            <div className="bg-white transition-transform duration-300 hover:scale-105 rounded-2xl overflow-hidden" style={{boxShadow:'0 18px 38px -4px rgba(0,0,0,0.28)'}}>
               <img
                 src={comparacaoImg}
                 alt="Comparação visual entre instalação tradicional e Kits BRASPEX"

@@ -144,7 +144,7 @@ const Kits = () => {
             <div className="group flex flex-row items-stretch gap-8" style={{minHeight:'520px'}}>
               {/* Imagem - sempre à esquerda */}
               <div className="w-1/2 flex items-center justify-center cursor-pointer" onClick={() => openModal(activeKit.items[0])}>
-                <div className="border-2 border-[#120229] rounded-2xl p-1 bg-white shadow-lg transition-transform duration-300 hover:scale-105">
+                <div className="border-2 border-[#120229] rounded-2xl p-1 bg-white transition-transform duration-300 hover:scale-105" style={{boxShadow:'0 18px 38px -4px rgba(0,0,0,0.28)'}}>
                   <img
                     src={activeKit.items[0].image}
                     alt={activeKit.items[0].title}
