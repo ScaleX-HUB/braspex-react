@@ -206,14 +206,15 @@ const Fluxo = () => {
           ))}
         </div>
 
-        {/* Linha vertical fixa no meio do card */}
-        <div className="flex justify-center mb-6">
-          <div className="w-px h-12 bg-gray-300"></div>
+        {/* Linha vertical fixa no meio do card - maior e mais para cima */}
+        <div className="flex justify-center" style={{marginTop: '-32px', marginBottom: '8px'}}>
+          <div className="w-px h-14 bg-gray-300"></div>
         </div>
 
-        {/* Card de conteúdo */}
-        <div className="bg-white rounded-2xl shadow-md p-8 text-center max-w-3xl mx-auto">
+        {/* Card de conteúdo - mais próximo dos steps e com hover, agora com numeração */}
+        <div className="fluxo-card bg-white rounded-2xl shadow-md p-8 text-center max-w-3xl mx-auto transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
           <h3 className="text-2xl font-bold text-gray-900 mb-2">
+            <span className="font-extrabold mr-2 text-2xl" style={{color:'#120229'}}>{currentStep.id}.</span>
             {currentStep.content.title}
           </h3>
           <p className="text-[#FFD027] font-semibold text-lg mb-6">
