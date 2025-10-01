@@ -40,10 +40,10 @@ const Header = () => {
 
   return (
     <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-white shadow-md' : 'bg-transparent'
+      isMenuOpen ? 'bg-white shadow-md' : (isScrolled ? 'bg-white shadow-md' : 'bg-transparent')
     }`}>
       <nav className="max-w-6xl mx-auto px-5">
-        <div className="flex justify-between items-center h-24">
+        <div className="flex justify-between items-center h-20 lg:h-24">
           {/* Logo */}
           <div className="nav-logo">
             <a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }} className="cursor-pointer">
@@ -164,8 +164,8 @@ const Header = () => {
 
         {/* Menu Mobile Dropdown */}
         <div className={`lg:hidden transition-all duration-300 bg-white ${
-          isMenuOpen ? 'max-h-96 opacity-100 border-t' : 'max-h-0 opacity-0'
-        } overflow-hidden`}>
+          isMenuOpen ? 'max-h-[80vh] opacity-100 border-t overflow-y-auto' : 'max-h-0 opacity-0 overflow-hidden'
+        }`}>
           <ul className="py-4 space-y-2">
             <li><button onClick={() => scrollToSection('home')} className="block w-full text-left px-4 py-2 text-[#005563] hover:text-[#FFD027]">Home</button></li>
             <li><button onClick={() => scrollToSection('sobre')} className="block w-full text-left px-4 py-2 text-[#005563] hover:text-[#FFD027]">Sobre</button></li>
