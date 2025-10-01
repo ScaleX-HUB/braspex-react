@@ -104,6 +104,18 @@ const Kits = () => {
     return () => clearInterval(intervalRef.current);
   }, [kitCategories.length, autoPlay]);
 
+  // Escutar evento customizado do Header para navegar para kit específico
+  useEffect(() => {
+    const handleNavigateToKit = (event) => {
+      const { kitIndex } = event.detail;
+      setActiveIndex(kitIndex);
+      setAutoPlay(false);
+    };
+
+    window.addEventListener('navigateToKit', handleNavigateToKit);
+    return () => window.removeEventListener('navigateToKit', handleNavigateToKit);
+  }, []);
+
   const handleManualNavigation = (index) => {
     setAutoPlay(false);
     setActiveIndex(index);

@@ -4,7 +4,7 @@ import { WhatsappLogo } from 'phosphor-react'; // Ícone para o WhatsApp
 const WhatsAppButton = () => {
   // Coloque aqui o número de WhatsApp da sua empresa
   // Formato: código do país + DDD + número (tudo junto, sem espaços ou símbolos)
-  const phoneNumber = '5581986431000'; 
+  const phoneNumber = '5581989635638'; 
   const message = 'Olá! Gostaria de solicitar uma cotação.';
   
   // A URL é construída dinamicamente com as variáveis acima

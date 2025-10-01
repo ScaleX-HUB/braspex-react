@@ -82,6 +82,15 @@ const Footer = () => {
       <div className="border-t border-gray-700 mt-16 pt-8 text-center text-gray-400">
         <p>&copy; {new Date().getFullYear()} Braspex. Todos os direitos reservados.</p>
         <p className="mt-2 text-sm">Desenvolvido por ConverseIA Tech</p>
+        <div className="mt-4">
+          <a 
+            href="/admin" 
+            className="text-xs text-gray-500 hover:text-gray-300 transition-colors opacity-50 hover:opacity-75"
+            title="Painel Administrativo"
+          >
+            •
+          </a>
+        </div>
       </div>
     </footer>
   );

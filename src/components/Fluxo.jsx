@@ -47,22 +47,6 @@ const Fluxo = () => {
       }
     },
     { 
-      id: 4, 
-      icon: <CheckCircle className="w-7 h-7" />, 
-      shortTitle: "Testes", 
-      content: { 
-        title: "Teste de Montagem e Checklist",
-        timeframe: "1-2 dias úteis",
-        description: "Verificação completa de todos os componentes e teste de montagem para garantir perfeito funcionamento antes da entrega.",
-        items: [
-          "Teste de pressão hidráulica",
-          "Verificação de conexões",
-          "Checklist de qualidade",
-          "Documentação técnica"
-        ]
-      }
-    },
-    { 
       id: 3, 
       icon: <Factory className="w-7 h-7" />, 
       shortTitle: "Produção", 
@@ -75,6 +59,22 @@ const Fluxo = () => {
           "Equipamentos de alta precisão",
           "Controle de qualidade contínuo",
           "Rastreabilidade de componentes"
+        ]
+      }
+    },
+    { 
+      id: 4, 
+      icon: <CheckCircle className="w-7 h-7" />, 
+      shortTitle: "Testes", 
+      content: { 
+        title: "Teste de Montagem e Checklist",
+        timeframe: "1-2 dias úteis",
+        description: "Verificação completa de todos os componentes e teste de montagem para garantir perfeito funcionamento antes da entrega.",
+        items: [
+          "Teste de pressão hidráulica",
+          "Verificação de conexões",
+          "Checklist de qualidade",
+          "Documentação técnica"
         ]
       }
     },

@@ -5,8 +5,11 @@ import {
   Factory, 
   Target 
 } from 'phosphor-react';
+import { useSiteContent } from '../contexts/SiteContentContext';
 
 const Vantagens = () => {
+  const { content } = useSiteContent();
+  const vantagensContent = content.vantagens;
   const steps = [
     {
       icon: <Factory className="w-7 h-7" />,
@@ -81,7 +84,7 @@ const Vantagens = () => {
         {/* Título */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Vantagens dos Kits Braspex
+            {vantagensContent.title}
           </h2>
           <div className="w-24 h-1 bg-[#FFD027] mx-auto rounded-full"></div>
         </div>
