@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+import { useSiteContent } from '../contexts/SiteContentContext';
 import { Envelope, Phone, Globe, MapPin, PaperPlaneTilt, User, Buildings, ChatCircle } from 'phosphor-react';
 
 const Contato = () => {
+  const { content } = useSiteContent();
+  const contatoContent = content.contato;
+  
   const [formData, setFormData] = useState({
     nome: '',
     empresa: '',
@@ -65,9 +69,15 @@ const Contato = () => {
     <section id="contato" className="py-20 bg-white">
   <div className="max-w-3xl mx-auto px-5">
         <div className="text-center mb-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Solicite uma Cotação Personalizada
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            {contatoContent.title}
           </h2>
+          <p className="text-xl text-gray-600 mb-4">
+            {contatoContent.subtitle}
+          </p>
+          <p className="text-gray-600 mb-6">
+            {contatoContent.description}
+          </p>
           <div className="w-24 h-1 bg-[#FFD027] mx-auto rounded-full mb-8"></div>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">

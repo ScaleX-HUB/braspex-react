@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useSiteContent } from '../contexts/SiteContentContext';
 import comparacaoImg from '../assets/comparacao-tradicionalxprazo.png';
 
 const Comparacao = () => {
+  const { content } = useSiteContent();
+  const comparacaoContent = content.comparacao;
+  
   // Estado para hover/touch nos cards e imagem no mobile
   const [activeCard, setActiveCard] = useState(null);
   const [activeImg, setActiveImg] = useState(false);
@@ -55,12 +59,10 @@ const Comparacao = () => {
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Comparação de Prazo
+            {comparacaoContent.title}
           </h2>
           <h3 className="text-2xl md:text-3xl font-semibold">
-            <span className="text-gray-600">TRADICIONAL</span>
-            <span className="mx-4 text-[#FFD027] font-bold">VS</span>
-            <span className="text-[#005563]">KITS BRASPEX</span>
+            {comparacaoContent.subtitle}
           </h3>
           <div className="w-24 h-1 bg-[#FFD027] mx-auto rounded-full mt-6"></div>
         </div>
@@ -125,8 +127,7 @@ const Comparacao = () => {
         {/* Texto explicativo */}
         <div className="text-center max-w-3xl mx-auto">
           <p className="text-lg text-gray-600 leading-relaxed font-montserrat">
-            Os Kits BRASPEX revolucionam a construção civil com processos industrializados 
-            que garantem maior eficiência, qualidade superior e redução significativa de custos e prazos.
+            {comparacaoContent.description}
           </p>
         </div>
       </div>

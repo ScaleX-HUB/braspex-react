@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSiteContent } from '../contexts/SiteContentContext';
 import parceiro1 from '../assets/parceiro1.png';
 import parceiro2 from '../assets/parceiro2.png';
 import parceria3 from '../assets/parceria3.png';
@@ -6,8 +7,12 @@ import parceria4 from '../assets/parceria4.png';
 import parceria5 from '../assets/parceria5.png';
 
 const Parceiros = () => {
+  const { content } = useSiteContent();
+  const parceirosContent = content?.parceiros || { title: 'Nossos Parceiros', subtitle: 'Trabalhamos com as melhores marcas' };
+  
   // Estado para controlar o efeito de toque nas imagens no mobile
   const [activeImg, setActiveImg] = React.useState(null);
+  
   // Carrossel infinito: quando chega ao fim, volta ao início
   React.useEffect(() => {
     const carousel = carouselRef.current;
@@ -98,8 +103,11 @@ const Parceiros = () => {
       <div className="max-w-6xl mx-auto px-5">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Nossos Parceiros
+            {parceirosContent.title}
           </h2>
+          <p className="text-xl text-gray-600 mb-6">
+            {parceirosContent.subtitle}
+          </p>
           <div className="w-24 h-1 bg-[#FFD027] mx-auto rounded-full"></div>
         </div>
         {/* Carousel Container com scroll manual, drag e animação */}

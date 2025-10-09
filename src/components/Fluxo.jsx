@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSiteContent } from '../contexts/SiteContentContext';
 import { 
   FileText, 
   Gear, 
@@ -9,6 +10,9 @@ import {
 } from 'phosphor-react';
 
 const Fluxo = () => {
+  const { content } = useSiteContent();
+  const fluxoContent = content.fluxo;
+  
   const [activeStep, setActiveStep] = useState(1);
 
   // Removido o avanço automático
@@ -120,11 +124,11 @@ const Fluxo = () => {
         {/* Header */}
         <div className="text-center mb-14">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Como Trabalhamos
+            {fluxoContent.title}
           </h2>
           <div className="w-20 h-1 bg-[#FFD027] mx-auto rounded-full mb-6"></div>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Nosso processo é estruturado para garantir máxima qualidade e eficiência em cada etapa.
+            {fluxoContent.description}
           </p>
         </div>
 
