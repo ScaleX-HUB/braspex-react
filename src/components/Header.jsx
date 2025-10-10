@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { List, X, CaretDown, Drop, Fire, Wind, Gear, House, Info, Package, FlowArrow, AddressBook } from 'phosphor-react';
 import logoBraspex from '../assets/logo-braspex.png';
+import logoBraspexBranca from '../assets/logo-branca-braspex.png';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -68,7 +69,7 @@ const Header = () => {
           <div className="nav-logo">
             <a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }} className="cursor-pointer">
               <img 
-                src={logoBraspex} 
+                src={(isScrolled || isMenuOpen) ? logoBraspex : logoBraspexBranca}
                 alt="BRASPEX Logo" 
                 className="h-20 w-auto transition-transform duration-300 hover:scale-105"
               />
@@ -86,7 +87,7 @@ const Header = () => {
                     isScrolled ? 'text-[#005563] hover:text-[#FFD027]' : 'text-white hover:text-[#FFD027]'
                   }`}
                 >
-                  <House className="w-4 h-4" />
+                  <House className="w-[18px] h-[18px]" />
                   Home
                 </button>
               </li>
@@ -97,7 +98,7 @@ const Header = () => {
                     isScrolled ? 'text-[#005563] hover:text-[#FFD027]' : 'text-white hover:text-[#FFD027]'
                   }`}
                 >
-                  <Info className="w-4 h-4" />
+                  <Info className="w-[18px] h-[18px]" />
                   Sobre
                 </button>
               </li>
@@ -109,9 +110,9 @@ const Header = () => {
                     isScrolled ? 'text-[#005563] hover:text-[#FFD027]' : 'text-white hover:text-[#FFD027]'
                   }`}
                 >
-                  <Package className="w-4 h-4" />
+                  <Package className="w-[18px] h-[18px]" />
                   Nossos Kits
-                  <CaretDown className="ml-1 h-4 w-4" />
+                  <CaretDown className="ml-1 h-[18px] w-[18px]" />
                 </button>
                 <div 
                   className={`absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 transition-all duration-300 ${
@@ -121,19 +122,19 @@ const Header = () => {
                   onMouseLeave={() => setIsDropdownOpen(false)}
                 >
                   <button type="button" onClick={() => scrollToSection('kit-agua')} className="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-[#005563] transition-colors duration-200 rounded-t-lg flex items-center gap-2">
-                    <Drop className="w-4 h-4 text-blue-500" />
-                    Água Fria e Quente
+                    <Drop className="w-[18px] h-[18px] text-blue-500" />
+                    Kit Chuveiro Industrial
                   </button>
                   <button type="button" onClick={() => scrollToSection('kit-agua')} className="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-[#005563] transition-colors duration-200 flex items-center gap-2">
-                    <Fire className="w-4 h-4 text-red-500" />
-                    Cozinha e Gás
+                    <Fire className="w-[18px] h-[18px] text-red-500" />
+                    Kit Aquecedor Industrial
                   </button>
                   <button type="button" onClick={() => scrollToSection('kit-ar')} className="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-[#005563] transition-colors duration-200 flex items-center gap-2">
-                    <Wind className="w-4 h-4 text-green-500" />
-                    Ar-Condicionado
+                    <Wind className="w-[18px] h-[18px] text-green-500" />
+                    Kit Ar-Condicionado
                   </button>
                   <button type="button" onClick={() => scrollToSection('kit-chassis')} className="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-[#005563] transition-colors duration-200 rounded-b-lg flex items-center gap-2">
-                    <Gear className="w-4 h-4 text-gray-600" />
+                    <Gear className="w-[18px] h-[18px] text-gray-600" />
                     Chassis Metálicos
                   </button>
                 </div>
@@ -145,7 +146,7 @@ const Header = () => {
                     isScrolled ? 'text-[#005563] hover:text-[#FFD027]' : 'text-white hover:text-[#FFD027]'
                   }`}
                 >
-                  <FlowArrow className="w-4 h-4" />
+                  <FlowArrow className="w-[18px] h-[18px]" />
                   Fluxo de Execução
                 </button>
               </li>
@@ -156,7 +157,7 @@ const Header = () => {
                     isScrolled ? 'text-[#005563] hover:text-[#FFD027]' : 'text-white hover:text-[#FFD027]'
                   }`}
                 >
-                  <AddressBook className="w-4 h-4" />
+                  <AddressBook className="w-[18px] h-[18px]" />
                   Contato
                 </button>
               </li>
@@ -191,15 +192,15 @@ const Header = () => {
             <li><button onClick={() => scrollToSection('sobre')} className="block w-full text-left px-4 py-2 text-[#005563] hover:text-[#FFD027]">Sobre</button></li>
             <li><button type="button" onClick={() => scrollToSection('kit-agua')} className="w-full text-left px-4 py-2 text-[#005563] hover:text-[#FFD027] flex items-center gap-2">
               <Drop className="w-4 h-4 text-blue-500" />
-              Água Fria e Quente
+              Kit Chuveiro Industrial
             </button></li>
             <li><button type="button" onClick={() => scrollToSection('kit-agua')} className="w-full text-left px-4 py-2 text-[#005563] hover:text-[#FFD027] flex items-center gap-2">
               <Fire className="w-4 h-4 text-red-500" />
-              Cozinha e Gás
+              Kit Aquecedor Industrial
             </button></li>
             <li><button type="button" onClick={() => scrollToSection('kit-ar')} className="w-full text-left px-4 py-2 text-[#005563] hover:text-[#FFD027] flex items-center gap-2">
               <Wind className="w-4 h-4 text-green-500" />
-              Ar-Condicionado
+              Kit Ar-Condicionado
             </button></li>
             <li><button type="button" onClick={() => scrollToSection('kit-chassis')} className="w-full text-left px-4 py-2 text-[#005563] hover:text-[#FFD027] flex items-center gap-2">
               <Gear className="w-4 h-4 text-gray-600" />

@@ -2,7 +2,7 @@ import React from 'react';
 import { useSiteContent } from '../contexts/SiteContentContext';
 import { Envelope, Phone, MapPin, InstagramLogo, YoutubeLogo, FacebookLogo, LinkedinLogo } from 'phosphor-react';
 import logoBraspexDark from '../assets/logo-braspex-dark.png'; // Usaremos esta versão do logo
-import logoBraspex from '../assets/logo-braspex.png'; // Logo padrão
+import logoBraspexBranca from '../assets/logo-branca-braspex.png'; // Logo branca
 
 const Footer = () => {
   const { content } = useSiteContent();
@@ -15,34 +15,17 @@ const Footer = () => {
         <div className="col-span-1 md:col-span-2 flex flex-col items-center md:items-start">
           <div className="flex justify-center md:justify-start w-full">
             <div
-                className="logo-balloon bg-white rounded-full p-4 border border-white flex items-center justify-center mb-6 transition-all duration-300"
-              style={{
-                minWidth: '120px',
-                minHeight: '120px',
-                background: 'rgba(255,255,255,0.92)',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-                boxShadow: '0 10px 24px -8px rgba(0,0,0,0.13)'
-              }}
+                className="logo-balloon rounded-full flex items-center justify-center mb-6 transition-all duration-300"
+                style={{ minWidth: '120px', minHeight: '120px' }}
             >
               <img 
-                src={logoBraspex}
+                src={logoBraspexBranca}
                 alt="BRASPEX Logo"
                 className="h-20 w-auto object-contain"
                 style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.08))' }}
               />
             </div>
           </div>
-          <style>{`
-            .logo-balloon:hover {
-              background: rgba(255,255,255,1);
-              box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-              border-color: #FFD027;
-              backdrop-filter: blur(16px);
-              -webkit-backdrop-filter: blur(16px);
-              transform: scale(1.04);
-            }
-          `}</style>
           <p className="text-gray-300 leading-relaxed max-w-md text-center md:text-left">
             {footerContent.description}
           </p>
