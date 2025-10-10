@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { useSiteContent } from '../contexts/SiteContentContext';
 import { Eye, Users, Calendar, ChartBar, FloppyDisk, ArrowCounterClockwise, ArrowLeft, SignOut, Gear, Package, Plus, Trash, PencilSimple } from 'phosphor-react';
 import { useNavigate } from 'react-router-dom';
-import BaserowSetup from '../components/BaserowSetup';
 import { productCategories } from '../data/productCategories';
 import { mockProducts } from '../data/mockProducts';
 
 const AdminPanel = ({ onLogout }) => {
-  const { content, analytics, updateContent, resetContent, loading, isBaserowConnected } = useSiteContent();
+  const { content, analytics, updateContent, resetContent, loading } = useSiteContent();
   const [activeSection, setActiveSection] = useState('analytics');
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [products, setProducts] = useState(mockProducts);
@@ -17,7 +16,6 @@ const AdminPanel = ({ onLogout }) => {
 
   const sections = [
     { id: 'analytics', name: 'Analytics', icon: <ChartBar className="w-5 h-5" /> },
-    { id: 'baserow', name: 'Configurar Baserow', icon: <Gear className="w-5 h-5" /> },
     { id: 'produtos', name: 'Produtos', icon: <Package className="w-5 h-5" /> },
     { id: 'hero', name: 'Hero/Banner', icon: <Eye className="w-5 h-5" /> },
     { id: 'vantagens', name: 'Vantagens', icon: <Users className="w-5 h-5" /> },
@@ -483,13 +481,7 @@ const AdminPanel = ({ onLogout }) => {
               <h1 className="text-2xl font-bold text-gray-900">
                 Painel Administrativo - BRASPEX
               </h1>
-              {/* Status da conexão com Baserow */}
-              <div className="flex items-center space-x-2">
-                <div className={`w-2 h-2 rounded-full ${isBaserowConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                <span className="text-sm text-gray-600">
-                  {isBaserowConnected ? 'Baserow Conectado' : 'Modo Local'}
-                </span>
-              </div>
+              {/* Status da conexão removido */}
             </div>
             
             <div className="flex items-center space-x-3">
@@ -556,9 +548,9 @@ const AdminPanel = ({ onLogout }) => {
           <div className="flex-1">
             <div className="bg-white rounded-xl shadow-lg p-6">
               {activeSection === 'analytics' && renderAnalytics()}
-              {activeSection === 'baserow' && <BaserowSetup />}
+              {/* Baserow removido */}
               {activeSection === 'produtos' && renderProductsManager()}
-              {activeSection !== 'analytics' && activeSection !== 'baserow' && activeSection !== 'produtos' && renderContentEditor(activeSection)}
+              {activeSection !== 'analytics' && activeSection !== 'produtos' && renderContentEditor(activeSection)}
             </div>
           </div>
         </div>
