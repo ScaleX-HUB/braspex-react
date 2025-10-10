@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import { useSiteContent } from '../contexts/SiteContentContext';
 import comparacaoImg from '../assets/comparacao-tradicionalxprazo.png';
 
 const Comparacao = () => {
+  const { content } = useSiteContent();
+  const comparacaoContent = content.comparacao;
+  
   // Estado para hover/touch nos cards e imagem no mobile
   const [activeCard, setActiveCard] = useState(null);
   const [activeImg, setActiveImg] = useState(false);
@@ -49,30 +54,96 @@ const Comparacao = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Framer Motion variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const titleVariants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.9,
+        ease: [0.4, 0, 0.2, 1]
+      }
+    }
+  };
+
+  const contentVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.7,
+        ease: [0.4, 0, 0.2, 1]
+      }
+    }
+  };
+
+  const chartItemVariants = {
+    hidden: { opacity: 0, x: -30 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.4, 0, 0.2, 1]
+      }
+    }
+  };
+
+  const imageVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.8,
+        ease: [0.4, 0, 0.2, 1]
+      }
+    }
+  };
+
   return (
-    <section ref={sectionRef} className="py-20 bg-gradient-to-b from-white to-gray-50">
+    <motion.section
+      ref={sectionRef}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      variants={containerVariants}
+      className="py-20 bg-gradient-to-b from-white to-gray-50"
+    >
       <div className="max-w-6xl mx-auto px-5">
         {/* Header */}
-        <div className="text-center mb-16">
+        <motion.div variants={titleVariants} className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Comparação de Prazo
+            {comparacaoContent.title}
           </h2>
           <h3 className="text-2xl md:text-3xl font-semibold">
-            <span className="text-gray-600">TRADICIONAL</span>
-            <span className="mx-4 text-[#FFD027] font-bold">VS</span>
-            <span className="text-[#005563]">KITS BRASPEX</span>
+            {comparacaoContent.subtitle}
           </h3>
           <div className="w-24 h-1 bg-[#FFD027] mx-auto rounded-full mt-6"></div>
-        </div>
+        </motion.div>
 
         {/* Comparação lado a lado */}
         <div className="flex flex-col lg:flex-row items-stretch gap-12 mb-16">
           {/* Charts - Esquerda */}
-          <div className="w-full lg:w-1/2 flex flex-col justify-between">
+          <motion.div variants={contentVariants} className="w-full lg:w-1/2 flex flex-col justify-between">
             <div className="space-y-6 h-full flex flex-col justify-center">
               {chartData.map((item, index) => (
-                <div
+                <motion.div
                   key={index}
+                  variants={chartItemVariants}
                   className={`flex-1 min-h-[50px] flex flex-col justify-center transition-all duration-300 cursor-pointer font-montserrat
                     ${activeCard === index ? 'scale-105' : ''}
                   `}
@@ -98,13 +169,13 @@ const Comparacao = () => {
                       }}
                     ></div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Visual Comparison - Direita */}
-          <div className="w-full lg:w-1/2 flex items-center justify-center">
+          <motion.div variants={imageVariants} className="w-full lg:w-1/2 flex items-center justify-center">
             <div
               className={`bg-white transition-transform duration-300 rounded-2xl overflow-hidden ${activeImg ? 'scale-105' : ''}`}
               style={{boxShadow:'0 18px 38px -4px rgba(0,0,0,0.28)'}}
@@ -119,18 +190,17 @@ const Comparacao = () => {
                 className="object-contain max-h-[450px] max-w-full border-2 border-[#FFD027] rounded-2xl"
               />
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Texto explicativo */}
-        <div className="text-center max-w-3xl mx-auto">
+        <motion.div variants={contentVariants} className="text-center max-w-3xl mx-auto">
           <p className="text-lg text-gray-600 leading-relaxed font-montserrat">
-            Os Kits BRASPEX revolucionam a construção civil com processos industrializados 
-            que garantem maior eficiência, qualidade superior e redução significativa de custos e prazos.
+            {comparacaoContent.description}
           </p>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

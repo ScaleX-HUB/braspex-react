@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Lock, Eye, EyeSlash } from 'phosphor-react';
-import { authService } from '../services/baserowService';
+import { usersAPI } from '../services/usersAPI';
 import AdminPanel from './AdminPanel';
 
 const AdminLogin = () => {
@@ -24,15 +24,15 @@ const AdminLogin = () => {
     setError('');
     
     try {
-      // Primeiro tentar autenticação com Baserow
-      const result = await authService.login(credentials.username, credentials.password);
+      // Tentar autenticação com Supabase
+      const result = await usersAPI.login(credentials.username, credentials.password);
       
       if (result.success) {
         setIsAuthenticated(true);
         localStorage.setItem('adminAuth', 'true');
         localStorage.setItem('adminUser', JSON.stringify(result.user));
       } else {
-        // Fallback para credenciais fixas se Baserow não estiver configurado
+        // Fallback para credenciais fixas se Supabase não estiver configurado
         if (credentials.username === ADMIN_CREDENTIALS.username && 
             credentials.password === ADMIN_CREDENTIALS.password) {
           setIsAuthenticated(true);
@@ -139,15 +139,6 @@ const AdminLogin = () => {
             {loading ? 'Autenticando...' : 'Entrar'}
           </button>
         </form>
-
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <div className="text-center">
-            <p className="text-xs text-gray-500">
-              Credenciais de acesso:<br />
-              <code className="bg-gray-100 px-2 py-1 rounded">admin / Braspex2025!</code>
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );

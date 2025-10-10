@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
-import { Envelope, Phone, Globe, MapPin, PaperPlaneTilt, User, Buildings, ChatCircle } from 'phosphor-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useSiteContent } from '../contexts/SiteContentContext';
+import { Envelope, Phone, Globe, MapPin, PaperPlaneTilt, User, Buildings, ChatCircle, CheckCircle } from 'phosphor-react';
 
 const Contato = () => {
+  const { content } = useSiteContent();
+  const contatoContent = content.contato;
+  
   const [formData, setFormData] = useState({
     nome: '',
     empresa: '',
@@ -9,6 +14,9 @@ const Contato = () => {
     telefone: '',
     mensagem: ''
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -18,20 +26,45 @@ const Contato = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aqui você pode implementar a lógica de envio do formulário
-    console.log('Dados do formulário:', formData);
-    alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
+    setIsSubmitting(true);
     
-    // Limpar formulário
-    setFormData({
-      nome: '',
-      empresa: '',
-      email: '',
-      telefone: '',
-      mensagem: ''
-    });
+    try {
+      await fetch('https://sheetdb.io/api/v1/5h8knwp5z36hw', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          data: [
+            {
+              'Nome Completo': formData.nome,
+              'Empresa': formData.empresa || '',
+              'E-mail': formData.email,
+              'Telefone': formData.telefone || '',
+              'Mensagem': formData.mensagem,
+            }
+          ]
+        }),
+      });
+      
+      setIsSuccess(true);
+      setFormData({
+        nome: '',
+        empresa: '',
+        email: '',
+        telefone: '',
+        mensagem: ''
+      });
+      
+      // Resetar após 3 segundos
+      setTimeout(() => {
+        setIsSuccess(false);
+        setIsSubmitting(false);
+      }, 3000);
+    } catch (error) {
+      setIsSubmitting(false);
+      alert('Erro ao enviar mensagem. Tente novamente.');
+    }
   };
 
   const contactInfo = [
@@ -61,23 +94,72 @@ const Contato = () => {
     }
   ];
 
+  // Framer Motion variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const titleVariants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.9,
+        ease: [0.4, 0, 0.2, 1]
+      }
+    }
+  };
+
+  const formVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.7,
+        ease: [0.4, 0, 0.2, 1]
+      }
+    }
+  };
+
   return (
-    <section id="contato" className="py-20 bg-white">
-  <div className="max-w-3xl mx-auto px-5">
-        <div className="text-center mb-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Solicite uma Cotação Personalizada
+    <motion.section
+      id="contato"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      variants={containerVariants}
+      className="py-20 bg-white"
+    >
+      <div className="max-w-3xl mx-auto px-5">
+        <motion.div variants={titleVariants} className="text-center mb-10">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            {contatoContent.title}
           </h2>
+          <p className="text-xl text-gray-600 mb-4">
+            {contatoContent.subtitle}
+          </p>
+          <p className="text-gray-600 mb-6">
+            {contatoContent.description}
+          </p>
           <div className="w-24 h-1 bg-[#FFD027] mx-auto rounded-full mb-8"></div>
-        </div>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        </motion.div>
+        <motion.form variants={formVariants} onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-2xl">
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="nome" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="nome" className="block text-sm font-medium text-gray-900 mb-2">
                 Nome Completo *
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-5 h-5" />
                 <input
                   type="text"
                   id="nome"
@@ -85,24 +167,24 @@ const Contato = () => {
                   value={formData.nome}
                   onChange={handleInputChange}
                   required
-                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300"
+                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300 bg-white text-gray-900"
                   placeholder="Seu nome completo"
                 />
               </div>
             </div>
             <div>
-              <label htmlFor="empresa" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="empresa" className="block text-sm font-medium text-gray-900 mb-2">
                 Empresa
               </label>
               <div className="relative">
-                <Buildings className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Buildings className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-5 h-5" />
                 <input
                   type="text"
                   id="empresa"
                   name="empresa"
                   value={formData.empresa}
                   onChange={handleInputChange}
-                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300"
+                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300 bg-white text-gray-900"
                   placeholder="Nome da empresa"
                 />
               </div>
@@ -110,11 +192,11 @@ const Contato = () => {
           </div>
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-2">
                 E-mail *
               </label>
               <div className="relative">
-                <Envelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Envelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-5 h-5" />
                 <input
                   type="email"
                   id="email"
@@ -122,35 +204,35 @@ const Contato = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
-                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300"
+                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300 bg-white text-gray-900"
                   placeholder="seu@email.com"
                 />
               </div>
             </div>
             <div>
-              <label htmlFor="telefone" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="telefone" className="block text-sm font-medium text-gray-900 mb-2">
                 Telefone
               </label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-5 h-5" />
                 <input
                   type="tel"
                   id="telefone"
                   name="telefone"
                   value={formData.telefone}
                   onChange={handleInputChange}
-                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300"
+                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300 bg-white text-gray-900"
                   placeholder="(81) 9999-9999"
                 />
               </div>
             </div>
           </div>
           <div>
-            <label htmlFor="mensagem" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="mensagem" className="block text-sm font-medium text-gray-900 mb-2">
               Mensagem *
             </label>
             <div className="relative">
-              <ChatCircle className="absolute left-3 top-4 text-gray-400 w-5 h-5" />
+              <ChatCircle className="absolute left-3 top-4 text-gray-600 w-5 h-5" />
               <textarea
                 id="mensagem"
                 name="mensagem"
@@ -158,21 +240,47 @@ const Contato = () => {
                 onChange={handleInputChange}
                 required
                 rows={5}
-                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300 resize-none"
+                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300 resize-none bg-white text-gray-900"
                 placeholder="Descreva seu projeto e necessidades..."
               />
             </div>
           </div>
-          <button
+          <motion.button
             type="submit"
-            className="w-full bg-[#005563] text-white py-4 px-6 rounded-lg font-semibold hover:bg-[#007A8A] transition-all duration-300 flex items-center justify-center gap-3 hover:shadow-lg hover:-translate-y-0.5"
+            disabled={isSubmitting}
+            whileHover={!isSubmitting ? { scale: 1.02, boxShadow: '0 10px 25px -5px rgba(0,0,0,0.3)' } : {}}
+            whileTap={!isSubmitting ? { scale: 0.98 } : {}}
+            className="w-full py-4 px-6 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-3 bg-[#005563] text-white hover:bg-[#007A8A]"
           >
-            <PaperPlaneTilt className="w-5 h-5" />
-            Enviar Mensagem
-          </button>
-        </form>
+            <AnimatePresence mode="wait">
+              {isSuccess ? (
+                <motion.div
+                  key="success"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
+                  className="flex items-center gap-3"
+                >
+                  <CheckCircle className="w-6 h-6 text-green-400" weight="fill" />
+                  <span className="text-white">Mensagem Enviada!</span>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="send"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="flex items-center gap-3"
+                >
+                  <PaperPlaneTilt className="w-5 h-5" />
+                  {isSubmitting ? 'Enviando...' : 'Enviar Mensagem'}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.button>
+        </motion.form>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

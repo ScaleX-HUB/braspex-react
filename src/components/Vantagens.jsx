@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { 
   Lock, 
   Lightning, 
@@ -78,23 +79,73 @@ const Vantagens = () => {
     return () => carousel.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Framer Motion variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  const titleVariants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.9,
+        ease: [0.4, 0, 0.2, 1]
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, scale: 0.8, y: 30 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        type: 'spring',
+        stiffness: 260,
+        damping: 22,
+        mass: 1.1
+      }
+    }
+  };
+
   return (
-    <section id="vantagens" className="pt-20 pb-12 bg-white">
+    <motion.section
+      id="vantagens"
+      className="pt-20 pb-12 bg-white"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      variants={containerVariants}
+    >
       <div className="max-w-6xl mx-auto px-5">
         {/* Título */}
-        <div className="text-center mb-16">
+        <motion.div className="text-center mb-16" variants={titleVariants}>
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             {vantagensContent.title}
           </h2>
           <div className="w-24 h-1 bg-[#FFD027] mx-auto rounded-full"></div>
-        </div>
+        </motion.div>
         {/* Desktop: Layout linear */}
-        <div className="hidden md:flex flex-row items-start justify-center gap-8 relative">
+        <motion.div
+          className="hidden md:flex flex-row items-start justify-center gap-8 relative"
+          variants={containerVariants}
+        >
           {steps.map((step, index) => (
-            <div
+            <motion.div
               key={index}
               className="flex flex-col items-center text-center max-w-xs relative px-8"
               style={{ zIndex: 2 }}
+              variants={itemVariants}
             >
               {/* Ícone em círculo */}
               <div
@@ -115,9 +166,9 @@ const Vantagens = () => {
               {index !== steps.length - 1 && (
                 <div className="absolute top-12 left-[calc(100%-2rem)] w-16 h-[3px] bg-gradient-to-r from-gray-300 to-gray-400 rounded-full"></div>
               )}
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Mobile: Carrossel centralizado com linhas */}
         <div className="md:hidden relative overflow-hidden">
@@ -169,7 +220,7 @@ const Vantagens = () => {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

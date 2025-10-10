@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { contentService, analyticsService, isUsingMockData } from '../services/baserowService';
+import { textsAPI } from '../services/textsAPI';
+import { analyticsAPI } from '../services/analyticsAPI';
 
 const SiteContentContext = createContext();
 
@@ -58,33 +59,33 @@ export const SiteContentProvider = ({ children }) => {
     visitors: []
   });
   const [loading, setLoading] = useState(true);
-  const [isBaserowConnected, setIsBaserowConnected] = useState(false);
+  const [isSupabaseConnected, setIsSupabaseConnected] = useState(false);
 
-  // Carregar conteúdo do Baserow na inicialização
+  // Carregar conteúdo do Supabase na inicialização
   useEffect(() => {
     const loadContent = async () => {
       try {
-        const baserowContent = await contentService.getAllContent();
-        if (baserowContent && Object.keys(baserowContent).length > 0) {
-          setContent(baserowContent);
-          setIsBaserowConnected(!isUsingMockData());
+        const supabaseContent = await textsAPI.getAllFormatted();
+        if (supabaseContent && Object.keys(supabaseContent).length > 0) {
+          setContent(supabaseContent);
+          setIsSupabaseConnected(true);
         } else {
-          // Fallback para conteúdo local se Baserow não estiver disponível
-          console.log('Usando conteúdo local - Baserow não configurado');
+          // Fallback para conteúdo local se Supabase não estiver disponível
+          console.log('Usando conteúdo local - Supabase não configurado');
           const saved = localStorage.getItem('siteContent');
           if (saved) {
             setContent(JSON.parse(saved));
           }
-          setIsBaserowConnected(false);
+          setIsSupabaseConnected(false);
         }
       } catch (error) {
-        console.error('Erro ao carregar conteúdo do Baserow:', error);
+        console.error('Erro ao carregar conteúdo do Supabase:', error);
         // Fallback para localStorage
         const saved = localStorage.getItem('siteContent');
         if (saved) {
           setContent(JSON.parse(saved));
         }
-        setIsBaserowConnected(false);
+        setIsSupabaseConnected(false);
       } finally {
         setLoading(false);
       }
@@ -93,14 +94,14 @@ export const SiteContentProvider = ({ children }) => {
     loadContent();
   }, []);
 
-  // Carregar analytics do Baserow
+  // Carregar analytics do Supabase
   useEffect(() => {
     const loadAnalytics = async () => {
       try {
-        if (isBaserowConnected) {
-          const baserowAnalytics = await analyticsService.getAnalytics();
-          if (baserowAnalytics) {
-            setAnalytics(baserowAnalytics);
+        if (isSupabaseConnected) {
+          const supabaseAnalytics = await analyticsAPI.getStats();
+          if (supabaseAnalytics) {
+            setAnalytics(supabaseAnalytics);
           }
         } else {
           // Fallback para localStorage
@@ -110,7 +111,7 @@ export const SiteContentProvider = ({ children }) => {
           }
         }
       } catch (error) {
-        console.error('Erro ao carregar analytics do Baserow:', error);
+        console.error('Erro ao carregar analytics do Supabase:', error);
       }
     };
 
@@ -118,8 +119,11 @@ export const SiteContentProvider = ({ children }) => {
       loadAnalytics();
       
       // Registrar visita
-      if (isBaserowConnected) {
-        analyticsService.trackVisit();
+      if (isSupabaseConnected) {
+        analyticsAPI.trackView({
+          page: window.location.pathname,
+          userAgent: navigator.userAgent
+        });
       } else {
         // Fallback para localStorage
         const today = new Date().toISOString().split('T')[0];
@@ -141,31 +145,28 @@ export const SiteContentProvider = ({ children }) => {
         });
       }
 
-      // Atualizar analytics a cada 30 segundos se conectado ao Baserow
-      if (isBaserowConnected) {
+      // Atualizar analytics a cada 30 segundos se conectado ao Supabase
+      if (isSupabaseConnected) {
         const interval = setInterval(loadAnalytics, 30000);
         return () => clearInterval(interval);
       }
     }
-  }, [loading, isBaserowConnected]);
+  }, [loading, isSupabaseConnected]);
 
   const updateContent = async (section, field, value) => {
     try {
-      if (isBaserowConnected) {
-        const success = await contentService.updateContent(section, field, value);
-        if (success) {
-          setContent(prev => ({
-            ...prev,
-            [section]: {
-              ...prev[section],
-              [field]: value
-            }
-          }));
-          return true;
-        }
-        return false;
+      if (isSupabaseConnected) {
+        await textsAPI.updateByField(section, field, value);
+        setContent(prev => ({
+          ...prev,
+          [section]: {
+            ...prev[section],
+            [field]: value
+          }
+        }));
+        return true;
       } else {
-        // Fallback para localStorage se Baserow não estiver disponível
+        // Fallback para localStorage se Supabase não estiver disponível
         const newContent = {
           ...content,
           [section]: {
@@ -185,13 +186,15 @@ export const SiteContentProvider = ({ children }) => {
 
   const resetContent = async () => {
     try {
-      if (isBaserowConnected) {
-        const success = await contentService.resetContent();
-        if (success) {
-          setContent(DEFAULT_CONTENT);
-          return true;
+      if (isSupabaseConnected) {
+        // Em Supabase, precisamos resetar campo por campo
+        for (const section of Object.keys(DEFAULT_CONTENT)) {
+          for (const field of Object.keys(DEFAULT_CONTENT[section])) {
+            await textsAPI.updateByField(section, field, DEFAULT_CONTENT[section][field]);
+          }
         }
-        return false;
+        setContent(DEFAULT_CONTENT);
+        return true;
       } else {
         // Fallback para localStorage
         setContent(DEFAULT_CONTENT);
@@ -210,7 +213,7 @@ export const SiteContentProvider = ({ children }) => {
     updateContent,
     resetContent,
     loading,
-    isBaserowConnected
+    isSupabaseConnected
   };
 
   return (
