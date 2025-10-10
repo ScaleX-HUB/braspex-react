@@ -1,6 +1,8 @@
 // Dados de exemplo para demonstração do Baserow
 // Estes dados simulam o que viria do Baserow quando não configurado
 
+import { mockProducts } from './mockProducts';
+
 export const mockBaserowData = {
   // Usuário admin para demonstração
   users: [
@@ -14,6 +16,9 @@ export const mockBaserowData = {
       last_login: new Date().toISOString()
     }
   ],
+
+  // Produtos
+  products: mockProducts,
 
   // Conteúdo do site com dados de exemplo
   content: [

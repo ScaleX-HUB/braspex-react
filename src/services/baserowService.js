@@ -321,6 +321,151 @@ export const analyticsService = {
   }
 };
 
+// Serviços de Produtos
+export const productService = {
+  async getAllProducts() {
+    if (!isBaserowConfigured()) {
+      // Usar dados mock
+      await mockApiDelay();
+      return mockBaserowData.products;
+    }
+
+    try {
+      const response = await api.get(`/database/rows/table/${baserowConfig.tables.products}/`);
+      return response.data.results;
+    } catch (error) {
+      console.error('Erro ao buscar produtos:', error);
+      return [];
+    }
+  },
+
+  async getProductById(productId) {
+    if (!isBaserowConfigured()) {
+      await mockApiDelay();
+      return mockBaserowData.products.find(p => p.id === productId);
+    }
+
+    try {
+      const response = await api.get(`/database/rows/table/${baserowConfig.tables.products}/${productId}/`);
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao buscar produto:', error);
+      return null;
+    }
+  },
+
+  async getProductsByCategory(categoryId, subcategoryId = null) {
+    if (!isBaserowConfigured()) {
+      await mockApiDelay();
+      return mockBaserowData.products.filter(p => {
+        if (p.categoryId !== categoryId) return false;
+        if (subcategoryId && p.subcategoryId !== subcategoryId) return false;
+        return p.active;
+      });
+    }
+
+    try {
+      let params = { 'filter__categoryId__equal': categoryId };
+      if (subcategoryId) {
+        params['filter__subcategoryId__equal'] = subcategoryId;
+      }
+      params['filter__active__equal'] = true;
+
+      const response = await api.get(`/database/rows/table/${baserowConfig.tables.products}/`, { params });
+      return response.data.results;
+    } catch (error) {
+      console.error('Erro ao buscar produtos por categoria:', error);
+      return [];
+    }
+  },
+
+  async createProduct(productData) {
+    if (!isBaserowConfigured()) {
+      await mockApiDelay(500);
+      const newProduct = {
+        ...productData,
+        id: Math.max(...mockBaserowData.products.map(p => p.id), 0) + 1
+      };
+      mockBaserowData.products.push(newProduct);
+      return newProduct;
+    }
+
+    try {
+      const response = await api.post(`/database/rows/table/${baserowConfig.tables.products}/`, productData);
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao criar produto:', error);
+      throw error;
+    }
+  },
+
+  async updateProduct(productId, productData) {
+    if (!isBaserowConfigured()) {
+      await mockApiDelay(500);
+      const index = mockBaserowData.products.findIndex(p => p.id === productId);
+      if (index >= 0) {
+        mockBaserowData.products[index] = { ...mockBaserowData.products[index], ...productData };
+        return mockBaserowData.products[index];
+      }
+      throw new Error('Produto não encontrado');
+    }
+
+    try {
+      const response = await api.patch(`/database/rows/table/${baserowConfig.tables.products}/${productId}/`, productData);
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao atualizar produto:', error);
+      throw error;
+    }
+  },
+
+  async deleteProduct(productId) {
+    if (!isBaserowConfigured()) {
+      await mockApiDelay(300);
+      const index = mockBaserowData.products.findIndex(p => p.id === productId);
+      if (index >= 0) {
+        mockBaserowData.products.splice(index, 1);
+        return true;
+      }
+      return false;
+    }
+
+    try {
+      await api.delete(`/database/rows/table/${baserowConfig.tables.products}/${productId}/`);
+      return true;
+    } catch (error) {
+      console.error('Erro ao deletar produto:', error);
+      return false;
+    }
+  },
+
+  async searchProducts(query) {
+    if (!isBaserowConfigured()) {
+      await mockApiDelay();
+      const lowerQuery = query.toLowerCase();
+      return mockBaserowData.products.filter(p =>
+        p.active && (
+          p.name.toLowerCase().includes(lowerQuery) ||
+          p.description.toLowerCase().includes(lowerQuery)
+        )
+      );
+    }
+
+    try {
+      const response = await api.get(`/database/rows/table/${baserowConfig.tables.products}/`, {
+        params: {
+          search: query,
+          'filter__active__equal': true
+        }
+      });
+      return response.data.results;
+    } catch (error) {
+      console.error('Erro ao buscar produtos:', error);
+      return [];
+    }
+  }
+};
+
 // Função para testar conexão
 export const testConnection = async () => {
   if (!isBaserowConfigured()) {

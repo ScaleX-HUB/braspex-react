@@ -16,7 +16,8 @@ export const baserowConfig = {
   tables: {
     content: '', // Tabela para armazenar o conteúdo do site
     analytics: '', // Tabela para armazenar analytics
-    users: '' // Tabela para usuários do admin
+    users: '', // Tabela para usuários do admin
+    products: '' // Tabela para produtos
   }
 };
 
@@ -47,4 +48,18 @@ Campos:
 - active (Boolean)
 - created_at (Date)
 - last_login (Date)
+
+TABELA: products (Produtos)
+Campos:
+- name (Text) - Nome do produto
+- description (Long Text) - Descrição do produto
+- categoryId (Text) - ID da categoria (pex, gas, kit, polvo, outros)
+- subcategoryId (Text) - ID da subcategoria
+- childId (Text) - ID do child (opcional)
+- subchildId (Text) - ID do subchild (opcional)
+- image (URL) - URL da imagem do produto
+- specifications (Long Text) - JSON com especificações
+- active (Boolean) - Se o produto está ativo
+- created_at (Date)
+- updated_at (Date)
 */
