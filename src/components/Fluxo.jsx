@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { useSiteContent } from '../contexts/SiteContentContext';
 import { 
   FileText, 
@@ -14,8 +15,6 @@ const Fluxo = () => {
   const fluxoContent = content.fluxo;
   
   const [activeStep, setActiveStep] = useState(1);
-
-  // Removido o avanço automático
 
   const steps = [
     { 
@@ -118,11 +117,78 @@ const Fluxo = () => {
 
   const currentStep = steps.find(step => step.id === activeStep);
 
+  // Framer Motion variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const titleVariants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.9,
+        ease: [0.4, 0, 0.2, 1]
+      }
+    }
+  };
+
+  const stepsRowVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.5
+      }
+    }
+  };
+
+  const stepVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        ease: [0.4, 0, 0.2, 1]
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.7,
+        ease: [0.4, 0, 0.2, 1],
+        delay: 1.2
+      }
+    }
+  };
+
   return (
-    <section id="fluxo" className="py-20 bg-gradient-to-b from-gray-50 to-white">
+    <motion.section
+      id="fluxo"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      variants={containerVariants}
+      className="py-20 bg-gradient-to-b from-gray-50 to-white"
+    >
       <div className="max-w-5xl mx-auto px-5">
         {/* Header */}
-        <div className="text-center mb-14">
+        <motion.div variants={titleVariants} className="text-center mb-14">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             {fluxoContent.title}
           </h2>
@@ -130,10 +196,10 @@ const Fluxo = () => {
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             {fluxoContent.description}
           </p>
-        </div>
+        </motion.div>
 
         {/* Steps com linhas conectando */}
-        <div className="hidden md:flex justify-between items-center mb-12 relative" style={{ minHeight: '9rem' }}>
+        <motion.div variants={stepsRowVariants} className="hidden md:flex justify-between items-center mb-12 relative" style={{ minHeight: '9rem' }}>
           {/* Linha horizontal única conectando as bolas */}
           <div className="absolute h-px bg-gray-300 z-0" style={{ 
             left: 'calc(16.66% / 2)', 
@@ -142,7 +208,7 @@ const Fluxo = () => {
             transform: 'translateY(-20px)' 
           }}></div>
           {steps.map((step) => (
-            <div key={step.id} className="relative flex-1 flex justify-center">
+            <motion.div key={step.id} variants={stepVariants} className="relative flex-1 flex justify-center">
               <button
                 onClick={() => setActiveStep(step.id)}
                 className={`flex flex-col items-center transition-all duration-300 relative z-10`}
@@ -174,12 +240,12 @@ const Fluxo = () => {
                   {step.shortTitle}
                 </span>
               </button>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Versão Mobile - Grid com 2 colunas + linhas conectoras */}
-        <div className="md:hidden relative mb-12">
+        <motion.div variants={stepsRowVariants} className="md:hidden relative mb-12">
           {/* SVG com linhas conectoras */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
             {/* Projeto → Compatibilização (horizontal com espaçamento) */}
@@ -196,7 +262,7 @@ const Fluxo = () => {
           
           <div className="grid grid-cols-2 gap-6 relative z-10">
             {steps.map((step) => (
-              <div key={step.id} className="flex flex-col items-center">
+              <motion.div key={step.id} variants={stepVariants} className="flex flex-col items-center">
                 <button
                   onClick={() => setActiveStep(step.id)}
                   className={`flex flex-col items-center transition-all duration-300 relative z-10`}
@@ -221,10 +287,10 @@ const Fluxo = () => {
                     {step.shortTitle}
                   </span>
                 </button>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Linha vertical fixa no meio do card - maior e mais para cima */}
         <div className="flex justify-center" style={{marginTop: '-32px', marginBottom: '8px'}}>
@@ -232,7 +298,7 @@ const Fluxo = () => {
         </div>
 
         {/* Card de conteúdo - mais próximo dos steps e com hover, agora com numeração */}
-        <div className="fluxo-card bg-white rounded-2xl shadow-md p-8 text-center max-w-3xl mx-auto transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+        <motion.div variants={cardVariants} className="fluxo-card bg-white rounded-2xl shadow-md p-8 text-center max-w-3xl mx-auto transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
           <h3 className="text-2xl font-bold text-gray-900 mb-2">
             <span className="font-extrabold mr-2 text-2xl" style={{color:'#120229'}}>{currentStep.id}.</span>
             {currentStep.content.title}
@@ -243,9 +309,9 @@ const Fluxo = () => {
           <p className="text-gray-600 text-lg leading-relaxed">
             {currentStep.content.description}
           </p>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

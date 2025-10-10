@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { useSiteContent } from '../contexts/SiteContentContext';
 import { X, CheckCircle, Drop, Wind, Gear } from 'phosphor-react';
 // Imagens agora estão na pasta public
@@ -65,17 +66,60 @@ const Kits = () => {
     }
   ];
 
+  // Framer Motion variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.3,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const titleVariants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.9,
+        ease: [0.4, 0, 0.2, 1]
+      }
+    }
+  };
+
+  const productVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.4, 0, 0.2, 1]
+      }
+    }
+  };
+
   return (
     <>
-      <section id="kits" className="py-16 bg-gray-50">
+      <motion.section
+        id="kits"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={containerVariants}
+        className="py-16 bg-gray-50"
+      >
         <div className="max-w-6xl mx-auto px-5">
           {/* Header */}
-          <div className="text-center mb-16">
+          <motion.div variants={titleVariants} className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               {kitsContent.title}
             </h2>
             <div className="w-24 h-1 bg-[#FFD027] mx-auto rounded-full mb-8"></div>
-          </div>
+          </motion.div>
 
           {/* Lista de Produtos - Alternando layout */}
           <div className="space-y-20">
@@ -83,8 +127,9 @@ const Kits = () => {
               const isImageLeft = index % 2 === 0; // Par: imagem à esquerda, Ímpar: imagem à direita
               
               return (
-                <div 
-                  key={product.id} 
+                <motion.div 
+                  key={product.id}
+                  variants={productVariants}
                   className="scroll-mt-24"
                   id={product.id}
                 >
@@ -184,12 +229,12 @@ const Kits = () => {
                   {index < products.length - 1 && (
                     <div className="mt-20 border-b-2 border-gray-200"></div>
                   )}
-                </div>
+                </motion.div>
               );
             })}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Modal */}
       {modalImage && (

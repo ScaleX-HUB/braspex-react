@@ -15,7 +15,7 @@ const Footer = () => {
         <div className="col-span-1 md:col-span-2 flex flex-col items-center md:items-start">
           <div className="flex justify-center md:justify-start w-full">
             <div
-              className="logo-balloon bg-white rounded-full p-4 border border-gray-200 flex items-center justify-center mb-6 transition-all duration-300"
+                className="logo-balloon bg-white rounded-full p-4 border border-white flex items-center justify-center mb-6 transition-all duration-300"
               style={{
                 minWidth: '120px',
                 minHeight: '120px',
@@ -83,14 +83,14 @@ const Footer = () => {
       </div>
 
       <div className="border-t border-gray-700 mt-16 pt-8 text-center">
-        <p className="text-lg font-bold text-white mb-1">{footerContent.copyright}</p>
-        <p className="mt-2 text-base font-semibold text-[#FFD027]">
-          Desenvolvido por <a href="https://www.linkedin.com/company/converseia" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">ConverseIA Tech</a>
+        <p className="text-base font-light font-montserrat text-white mb-1">{footerContent.copyright}</p>
+        <p className="mt-2 text-sm font-light font-montserrat text-[#FFD027]">
+          Desenvolvido por <a href="https://www.linkedin.com/company/converseia" target="_blank" rel="noopener noreferrer" className="underline hover:text-white font-montserrat font-light">ConverseIA Tech</a>
         </p>
         <div className="mt-4">
           <a 
             href="/admin" 
-            className="text-xs text-gray-500 hover:text-gray-300 transition-colors opacity-50 hover:opacity-75"
+            className="text-xs font-light font-montserrat text-gray-500 hover:text-gray-300 transition-colors opacity-50 hover:opacity-75"
             title="Painel Administrativo"
           >
             •

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { useSiteContent } from '../contexts/SiteContentContext';
 import { Envelope, Phone, Globe, MapPin, PaperPlaneTilt, User, Buildings, ChatCircle } from 'phosphor-react';
 
@@ -65,10 +66,53 @@ const Contato = () => {
     }
   ];
 
+  // Framer Motion variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const titleVariants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.9,
+        ease: [0.4, 0, 0.2, 1]
+      }
+    }
+  };
+
+  const formVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.7,
+        ease: [0.4, 0, 0.2, 1]
+      }
+    }
+  };
+
   return (
-    <section id="contato" className="py-20 bg-white">
-  <div className="max-w-3xl mx-auto px-5">
-        <div className="text-center mb-10">
+    <motion.section
+      id="contato"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      variants={containerVariants}
+      className="py-20 bg-white"
+    >
+      <div className="max-w-3xl mx-auto px-5">
+        <motion.div variants={titleVariants} className="text-center mb-10">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             {contatoContent.title}
           </h2>
@@ -79,8 +123,8 @@ const Contato = () => {
             {contatoContent.description}
           </p>
           <div className="w-24 h-1 bg-[#FFD027] mx-auto rounded-full mb-8"></div>
-        </div>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        </motion.div>
+        <motion.form variants={formVariants} onSubmit={handleSubmit} className="space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label htmlFor="nome" className="block text-sm font-medium text-gray-700 mb-2">
@@ -173,16 +217,18 @@ const Contato = () => {
               />
             </div>
           </div>
-          <button
+          <motion.button
             type="submit"
-            className="w-full bg-[#005563] text-white py-4 px-6 rounded-lg font-semibold hover:bg-[#007A8A] transition-all duration-300 flex items-center justify-center gap-3 hover:shadow-lg hover:-translate-y-0.5"
+            whileHover={{ scale: 1.02, boxShadow: '0 10px 25px -5px rgba(0,0,0,0.3)' }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full bg-[#005563] text-white py-4 px-6 rounded-lg font-semibold hover:bg-[#007A8A] transition-all duration-300 flex items-center justify-center gap-3"
           >
             <PaperPlaneTilt className="w-5 h-5" />
             Enviar Mensagem
-          </button>
-        </form>
+          </motion.button>
+        </motion.form>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
