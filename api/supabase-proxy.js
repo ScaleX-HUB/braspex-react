@@ -30,8 +30,8 @@ export default async function handler(req, res) {
   // CRÍTICO: Capturar path do query param (vem do vercel.json)
   const { path: capturedPath, ...queryParams } = req.query || {};
   
-  // Reconstruir URL completa
-  let finalPath = capturedPath ? `/${capturedPath}` : '/';
+  // Reconstruir URL completa (path já vem com barra inicial do vercel.json)
+  let finalPath = capturedPath || '/';
   const queryString = new URLSearchParams(queryParams).toString();
   if (queryString) {
     finalPath += `?${queryString}`;
