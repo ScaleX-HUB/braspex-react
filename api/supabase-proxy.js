@@ -8,8 +8,9 @@
  */
 
 export default async function handler(req, res) {
-  // URL do Supabase self-hosted (HTTP) - Pegar das variáveis de ambiente
+  // URL e Schema do Supabase self-hosted (HTTP) - Pegar das variáveis de ambiente
   const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'http://173.249.32.99:54321';
+  const SUPABASE_SCHEMA = process.env.VITE_SUPABASE_SCHEMA || 'braspex';
   
   // CORS headers essenciais
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -38,6 +39,7 @@ export default async function handler(req, res) {
   
   const targetUrl = `${SUPABASE_URL}${finalPath}`;
   console.log('🎯 Proxy request:', req.method, targetUrl);
+  console.log('📂 Schema:', SUPABASE_SCHEMA);
 
   // Headers PostgREST obrigatórios
   const headers = {
@@ -45,8 +47,9 @@ export default async function handler(req, res) {
     'Authorization': req.headers['authorization'] || '',
     'apikey': req.headers['apikey'] || '',
     'Prefer': req.headers['prefer'] || '',
-    'Accept-Profile': req.headers['accept-profile'] || '',
-    'Content-Profile': req.headers['content-profile'] || '',
+    // FORÇAR schema do .env (não confiar no cliente)
+    'Accept-Profile': SUPABASE_SCHEMA,
+    'Content-Profile': SUPABASE_SCHEMA,
   };
 
   // Remover headers vazios
