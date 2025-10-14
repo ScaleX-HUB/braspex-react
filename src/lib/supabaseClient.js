@@ -13,11 +13,14 @@
 const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost';
 
 // URL base - em produção usa o proxy da Vercel
-const SUPABASE_URL = isDevelopment 
-  ? (import.meta.env.VITE_SUPABASE_URL || 'http://supabase.talka.tech:3000')
+const SUPABASE_BASE_URL = isDevelopment 
+  ? (import.meta.env.VITE_SUPABASE_URL || 'http://173.249.32.99:54321')
   : '/api/supabase-proxy'; // Proxy da Vercel em produção
 
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+// Adicionar /rest/v1 apenas em desenvolvimento (proxy já inclui)
+const SUPABASE_URL = isDevelopment ? `${SUPABASE_BASE_URL}/rest/v1` : SUPABASE_BASE_URL;
+
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzYwMDE1NTc0LCJleHAiOjIwNzUzNzU1NzR9.zOkNw3Bh2qhDjrOYK8Gptx7Kv_ADs-9x0732M9pLYoQ';
 const SUPABASE_SCHEMA = import.meta.env.VITE_SUPABASE_SCHEMA || 'braspex';
 
 console.log('🔧 Supabase Client Config:', {

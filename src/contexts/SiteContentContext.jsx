@@ -67,23 +67,42 @@ export const SiteContentProvider = ({ children }) => {
       try {
         const supabaseContent = await textsAPI.getAllFormatted();
         if (supabaseContent && Object.keys(supabaseContent).length > 0) {
-          setContent(supabaseContent);
+          // Merge: usar Supabase mas manter defaults para campos não encontrados
+          const mergedContent = { ...DEFAULT_CONTENT };
+          Object.keys(supabaseContent).forEach(section => {
+            if (mergedContent[section]) {
+              mergedContent[section] = {
+                ...mergedContent[section],
+                ...supabaseContent[section]
+              };
+            } else {
+              mergedContent[section] = supabaseContent[section];
+            }
+          });
+          setContent(mergedContent);
           setIsSupabaseConnected(true);
+          console.log('✅ Conteúdo carregado do Supabase (merged com defaults)');
         } else {
           // Fallback para conteúdo local se Supabase não estiver disponível
-          console.log('Usando conteúdo local - Supabase não configurado');
+          console.log('⚠️ Usando conteúdo DEFAULT - Supabase vazio ou não configurado');
           const saved = localStorage.getItem('siteContent');
           if (saved) {
             setContent(JSON.parse(saved));
+          } else {
+            setContent(DEFAULT_CONTENT);
           }
           setIsSupabaseConnected(false);
         }
       } catch (error) {
-        console.error('Erro ao carregar conteúdo do Supabase:', error);
-        // Fallback para localStorage
+        console.error('❌ Erro ao carregar conteúdo do Supabase:', error);
+        // Fallback para localStorage ou DEFAULT
         const saved = localStorage.getItem('siteContent');
         if (saved) {
+          console.log('📦 Usando conteúdo do localStorage');
           setContent(JSON.parse(saved));
+        } else {
+          console.log('📦 Usando conteúdo DEFAULT');
+          setContent(DEFAULT_CONTENT);
         }
         setIsSupabaseConnected(false);
       } finally {
@@ -155,18 +174,23 @@ export const SiteContentProvider = ({ children }) => {
 
   const updateContent = async (section, field, value) => {
     try {
+      // ATUALIZAR ESTADO IMEDIATAMENTE para responsividade
+      setContent(prev => ({
+        ...prev,
+        [section]: {
+          ...prev[section],
+          [field]: value
+        }
+      }));
+
+      // SALVAR EM BACKGROUND (não bloqueia o input)
       if (isSupabaseConnected) {
-        await textsAPI.updateByField(section, field, value);
-        setContent(prev => ({
-          ...prev,
-          [section]: {
-            ...prev[section],
-            [field]: value
-          }
-        }));
-        return true;
+        // Salvar no Supabase sem bloquear
+        textsAPI.updateByField(section, field, value).catch(error => {
+          console.error('❌ Erro ao salvar no Supabase:', error);
+        });
       } else {
-        // Fallback para localStorage se Supabase não estiver disponível
+        // Salvar no localStorage
         const newContent = {
           ...content,
           [section]: {
@@ -174,10 +198,10 @@ export const SiteContentProvider = ({ children }) => {
             [field]: value
           }
         };
-        setContent(newContent);
         localStorage.setItem('siteContent', JSON.stringify(newContent));
-        return true;
       }
+      
+      return true;
     } catch (error) {
       console.error('Erro ao atualizar conteúdo:', error);
       return false;

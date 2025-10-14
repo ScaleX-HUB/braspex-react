@@ -207,7 +207,7 @@ const SupabaseStatusDashboard = () => {
             <div>
               <h4 className="font-semibold text-gray-900 mb-2">Ações Recomendadas:</h4>
               <ol className="list-decimal list-inside space-y-1 text-sm text-gray-700">
-                <li>Verifique se o Supabase está rodando em <code className="bg-yellow-100 px-1 rounded">http://supabase.talka.tech:3000</code></li>
+                <li>Verifique se o Supabase está rodando em <code className="bg-yellow-100 px-1 rounded">http://173.249.32.99:54321</code></li>
                 <li>Execute o script <code className="bg-yellow-100 px-1 rounded">database/fix_permissions.sql</code></li>
                 <li>Execute o script <code className="bg-yellow-100 px-1 rounded">database/reset_complete.sql</code></li>
                 <li>Verifique as variáveis de ambiente no arquivo <code className="bg-yellow-100 px-1 rounded">.env</code></li>

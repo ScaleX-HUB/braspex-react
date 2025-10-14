@@ -1,7 +1,7 @@
 // Script de teste para verificar conexão com Supabase
 // Execute: node test-supabase.js
 
-const SUPABASE_URL = 'http://supabase.talka.tech:3000';
+const SUPABASE_URL = 'http://173.249.32.99:54321';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzYwMDE1NTc0LCJleHAiOjIwNzUzNzU1NzR9.zOkNw3Bh2qhDjrOYK8Gptx7Kv_ADs-9x0732M9pLYoQ';
 const SCHEMA = 'braspex';
 
@@ -11,7 +11,7 @@ async function testConnection() {
   try {
     // Teste 1: Buscar textos do site
     console.log('1️⃣ Buscando textos do site (site_texts)...');
-    const textsResponse = await fetch(`${SUPABASE_URL}/site_texts`, {
+    const textsResponse = await fetch(`${SUPABASE_URL}/rest/v1/site_texts`, {
       method: 'GET',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
@@ -31,7 +31,7 @@ async function testConnection() {
     
     // Teste 2: Buscar produtos
     console.log('2️⃣ Buscando produtos (products)...');
-    const productsResponse = await fetch(`${SUPABASE_URL}/products`, {
+    const productsResponse = await fetch(`${SUPABASE_URL}/rest/v1/products`, {
       method: 'GET',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
@@ -51,7 +51,7 @@ async function testConnection() {
     
     // Teste 3: Verificar usuário admin
     console.log('3️⃣ Verificando usuário admin (users)...');
-    const usersResponse = await fetch(`${SUPABASE_URL}/users?username=eq.admin`, {
+    const usersResponse = await fetch(`${SUPABASE_URL}/rest/v1/users?username=eq.admin`, {
       method: 'GET',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
@@ -76,10 +76,10 @@ async function testConnection() {
   } catch (error) {
     console.error('❌ ERRO:', error.message);
     console.error('\n💡 Verifique:');
-    console.error('   - Se o Supabase está rodando em http://supabase.talka.tech:3000');
+    console.error('   - Se o Supabase está rodando em http://173.249.32.99:54321');
     console.error('   - Se o schema "braspex" existe');
     console.error('   - Se as tabelas foram criadas');
-    console.error('   - Se os dados foram inseridos (rode reset_complete.sql)');
+    console.error('   - Se os dados foram inseridos');
   }
 }
 

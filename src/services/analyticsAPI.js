@@ -60,8 +60,9 @@ export const analyticsAPI = {
       });
       return data[0];
     } catch (error) {
-      console.error('Erro ao registrar visualização:', error);
-      throw error;
+      // Não bloquear a aplicação se analytics falhar
+      console.warn('⚠️ Analytics não disponível (erro 401 - permissões). Analytics desabilitado.');
+      return null;
     }
   },
 

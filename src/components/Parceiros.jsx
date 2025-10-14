@@ -18,8 +18,20 @@ const Parceiros = () => {
   React.useEffect(() => {
     const carousel = carouselRef.current;
     if (!carousel) return;
-    const scrollWidth = carousel.scrollWidth / 2;
+    // Espera o layout para garantir scrollWidth correto
+    const setInitialScroll = () => {
+      // scrollWidth pode ser zero se o layout não estiver pronto
+      const scrollWidth = carousel.scrollWidth / 2;
+      if (scrollWidth > 0) {
+        carousel.scrollLeft = scrollWidth;
+      } else {
+        // Tenta novamente após um pequeno delay
+        setTimeout(setInitialScroll, 50);
+      }
+    };
+    setInitialScroll();
     const handleScroll = () => {
+      const scrollWidth = carousel.scrollWidth / 2;
       if (carousel.scrollLeft >= scrollWidth) {
         carousel.scrollLeft = carousel.scrollLeft - scrollWidth;
       } else if (carousel.scrollLeft <= 0) {
@@ -27,8 +39,6 @@ const Parceiros = () => {
       }
     };
     carousel.addEventListener('scroll', handleScroll);
-    // Inicializa no meio para loop
-    carousel.scrollLeft = scrollWidth;
     return () => carousel.removeEventListener('scroll', handleScroll);
   }, []);
 

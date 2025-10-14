@@ -101,15 +101,31 @@ export const textsAPI = {
    */
   async updateByField(section, field, value) {
     try {
-      const data = await supabase.update(
-        TABLE_NAME,
-        { section, field },
-        {
+      // Primeiro, tentar buscar se existe
+      const existing = await this.getByField(section, field);
+      
+      if (existing) {
+        // Atualizar existente
+        const data = await supabase.update(
+          TABLE_NAME,
+          { section, field },
+          {
+            value,
+            updated_at: new Date().toISOString()
+          }
+        );
+        return data[0];
+      } else {
+        // Criar novo
+        const data = await supabase.insert(TABLE_NAME, {
+          section,
+          field,
           value,
+          created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
-        }
-      );
-      return data[0];
+        });
+        return data[0];
+      }
     } catch (error) {
       console.error(`Erro ao atualizar texto ${section}.${field}:`, error);
       throw error;

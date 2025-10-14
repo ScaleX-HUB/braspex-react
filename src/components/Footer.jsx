@@ -2,7 +2,7 @@ import React from 'react';
 import { useSiteContent } from '../contexts/SiteContentContext';
 import { Envelope, Phone, MapPin, InstagramLogo, YoutubeLogo, FacebookLogo, LinkedinLogo } from 'phosphor-react';
 import logoBraspexDark from '../assets/logo-braspex-dark.png'; // Usaremos esta versão do logo
-import logoBraspexBranca from '../assets/logo-branca-braspex.png'; // Logo branca
+import logoBraspexBranca from '../assets/logo-braspex.png';
 
 const Footer = () => {
   const { content } = useSiteContent();
@@ -15,8 +15,16 @@ const Footer = () => {
         <div className="col-span-1 md:col-span-2 flex flex-col items-center md:items-start">
           <div className="flex justify-center md:justify-start w-full">
             <div
-                className="logo-balloon rounded-full flex items-center justify-center mb-6 transition-all duration-300"
-                style={{ minWidth: '120px', minHeight: '120px' }}
+                  className="logo-balloon flex items-center justify-center mb-6 transition-transform duration-300 hover:scale-105"
+                  style={{ 
+                    minWidth: '240px', // mais largo
+                    minHeight: '120px', // menos alto
+                    borderRadius: '60px', // bordas bem arredondadas
+                    border: '6px solid #fff', // cor branca igual ao texto
+                    boxSizing: 'border-box',
+                    background: '#fff', // preenchido por dentro
+                    boxShadow: '0 4px 24px rgba(0,0,0,0.10)'
+                  }}
             >
               <img 
                 src={logoBraspexBranca}

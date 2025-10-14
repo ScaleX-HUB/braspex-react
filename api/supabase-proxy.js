@@ -8,8 +8,8 @@
  */
 
 export default async function handler(req, res) {
-  // URL do Supabase self-hosted (HTTP)
-  const SUPABASE_URL = 'http://supabase.talka.tech:3000';
+  // URL do Supabase self-hosted (HTTP) - Pegar das variáveis de ambiente
+  const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'http://173.249.32.99:54321';
   
   // CORS headers essenciais
   res.setHeader('Access-Control-Allow-Credentials', 'true');
