@@ -30,11 +30,20 @@ const Header = () => {
   // Carregar categorias
   useEffect(() => {
     const cats = loadCategories();
+    console.log('🏁 HEADER: Carregando categorias iniciais:', cats);
     setCategories(cats);
   }, []);
 
+  // Log quando categories mudar
+  useEffect(() => {
+    console.log('🔄 HEADER: Estado categories atualizado:', categories);
+    console.log('📊 Número de categorias no estado:', Object.keys(categories).length);
+  }, [categories]);
+
   // Sincronizar categorias
   useCategoriesSync((updatedCategories) => {
+    console.log('🔔 HEADER RECEBEU ATUALIZAÇÃO DE CATEGORIAS:', updatedCategories);
+    console.log('📊 Número de categorias:', Object.keys(updatedCategories).length);
     setCategories(updatedCategories);
   });
 

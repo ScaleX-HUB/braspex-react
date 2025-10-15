@@ -18,10 +18,10 @@ import logoBraspex from '../assets/logo-braspex.png';
 // Importar componentes modulares
 import AnalyticsSection from '../components/admin/AnalyticsSection';
 import SupabaseTestSection from '../components/admin/SupabaseTestSection';
-import TextsEditorSection from '../components/admin/TextsEditorSection';
+import TextsManager from '../components/admin/TextsManager';
 import SectionOrderManager from '../components/admin/SectionOrderManager';
 import BlogManager from '../components/admin/BlogManager';
-import ClientsSection from '../components/admin/ClientsSection';
+import ClientsKanban from '../components/admin/ClientsKanban';
 import ProductsManager from '../components/admin/ProductsManager';
 import CategoriesManager from '../components/admin/CategoriesManager';
 import QuotesManager from '../components/admin/QuotesManager';
@@ -109,7 +109,7 @@ const AdminPanel = () => {
         return <SectionOrderManager />;
       }
       if (activeSubsection === 'hero-edit') {
-        return <TextsEditorSection />;
+        return <TextsManager />;
       }
     }
 
@@ -120,7 +120,7 @@ const AdminPanel = () => {
 
     // Clients
     if (activeMenu === 'clients') {
-      return <ClientsSection />;
+      return <ClientsKanban />;
     }
 
     // Quotes

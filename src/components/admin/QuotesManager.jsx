@@ -17,6 +17,7 @@ import {
   Download
 } from 'phosphor-react';
 import { loadQuotes, updateQuoteStatus, deleteQuote, useQuotesSync, getQuotesStats } from '../../data/quotesUtils';
+import { addClient, findClientByEmail } from '../../data/clientsUtils';
 
 const QuotesManager = () => {
   const [quotes, setQuotes] = useState([]);
@@ -74,7 +75,41 @@ const QuotesManager = () => {
 
   const handleStatusChange = (quoteId, newStatus) => {
     if (updateQuoteStatus(quoteId, newStatus)) {
-      alert('Status atualizado com sucesso!');
+      // Se o status for "converted", criar automaticamente um cliente
+      if (newStatus === 'converted') {
+        const quotes = loadQuotes();
+        const quote = quotes.find(q => q.id === quoteId);
+        
+        if (quote && quote.customer) {
+          // Verificar se cliente já existe
+          const existingClient = findClientByEmail(quote.customer.email);
+          
+          if (!existingClient) {
+            // Criar novo cliente com os dados da cotação
+            const clientData = {
+              name: quote.customer.name,
+              email: quote.customer.email,
+              phone: quote.customer.phone || '',
+              company: quote.customer.company || '',
+              address: quote.customer.address || '',
+              city: quote.customer.city || '',
+              state: quote.customer.state || '',
+              zipCode: quote.customer.zipCode || '',
+              notes: `Cliente criado automaticamente da cotação #${quote.id}\n\n${quote.customer.message || ''}`,
+              stage: 'client',
+              inactive: false
+            };
+            
+            addClient(clientData);
+            alert('Status atualizado e cliente cadastrado automaticamente com sucesso!');
+          } else {
+            alert('Status atualizado! Cliente já existe no cadastro.');
+          }
+        }
+      } else {
+        alert('Status atualizado com sucesso!');
+      }
+      
       loadQuotesData();
     }
   };

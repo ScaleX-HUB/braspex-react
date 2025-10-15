@@ -7,88 +7,80 @@ import {
   X,
   Tag,
   FolderOpen,
-  ArrowsClockwise
+  ArrowsClockwise,
+  Package,
+  Fire,
+  Lightning,
+  Gear,
+  Wrench,
+  Cube,
+  Factory,
+  House,
+  Buildings,
+  CheckCircle,
+  Star,
+  Heart,
+  ShoppingCart
 } from 'phosphor-react';
+import { productCategories } from '../../data/productCategories';
 
-// Funções de gerenciamento de categorias
+// Mapeamento de ícones disponíveis (todos testados)
+const iconMap = {
+  Package,
+  Fire,
+  Lightning,
+  Gear,
+  Wrench,
+  Cube,
+  Factory,
+  House,
+  Buildings,
+  CheckCircle,
+  Star,
+  Heart,
+  ShoppingCart
+};
+
+// Função para renderizar ícone
+const renderIcon = (iconName, size = 24, weight = 'bold') => {
+  const IconComponent = iconMap[iconName] || Package;
+  return <IconComponent size={size} weight={weight} />;
+};
+
+// Chave do localStorage
 const STORAGE_KEY = 'braspex_categories';
 
-const loadCategories = () => {
+// Funções de gerenciamento de categorias
+const loadCategoriesFromStorage = () => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
-      return JSON.parse(stored);
+      const parsed = JSON.parse(stored);
+      console.log('✅ Categorias carregadas do localStorage:', parsed);
+      return parsed;
     }
   } catch (e) {
-    console.error('Erro ao carregar categorias:', e);
+    console.error('❌ Erro ao carregar categorias:', e);
   }
   
-  // Fallback para categorias padrão
-  return {
-    pex: {
-      id: 'pex',
-      name: 'pex',
-      displayName: 'PEX',
-      logo: '/pex-logo.png',
-      color: '#005563',
-      subcategories: [
-        { id: 'conexoes', name: 'Conexões' },
-        { id: 'ferramentas', name: 'Ferramentas' },
-        { id: 'tubos', name: 'Tubos' },
-        { id: 'valvulas', name: 'Válvulas' }
-      ]
-    },
-    gas: {
-      id: 'gas',
-      name: 'gas',
-      displayName: 'GÁS',
-      logo: '/gas-logo.png',
-      color: '#FF6B00',
-      subcategories: [
-        { id: 'reguladores', name: 'Reguladores' },
-        { id: 'mangueiras', name: 'Mangueiras' },
-        { id: 'conexoes', name: 'Conexões' }
-      ]
-    },
-    kit: {
-      id: 'kit',
-      name: 'kit',
-      displayName: 'KIT',
-      logo: '/kit-logo.png',
-      color: '#FFD027',
-      subcategories: [
-        { id: 'residencial', name: 'Residencial' },
-        { id: 'industrial', name: 'Industrial' },
-        { id: 'comercial', name: 'Comercial' }
-      ]
-    },
-    polvo: {
-      id: 'polvo',
-      name: 'polvo',
-      displayName: 'POLVO',
-      logo: '/polvo-logo.png',
-      color: '#00A86B',
-      subcategories: []
-    },
-    outros: {
-      id: 'outros',
-      name: 'outros',
-      displayName: 'OUTROS',
-      logo: '/outros-logo.png',
-      color: '#6C757D',
-      subcategories: []
-    }
-  };
+  // Fallback: usar categorias padrão do arquivo
+  console.log('⚠️ Usando categorias padrão');
+  return productCategories;
 };
 
-const saveCategories = (categories) => {
+const saveCategoriesToStorage = (categories) => {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(categories));
+    const jsonString = JSON.stringify(categories);
+    localStorage.setItem(STORAGE_KEY, jsonString);
+    console.log('✅ Categorias salvas no localStorage');
+    
     // Disparar evento para sincronização
     window.dispatchEvent(new CustomEvent('categoriesUpdated', { detail: categories }));
+    console.log('📡 Evento categoriesUpdated disparado');
     return true;
   } catch (e) {
-    console.error('Erro ao salvar categorias:', e);
+    console.error('❌ Erro ao salvar categorias:', e);
+    alert('Erro ao salvar: ' + e.message);
     return false;
   }
 };
@@ -97,13 +89,12 @@ const CategoriesManager = () => {
   const [categories, setCategories] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
-  const [editingSubcategory, setEditingSubcategory] = useState(null);
   const [formData, setFormData] = useState({
     id: '',
     name: '',
     displayName: '',
     logo: '',
-    icon: 'Package', // Novo campo para ícone
+    icon: 'Package',
     color: '#005563',
     subcategories: []
   });
@@ -112,12 +103,23 @@ const CategoriesManager = () => {
     name: ''
   });
 
+  console.log('🎯 RENDER CategoriesManager');
+  console.log('Estado isEditing:', isEditing);
+  console.log('Estado editingCategory:', editingCategory);
+  console.log('Categorias no estado:', Object.keys(categories).length, 'categorias');
+
   useEffect(() => {
-    const cats = loadCategories();
+    console.log('🔄 CARREGANDO CATEGORIAS...');
+    const cats = loadCategoriesFromStorage();
+    console.log('📦 Categorias carregadas:', cats);
+    console.log('📊 Tipo de dados:', typeof cats, Array.isArray(cats) ? 'Array' : 'Object');
     setCategories(cats);
   }, []);
 
   const handleNewCategory = () => {
+    console.log('🆕 CLICOU EM NOVA CATEGORIA');
+    console.log('Estado isEditing antes:', isEditing);
+    
     setFormData({
       id: '',
       name: '',
@@ -129,10 +131,25 @@ const CategoriesManager = () => {
     });
     setEditingCategory(null);
     setIsEditing(true);
+    
+    console.log('Estado isEditing depois:', true);
+    console.log('FormData resetado');
   };
 
   const handleEditCategory = (catId) => {
+    console.log('✏️ CLICOU EM EDITAR CATEGORIA:', catId);
+    console.log('Categorias disponíveis:', categories);
+    
     const cat = categories[catId];
+    
+    if (!cat) {
+      console.error('❌ Categoria não encontrada!', catId);
+      alert('Categoria não encontrada!');
+      return;
+    }
+    
+    console.log('📄 Dados da categoria encontrada:', cat);
+    
     setFormData({
       id: cat.id,
       name: cat.name,
@@ -144,20 +161,46 @@ const CategoriesManager = () => {
     });
     setEditingCategory(catId);
     setIsEditing(true);
+    
+    console.log('✅ isEditing setado para:', true);
+    console.log('✅ editingCategory setado para:', catId);
   };
 
   const handleDeleteCategory = (catId) => {
+    console.log('🗑️ TENTANDO DELETAR CATEGORIA:', catId);
+    console.log('Categorias antes:', categories);
+    
     if (window.confirm('Tem certeza que deseja deletar esta categoria? Todos os produtos desta categoria ficarão sem categoria.')) {
-      const updatedCategories = { ...categories };
-      delete updatedCategories[catId];
-      setCategories(updatedCategories);
-      saveCategories(updatedCategories);
-      alert('Categoria deletada com sucesso!');
+      // Criar novo objeto sem a categoria deletada
+      const updatedCategories = {};
+      Object.keys(categories).forEach(key => {
+        if (key !== catId) {
+          updatedCategories[key] = categories[key];
+        }
+      });
+      
+      console.log('Categorias depois de deletar:', updatedCategories);
+      
+      // Salvar no localStorage
+      const saved = saveCategoriesToStorage(updatedCategories);
+      console.log('Salvou após deletar?', saved);
+      
+      if (saved) {
+        // Atualizar estado IMEDIATAMENTE
+        setCategories(updatedCategories);
+        alert('Categoria deletada com sucesso!');
+      } else {
+        alert('Erro ao deletar categoria!');
+      }
     }
   };
 
   const handleSaveCategory = () => {
+    console.log('💾 TENTANDO SALVAR CATEGORIA');
+    console.log('FormData atual:', formData);
+    
     if (!formData.id || !formData.displayName) {
+      console.error('❌ Validação falhou - ID ou DisplayName vazio');
       alert('Por favor, preencha pelo menos o ID e o Nome de Exibição');
       return;
     }
@@ -168,15 +211,28 @@ const CategoriesManager = () => {
       name: formData.name || formData.id
     };
 
+    console.log('📦 Dados da categoria processados:', categoryData);
+
     const updatedCategories = {
       ...categories,
       [formData.id]: categoryData
     };
 
+    console.log('🗂️ Categorias atualizadas:', updatedCategories);
+
     setCategories(updatedCategories);
-    saveCategories(updatedCategories);
-    setIsEditing(false);
-    alert(editingCategory ? 'Categoria atualizada com sucesso!' : 'Categoria criada com sucesso!');
+    const saved = saveCategoriesToStorage(updatedCategories);
+    
+    console.log('💿 Resultado do salvamento:', saved);
+    
+    if (saved) {
+      setIsEditing(false);
+      console.log('✅ Categoria salva com sucesso! Fechando modal...');
+      alert(editingCategory ? 'Categoria atualizada com sucesso!' : 'Categoria criada com sucesso!');
+    } else {
+      console.error('❌ Falha ao salvar categoria');
+      alert('Erro ao salvar categoria. Verifique o console.');
+    }
   };
 
   const handleAddSubcategory = () => {
@@ -209,8 +265,9 @@ const CategoriesManager = () => {
   const handleRestoreDefaults = () => {
     if (window.confirm('Tem certeza que deseja restaurar as categorias padrão? Todas as alterações serão perdidas.')) {
       localStorage.removeItem(STORAGE_KEY);
-      const defaultCategories = loadCategories();
+      const defaultCategories = productCategories;
       setCategories(defaultCategories);
+      saveCategoriesToStorage(defaultCategories);
       alert('Categorias padrão restauradas com sucesso!');
     }
   };
@@ -326,13 +383,7 @@ const CategoriesManager = () => {
             <p className="text-xs text-gray-500 mb-3">Selecione um ícone para representar esta categoria no menu</p>
             
             <div className="grid grid-cols-8 gap-2 max-h-64 overflow-y-auto p-4 bg-gray-50 rounded-lg border border-gray-300">
-              {[
-                'Package', 'Drop', 'Fire', 'Lightning', 'Wind', 'Gear', 'Wrench', 'Hammer',
-                'Pipe', 'FaucetSimple', 'Thermometer', 'GasCan', 'ThermometerHot', 'ThermometerCold',
-                'Cube', 'CubeTransparent', 'Factory', 'House', 'Buildings', 'Warehouse',
-                'Tool', 'Plug', 'PlugCharging', 'Battery', 'BatteryCharging', 'Engine',
-                'CircleWavyCheck', 'CheckCircle', 'Seal', 'SealCheck', 'Certificate', 'Medal'
-              ].map((iconName) => (
+              {Object.keys(iconMap).map((iconName) => (
                 <button
                   key={iconName}
                   type="button"
@@ -344,7 +395,7 @@ const CategoriesManager = () => {
                   }`}
                   title={iconName}
                 >
-                  {React.createElement(require('phosphor-react')[iconName], { size: 24, weight: 'bold' })}
+                  {renderIcon(iconName, 24, 'bold')}
                 </button>
               ))}
             </div>
@@ -357,7 +408,7 @@ const CategoriesManager = () => {
                   style={{ backgroundColor: `${formData.color}20` }}
                 >
                   <span style={{ color: formData.color }}>
-                    {React.createElement(require('phosphor-react')[formData.icon || 'Package'], { size: 24, weight: 'bold' })}
+                    {renderIcon(formData.icon || 'Package', 24, 'bold')}
                   </span>
                 </div>
                 <span className="text-sm font-medium text-gray-700">{formData.icon}</span>
@@ -410,6 +461,7 @@ const CategoriesManager = () => {
               />
             </div>
             <button
+              type="button"
               onClick={handleAddSubcategory}
               className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
             >
@@ -421,6 +473,7 @@ const CategoriesManager = () => {
           {/* Botões de Ação */}
           <div className="flex gap-4 pt-4 border-t">
             <button
+              type="button"
               onClick={handleSaveCategory}
               className="flex-1 px-6 py-3 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center justify-center gap-2 font-semibold"
             >
@@ -428,6 +481,7 @@ const CategoriesManager = () => {
               Salvar Categoria
             </button>
             <button
+              type="button"
               onClick={() => setIsEditing(false)}
               className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
             >
@@ -455,6 +509,7 @@ const CategoriesManager = () => {
           </div>
           <div className="flex gap-3">
             <button
+              type="button"
               onClick={handleRestoreDefaults}
               className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2"
             >
@@ -462,7 +517,11 @@ const CategoriesManager = () => {
               Restaurar Padrão
             </button>
             <button
-              onClick={handleNewCategory}
+              type="button"
+              onClick={() => {
+                console.log('🔴 BOTÃO NOVA CATEGORIA CLICADO!');
+                handleNewCategory();
+              }}
               className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
             >
               <Plus size={20} weight="bold" />
@@ -511,14 +570,22 @@ const CategoriesManager = () => {
               {/* Botões de Ação */}
               <div className="flex gap-2">
                 <button
-                  onClick={() => handleEditCategory(category.id)}
+                  type="button"
+                  onClick={() => {
+                    console.log('🔴 BOTÃO EDITAR CLICADO! ID:', category.id);
+                    handleEditCategory(category.id);
+                  }}
                   className="flex-1 px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center justify-center gap-2"
                 >
                   <PencilSimple size={18} weight="bold" />
                   Editar
                 </button>
                 <button
-                  onClick={() => handleDeleteCategory(category.id)}
+                  type="button"
+                  onClick={() => {
+                    console.log('🔴 BOTÃO DELETAR CLICADO! ID:', category.id);
+                    handleDeleteCategory(category.id);
+                  }}
                   className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
                 >
                   <Trash size={18} weight="bold" />

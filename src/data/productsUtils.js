@@ -37,7 +37,7 @@ export const useCategoriesSync = (callback) => {
 };
 
 /**
- * Carrega produtos: primeiro tenta localStorage, depois mockProducts
+ * Carrega produtos: APENAS do localStorage (não usa fallback mockProducts)
  */
 export const loadProducts = async () => {
   // Tentar carregar do localStorage primeiro
@@ -52,20 +52,9 @@ export const loadProducts = async () => {
     }
   }
 
-  // Fallback: carregar mockProducts
-  try {
-    const module = await import('./mockProducts');
-    const mockProducts = module.mockProducts || module.default;
-    console.log('✅ Produtos carregados do mockProducts:', mockProducts.length);
-    
-    // Salvar no localStorage para próxima vez
-    saveProducts(mockProducts);
-    
-    return mockProducts;
-  } catch (error) {
-    console.error('❌ Erro ao carregar mockProducts:', error);
-    return [];
-  }
+  // Se não houver produtos no localStorage, retornar array vazio
+  console.log('⚠️ Nenhum produto encontrado no localStorage. Retornando array vazio.');
+  return [];
 };
 
 /**
