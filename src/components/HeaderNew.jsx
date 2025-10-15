@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { List, X, CaretDown, ShoppingCart, House, Info, Package, FlowArrow, AddressBook, Article, EnvelopeSimple } from 'phosphor-react';
+import { List, X, CaretDown, ShoppingCart, House, Info, Package, FlowArrow, AddressBook, Article } from 'phosphor-react';
 import { useLocation, Link } from 'react-router-dom';
 import logoBraspex from '../assets/logo-braspex.png';
 import logoBraspexBranca from '../assets/logo-branca-braspex.png';
@@ -124,17 +124,17 @@ const Header = () => {
             </a>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-6">
-              <a href="/" className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}>
-                <House size={18} weight="bold" />
+            <nav className="hidden lg:flex items-center gap-8">
+              <a href="/" className={`font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}>
+                <House size={20} weight="bold" />
                 Home
               </a>
 
               <button 
                 onClick={() => window.location.href = '/#sobre'}
-                className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
+                className={`font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
               >
-                <Info size={18} weight="bold" />
+                <Info size={20} weight="bold" />
                 Quem Somos
               </button>
 
@@ -145,11 +145,11 @@ const Header = () => {
                 onMouseLeave={() => setIsProductsOpen(false)}
               >
                 <button 
-                  className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
+                  className={`font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
                 >
-                  <Package size={18} weight="bold" />
+                  <Package size={20} weight="bold" />
                   Produtos
-                  <CaretDown size={14} weight="bold" className={`transition-transform ${isProductsOpen ? 'rotate-180' : ''}`} />
+                  <CaretDown size={16} weight="bold" className={`transition-transform ${isProductsOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {/* Mega Menu Dropdown */}
@@ -218,22 +218,22 @@ const Header = () => {
 
               <button 
                 onClick={() => window.location.href = '/#fluxo'}
-                className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
+                className={`font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
               >
-                <FlowArrow size={18} weight="bold" />
+                <FlowArrow size={20} weight="bold" />
                 Como Funciona
               </button>
 
               <button 
                 onClick={() => window.location.href = '/#contato'}
-                className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
+                className={`font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
               >
-                <AddressBook size={18} weight="bold" />
+                <AddressBook size={20} weight="bold" />
                 Contato
               </button>
 
-              <a href="/blog" className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}>
-                <Article size={18} weight="bold" />
+              <a href="/blog" className={`font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}>
+                <Article size={20} weight="bold" />
                 Blog
               </a>
 
@@ -242,21 +242,12 @@ const Header = () => {
                 onClick={() => setIsCartOpen(true)}
                 className="relative p-2 rounded-full bg-[#FFD027] hover:bg-[#FFB800] transition-colors"
               >
-                <ShoppingCart size={22} weight="bold" className="text-[#005563]" />
+                <ShoppingCart size={24} weight="bold" className="text-[#005563]" />
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                     {cartCount}
                   </span>
                 )}
-              </button>
-
-              {/* Botão Solicitar Orçamento */}
-              <button
-                onClick={() => window.location.href = '/#contato'}
-                className="px-4 py-2 bg-[#FFD027] text-[#005563] text-sm font-bold rounded-lg hover:bg-[#FFB800] transition-all shadow-md hover:shadow-lg flex items-center gap-2"
-              >
-                <EnvelopeSimple size={18} weight="bold" />
-                Solicitar Orçamento
               </button>
             </nav>
 
@@ -345,18 +336,6 @@ const Header = () => {
               <a href="/blog" onClick={closeMenu} className="block py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors">
                 Blog
               </a>
-              
-              {/* Solicitar Orçamento Mobile */}
-              <button 
-                onClick={() => { 
-                  closeMenu();
-                  window.location.href = '/#contato';
-                }}
-                className="flex items-center gap-3 py-3 px-4 mt-2 bg-[#FFD027] text-[#005563] font-bold rounded-lg hover:bg-[#FFB800] transition-all shadow-md w-full"
-              >
-                <EnvelopeSimple size={20} weight="bold" />
-                Solicitar Orçamento
-              </button>
             </nav>
           </div>
         )}

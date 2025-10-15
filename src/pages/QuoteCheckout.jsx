@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { X, ShoppingCart, Check, Package } from 'phosphor-react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { saveQuote } from '../data/quotesUtils';
 
 const QuoteCheckout = () => {
   const navigate = useNavigate();
@@ -57,13 +58,39 @@ const QuoteCheckout = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simular envio (aqui você pode integrar com backend ou email)
-    setTimeout(() => {
-      console.log('Dados do orçamento:', {
-        ...formData,
-        produtos: cartItems,
-        comentario: formatProductsForComment()
-      });
+    // Preparar dados da cotação
+    const quoteData = {
+      customer: {
+        name: formData.nomeCompleto,
+        email: formData.email,
+        phone: `(${formData.ddd}) ${formData.telefone}`,
+        company: formData.empresa,
+        address: formData.endereco,
+        complement: formData.complemento,
+        neighborhood: formData.bairro,
+        city: formData.cidade,
+        state: formData.estado,
+        zipCode: formData.cep,
+        receiveNews: formData.receberNovidades,
+        message: formatProductsForComment()
+      },
+      items: cartItems.map(item => ({
+        id: item.id,
+        name: item.name,
+        quantity: item.quantity || 1,
+        price: item.price,
+        material: item.material,
+        capacity: item.capacity,
+        image: item.image
+      })),
+      source: 'cart' // Identificar origem da cotação
+    };
+
+    // Salvar cotação
+    const savedQuote = saveQuote(quoteData);
+
+    if (savedQuote) {
+      console.log('✅ Cotação salva com sucesso:', savedQuote);
       
       setIsSubmitting(false);
       setSubmitSuccess(true);
@@ -73,7 +100,11 @@ const QuoteCheckout = () => {
         clearCart();
         navigate('/');
       }, 3000);
-    }, 1500);
+    } else {
+      console.error('❌ Erro ao salvar cotação');
+      setIsSubmitting(false);
+      alert('Erro ao enviar cotação. Por favor, tente novamente.');
+    }
   };
 
   if (cartItems.length === 0) {

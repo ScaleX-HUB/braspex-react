@@ -1,35 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Package, ShoppingCart } from 'phosphor-react';
 import { Link } from 'react-router-dom';
+import { loadProducts, useProductsSync } from '../data/productsUtils';
+import { useCart } from '../contexts/CartContext';
 
 const ProductsShowcase = () => {
-  const featuredProducts = [
-    {
-      id: 'kit-chuveiro-ppr',
-      name: 'Kit Chuveiro PPR',
-      description: 'Sistema rígido unido por termofusão para instalações residenciais e comerciais',
-      icon: '🚿',
-      image: '/imagemppr.png',
-      features: ['Resistente', 'Durável', 'Atóxico']
-    },
-    {
-      id: 'kit-ar-condicionado',
-      name: 'Kits Ar-Condicionado',
-      description: 'Tubulação completa de cobre para sistemas de refrigeração de 9K a 48K BTU',
-      icon: '❄️',
-      image: '/multicamadaairtecno.png',
-      features: ['Alta Performance', 'Isolamento Térmico', 'Múltiplas Capacidades']
-    },
-    {
-      id: '1000-travessas',
-      name: '1000 Travessas',
-      description: 'Estruturas em aço galvanizado para suporte de tubulações industriais',
-      icon: '🔧',
-      image: '/chassismetalicos.png',
-      features: ['Aço Galvanizado', 'Alta Carga', 'Durabilidade']
-    }
-  ];
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const { addToCart, isInCart } = useCart();
+
+  // Carregar produtos em destaque
+  useEffect(() => {
+    loadProducts().then(products => {
+      // Pegar os 3 primeiros produtos ativos
+      const activeProducts = products.filter(p => p.active !== false);
+      const featured = activeProducts.slice(0, 3);
+      setFeaturedProducts(featured);
+    });
+  }, []);
+
+  // Sincronizar quando produtos forem atualizados
+  useProductsSync((updatedProducts) => {
+    const activeProducts = updatedProducts.filter(p => p.active !== false);
+    const featured = activeProducts.slice(0, 3);
+    setFeaturedProducts(featured);
+  });
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -109,30 +104,55 @@ const ProductsShowcase = () => {
                 <h3 className="text-2xl font-bold text-slate-900 group-hover:text-[#005563] transition-colors">
                   {product.name}
                 </h3>
-                <p className="text-slate-600 leading-relaxed">
+                <p className="text-slate-600 leading-relaxed line-clamp-2">
                   {product.description}
                 </p>
 
-                {/* Features */}
+                {/* Features/Specs */}
                 <div className="flex flex-wrap gap-2">
-                  {product.features.map((feature, index) => (
-                    <span
-                      key={index}
-                      className="px-3 py-1 bg-[#005563]/5 text-[#005563] text-xs font-medium rounded-full"
-                    >
-                      {feature}
+                  {product.specifications?.material && (
+                    <span className="px-3 py-1 bg-[#005563]/5 text-[#005563] text-xs font-medium rounded-full">
+                      {product.specifications.material}
                     </span>
-                  ))}
+                  )}
+                  {product.specifications?.acabamento && (
+                    <span className="px-3 py-1 bg-[#005563]/5 text-[#005563] text-xs font-medium rounded-full">
+                      {product.specifications.acabamento}
+                    </span>
+                  )}
+                  {product.specifications?.capacity && (
+                    <span className="px-3 py-1 bg-[#FFD027]/20 text-[#005563] text-xs font-medium rounded-full">
+                      {product.specifications.capacity}
+                    </span>
+                  )}
+                  {(!product.specifications?.material && !product.specifications?.acabamento && !product.specifications?.capacity) && (
+                    <span className="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
+                      {product.price || 'Sob Consulta'}
+                    </span>
+                  )}
                 </div>
 
-                {/* CTA Button */}
-                <Link
-                  to={`/produtos/${product.id}`}
-                  className="inline-flex items-center gap-2 text-[#005563] font-semibold hover:text-[#003d47] transition-colors group/link mt-2"
-                >
-                  Ver Detalhes
-                  <ArrowRight className="w-5 h-5 group-hover/link:translate-x-1 transition-transform" />
-                </Link>
+                {/* CTA Buttons */}
+                <div className="flex gap-3 pt-2">
+                  <Link
+                    to={`/produtos/${product.id}`}
+                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#005563] text-white font-semibold rounded-lg hover:bg-[#004450] transition-all shadow-md hover:shadow-lg"
+                  >
+                    Ver Detalhes
+                    <ArrowRight className="w-5 h-5" weight="bold" />
+                  </Link>
+                  <button
+                    onClick={() => addToCart(product)}
+                    disabled={isInCart(product.id)}
+                    className={`px-4 py-3 rounded-lg font-semibold transition-all shadow-md ${
+                      isInCart(product.id)
+                        ? 'bg-green-500 text-white cursor-not-allowed'
+                        : 'bg-[#FFD027] text-[#005563] hover:bg-[#FFB800] hover:shadow-lg'
+                    }`}
+                  >
+                    <ShoppingCart size={20} weight="bold" />
+                  </button>
+                </div>
               </div>
             </motion.div>
           ))}

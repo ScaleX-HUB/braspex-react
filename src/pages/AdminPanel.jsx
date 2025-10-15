@@ -10,7 +10,8 @@ import {
   TextAlignLeft,
   ArrowsDownUp,
   Database,
-  Tag
+  Tag,
+  EnvelopeSimple
 } from 'phosphor-react';
 import logoBraspex from '../assets/logo-braspex.png';
 
@@ -23,6 +24,7 @@ import BlogManager from '../components/admin/BlogManager';
 import ClientsSection from '../components/admin/ClientsSection';
 import ProductsManager from '../components/admin/ProductsManager';
 import CategoriesManager from '../components/admin/CategoriesManager';
+import QuotesManager from '../components/admin/QuotesManager';
 
 const AdminPanel = () => {
   const [activeMenu, setActiveMenu] = useState('page-management');
@@ -50,6 +52,12 @@ const AdminPanel = () => {
       id: 'clients',
       name: 'Clientes',
       icon: <Users size={24} weight="bold" />,
+      subsections: []
+    },
+    {
+      id: 'quotes',
+      name: 'Cotações',
+      icon: <EnvelopeSimple size={24} weight="bold" />,
       subsections: []
     },
     {
@@ -113,6 +121,11 @@ const AdminPanel = () => {
     // Clients
     if (activeMenu === 'clients') {
       return <ClientsSection />;
+    }
+
+    // Quotes
+    if (activeMenu === 'quotes') {
+      return <QuotesManager />;
     }
 
     // Products

@@ -103,6 +103,7 @@ const CategoriesManager = () => {
     name: '',
     displayName: '',
     logo: '',
+    icon: 'Package', // Novo campo para ícone
     color: '#005563',
     subcategories: []
   });
@@ -122,6 +123,7 @@ const CategoriesManager = () => {
       name: '',
       displayName: '',
       logo: '',
+      icon: 'Package',
       color: '#005563',
       subcategories: []
     });
@@ -136,6 +138,7 @@ const CategoriesManager = () => {
       name: cat.name,
       displayName: cat.displayName,
       logo: cat.logo || '',
+      icon: cat.icon || 'Package',
       color: cat.color || '#005563',
       subcategories: cat.subcategories || []
     });
@@ -298,7 +301,7 @@ const CategoriesManager = () => {
           {/* Logo URL */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              URL do Logo
+              URL do Logo (opcional)
             </label>
             <input
               type="text"
@@ -313,6 +316,53 @@ const CategoriesManager = () => {
                 <img src={formData.logo} alt="Logo preview" className="h-12 object-contain" />
               </div>
             )}
+          </div>
+
+          {/* Seletor de Ícone */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Ícone da Categoria
+            </label>
+            <p className="text-xs text-gray-500 mb-3">Selecione um ícone para representar esta categoria no menu</p>
+            
+            <div className="grid grid-cols-8 gap-2 max-h-64 overflow-y-auto p-4 bg-gray-50 rounded-lg border border-gray-300">
+              {[
+                'Package', 'Drop', 'Fire', 'Lightning', 'Wind', 'Gear', 'Wrench', 'Hammer',
+                'Pipe', 'FaucetSimple', 'Thermometer', 'GasCan', 'ThermometerHot', 'ThermometerCold',
+                'Cube', 'CubeTransparent', 'Factory', 'House', 'Buildings', 'Warehouse',
+                'Tool', 'Plug', 'PlugCharging', 'Battery', 'BatteryCharging', 'Engine',
+                'CircleWavyCheck', 'CheckCircle', 'Seal', 'SealCheck', 'Certificate', 'Medal'
+              ].map((iconName) => (
+                <button
+                  key={iconName}
+                  type="button"
+                  onClick={() => setFormData({ ...formData, icon: iconName })}
+                  className={`p-3 rounded-lg border-2 transition-all hover:scale-110 ${
+                    formData.icon === iconName
+                      ? 'border-[#005563] bg-[#005563] text-white shadow-lg'
+                      : 'border-gray-300 bg-white hover:border-[#005563]'
+                  }`}
+                  title={iconName}
+                >
+                  {React.createElement(require('phosphor-react')[iconName], { size: 24, weight: 'bold' })}
+                </button>
+              ))}
+            </div>
+            
+            <div className="mt-3 p-4 bg-gray-50 rounded-lg flex items-center gap-4">
+              <span className="text-sm text-gray-600">Ícone Selecionado:</span>
+              <div className="flex items-center gap-2">
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: `${formData.color}20` }}
+                >
+                  <span style={{ color: formData.color }}>
+                    {React.createElement(require('phosphor-react')[formData.icon || 'Package'], { size: 24, weight: 'bold' })}
+                  </span>
+                </div>
+                <span className="text-sm font-medium text-gray-700">{formData.icon}</span>
+              </div>
+            </div>
           </div>
 
           {/* Subcategorias */}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSiteContent } from '../contexts/SiteContentContext';
 import { Envelope, Phone, Globe, MapPin, PaperPlaneTilt, User, Buildings, ChatCircle, CheckCircle } from 'phosphor-react';
+import { saveQuote } from '../data/quotesUtils';
 
 const Contato = () => {
   const { content } = useSiteContent();
@@ -31,6 +32,22 @@ const Contato = () => {
     setIsSubmitting(true);
     
     try {
+      // Salvar cotação no sistema local
+      const quoteData = {
+        customer: {
+          name: formData.nome,
+          email: formData.email,
+          phone: formData.telefone,
+          company: formData.empresa,
+          message: formData.mensagem
+        },
+        items: [], // Sem itens específicos, é um contato direto
+        source: 'contact-form' // Identificar origem
+      };
+      
+      saveQuote(quoteData);
+      
+      // Enviar para SheetDB
       await fetch('https://sheetdb.io/api/v1/5h8knwp5z36hw', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
