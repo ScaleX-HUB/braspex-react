@@ -12,9 +12,11 @@ const ProductsShowcase = () => {
   // Carregar produtos em destaque
   useEffect(() => {
     loadProducts().then(products => {
+      console.log('📦 Produtos carregados:', products);
       // Pegar os 3 primeiros produtos ativos
       const activeProducts = products.filter(p => p.active !== false);
       const featured = activeProducts.slice(0, 3);
+      console.log('⭐ Produtos em destaque:', featured);
       setFeaturedProducts(featured);
     });
   }, []);
@@ -142,7 +144,10 @@ const ProductsShowcase = () => {
                     <ArrowRight className="w-5 h-5" weight="bold" />
                   </Link>
                   <button
-                    onClick={() => addToCart(product)}
+                    onClick={() => {
+                      console.log('🔘 Botão clicado - Produto:', product);
+                      addToCart(product);
+                    }}
                     disabled={isInCart(product.id)}
                     className={`px-4 py-3 rounded-lg font-semibold transition-all shadow-md ${
                       isInCart(product.id)

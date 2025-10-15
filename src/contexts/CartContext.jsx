@@ -24,18 +24,28 @@ export const CartProvider = ({ children }) => {
   // Salvar carrinho no localStorage
   useEffect(() => {
     localStorage.setItem('braspex_cart', JSON.stringify(cartItems));
+    console.log('💾 Carrinho salvo:', cartItems.length, 'itens');
   }, [cartItems]);
 
   const addToCart = (product) => {
+    console.log('🛒 Adicionando ao carrinho:', product);
+    
+    if (!product || !product.id) {
+      console.error('❌ Produto inválido:', product);
+      return;
+    }
+    
     setCartItems(prev => {
       const existingItem = prev.find(item => item.id === product.id);
       if (existingItem) {
+        console.log('✅ Produto já existe, aumentando quantidade');
         return prev.map(item =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
+      console.log('✅ Adicionando novo produto ao carrinho');
       return [...prev, { ...product, quantity: 1 }];
     });
   };
