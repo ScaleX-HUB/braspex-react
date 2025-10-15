@@ -155,7 +155,7 @@ const Parceiros = () => {
 
   return (
     <motion.section
-      className="py-20 bg-gray-50"
+      className="py-20 bg-white"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
@@ -163,7 +163,10 @@ const Parceiros = () => {
     >
       <div className="max-w-6xl mx-auto px-5">
         <motion.div className="text-center mb-16" variants={titleVariants}>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <p className="text-[#005563] font-semibold text-lg mb-2 uppercase tracking-wide">
+            Parceiros de Confiança
+          </p>
+          <h2 className="text-4xl md:text-5xl font-bold text-[#005563] mb-4">
             {parceirosContent.title}
           </h2>
           <p className="text-xl text-gray-600 mb-6">
@@ -189,7 +192,7 @@ const Parceiros = () => {
             {duplicatedParceiros.map((parceiro, index) => (
               <div 
                 key={index}
-                className="flex-shrink-0 w-56 h-40 flex items-center justify-center p-4"
+                className="flex-shrink-0 w-56 h-40 flex items-center justify-center p-4 bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300"
                 onTouchStart={() => setActiveImg(index)}
                 onTouchEnd={() => setTimeout(() => setActiveImg(null), 200)}
               >
@@ -197,7 +200,7 @@ const Parceiros = () => {
                   src={parceiro.src}
                   alt={parceiro.alt}
                   draggable={false}
-                  className={`max-w-full max-h-full object-contain filter transition-all duration-300 grayscale hover:grayscale-0 hover:scale-125 ${activeImg === index ? 'grayscale-0 scale-125 z-10' : ''}`}
+                  className={`max-w-full max-h-full object-contain transition-all duration-300 hover:scale-110 ${activeImg === index ? 'scale-110' : ''}`}
                 />
               </div>
             ))}

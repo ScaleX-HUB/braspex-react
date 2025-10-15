@@ -3,8 +3,8 @@ export const productCategories = {
   PEX: {
     id: 'pex',
     name: 'PEX',
-    displayName: 'Linha Pex Barbi',
-    logo: '/public/imagempert.png', // Logo vermelho BARBI PEX
+    displayName: 'Linha Pex ',
+    logo: '/public/imagempert.png', // Logo vermelho
     color: '#E31E24', // Vermelho
     subcategories: [
       {
@@ -33,7 +33,7 @@ export const productCategories = {
     id: 'gas',
     name: 'GAS',
     displayName: 'Linha Pex Gás',
-    logo: '/public/imagemppr.png', // Logo amarelo BARBI GAS
+    logo: '/public/imagemppr.png', // Logo amarelo  AS
     color: '#FFD027', // Amarelo
     subcategories: [
       {
@@ -56,8 +56,8 @@ export const productCategories = {
   KIT: {
     id: 'kit',
     name: 'KIT',
-    displayName: 'Sistema Kit Barbi',
-    logo: '/public/kitsbraspex.png', // Logo cinza BARBI KIT
+    displayName: 'Sistema Kit',
+    logo: '/public/kitsbraspex.png', // Logo cinza KIT
     color: '#6B7280', // Cinza
     subcategories: [
       {
@@ -91,7 +91,7 @@ export const productCategories = {
     id: 'polvo',
     name: 'POLVO',
     displayName: 'Sistema Polvo',
-    logo: '/public/multicamadaairtecno.png', // Logo verde BARBI POLVO
+    logo: '/public/multicamadaairtecno.png', // Logo verde POLVO
     color: '#10B981', // Verde
     subcategories: []
   },

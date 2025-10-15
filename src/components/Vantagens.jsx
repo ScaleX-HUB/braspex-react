@@ -4,8 +4,11 @@ import {
   Lock, 
   Lightning, 
   Factory, 
-  Target 
+  Target,
+  ArrowRight,
+  Package
 } from 'phosphor-react';
+import { Link } from 'react-router-dom';
 import { useSiteContent } from '../contexts/SiteContentContext';
 
 const Vantagens = () => {
@@ -219,6 +222,24 @@ const Vantagens = () => {
             ))}
           </div>
         </div>
+
+        {/* CTA para Ver Produtos */}
+        <motion.div
+          className="text-center mt-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <Link
+            to="/produtos"
+            className="inline-flex items-center gap-3 bg-[#005563] text-white font-bold text-lg px-10 py-4 rounded-xl shadow-lg hover:bg-[#003d47] hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+          >
+            <Package size={24} weight="bold" />
+            Conheça Nossos Kits Industriais
+            <ArrowRight size={24} weight="bold" />
+          </Link>
+        </motion.div>
       </div>
     </motion.section>
   );

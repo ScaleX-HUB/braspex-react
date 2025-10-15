@@ -9,8 +9,7 @@ import {
   Gear, 
   TextAlignLeft,
   ArrowsDownUp,
-  Database,
-  Tag
+  Database
 } from 'phosphor-react';
 import logoBraspex from '../assets/logo-braspex.png';
 
@@ -22,7 +21,6 @@ import SectionOrderManager from '../components/admin/SectionOrderManager';
 import BlogManager from '../components/admin/BlogManager';
 import ClientsSection from '../components/admin/ClientsSection';
 import ProductsManager from '../components/admin/ProductsManager';
-import CategoriesManager from '../components/admin/CategoriesManager';
 
 const AdminPanel = () => {
   const [activeMenu, setActiveMenu] = useState('page-management');
@@ -37,7 +35,7 @@ const AdminPanel = () => {
       icon: <TextAlignLeft size={24} weight="bold" />,
       subsections: [
         { id: 'section-order', name: 'Ordem das Seções', icon: <ArrowsDownUp size={20} /> },
-        { id: 'hero-edit', name: 'Editar Textos', icon: <TextAlignLeft size={20} /> }
+        { id: 'hero-edit', name: 'Editar Hero', icon: <TextAlignLeft size={20} /> }
       ]
     },
     {
@@ -56,10 +54,7 @@ const AdminPanel = () => {
       id: 'products',
       name: 'Produtos',
       icon: <Package size={24} weight="bold" />,
-      subsections: [
-        { id: 'products-list', name: 'Gerenciar Produtos', icon: <Package size={20} /> },
-        { id: 'categories', name: 'Categorias', icon: <Tag size={20} /> }
-      ]
+      subsections: []
     },
     {
       id: 'admin',
@@ -101,7 +96,7 @@ const AdminPanel = () => {
         return <SectionOrderManager />;
       }
       if (activeSubsection === 'hero-edit') {
-        return <TextsEditorSection />;
+        return <TextsEditorSection section="hero" />;
       }
     }
 
@@ -117,12 +112,7 @@ const AdminPanel = () => {
 
     // Products
     if (activeMenu === 'products') {
-      if (activeSubsection === 'products-list') {
-        return <ProductsManager />;
-      }
-      if (activeSubsection === 'categories') {
-        return <CategoriesManager />;
-      }
+      return <ProductsManager />;
     }
 
     return null;

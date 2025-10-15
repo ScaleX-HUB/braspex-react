@@ -1,7 +1,8 @@
 // Dados de exemplo de produtos para demonstração
 // Baseado nas imagens de referência fornecidas
 
-export const mockProducts = [
+// Produtos padrão (fallback)
+const defaultProducts = [
   // Produtos PEX - Conexões
   {
     id: 1,
@@ -255,6 +256,39 @@ export const mockProducts = [
     active: true
   }
 ];
+
+// Carregar produtos do localStorage se existir, senão usar defaultProducts
+const loadProducts = () => {
+  try {
+    const stored = localStorage.getItem('braspex_products');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      console.log('📦 Produtos carregados do localStorage:', parsed.length);
+      return parsed;
+    }
+  } catch (error) {
+    console.error('❌ Erro ao carregar produtos do localStorage:', error);
+  }
+  console.log('📦 Usando produtos padrão:', defaultProducts.length);
+  return defaultProducts;
+};
+
+// Exportar produtos (carrega do localStorage ou padrão)
+export const mockProducts = loadProducts();
+
+// Função para salvar produtos no localStorage
+export const saveProducts = (products) => {
+  try {
+    localStorage.setItem('braspex_products', JSON.stringify(products));
+    console.log('✅ Produtos salvos no localStorage:', products.length);
+    // Recarregar a página para atualizar o site
+    window.dispatchEvent(new Event('braspex-products-updated'));
+    return true;
+  } catch (error) {
+    console.error('❌ Erro ao salvar produtos no localStorage:', error);
+    return false;
+  }
+};
 
 // Helper functions para produtos
 export const getProductsByCategory = (categoryId, subcategoryId = null, childId = null, subchildId = null) => {

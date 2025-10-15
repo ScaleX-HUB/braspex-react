@@ -124,19 +124,36 @@ class SupabaseClient {
     try {
       const url = `${this.baseURL}/${table}`;
 
+      console.log('📤 INSERT Request:', {
+        url,
+        table,
+        data,
+        headers: this.getHeaders(true)
+      });
+
       const response = await fetch(url, {
         method: 'POST',
         headers: this.getHeaders(true),
         body: JSON.stringify(data),
       });
 
+      console.log('📥 INSERT Response:', {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok
+      });
+
       if (!response.ok) {
-        throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+        const errorText = await response.text();
+        console.error('❌ INSERT Error Response:', errorText);
+        throw new Error(`Erro na requisição: ${response.status} ${response.statusText}\n\nDetalhes: ${errorText}`);
       }
 
-      return await response.json();
+      const result = await response.json();
+      console.log('✅ INSERT Success:', result);
+      return result;
     } catch (error) {
-      console.error(`Erro ao inserir dados em ${table}:`, error);
+      console.error(`❌ Erro ao inserir dados em ${table}:`, error);
       throw error;
     }
   }
@@ -149,19 +166,37 @@ class SupabaseClient {
       const queryString = this.buildQueryString(filters);
       const url = `${this.baseURL}/${table}${queryString ? `?${queryString}` : ''}`;
 
+      console.log('📤 UPDATE Request:', {
+        url,
+        table,
+        filters,
+        data,
+        headers: this.getHeaders(true)
+      });
+
       const response = await fetch(url, {
         method: 'PATCH',
         headers: this.getHeaders(true),
         body: JSON.stringify(data),
       });
 
+      console.log('📥 UPDATE Response:', {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok
+      });
+
       if (!response.ok) {
-        throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+        const errorText = await response.text();
+        console.error('❌ UPDATE Error Response:', errorText);
+        throw new Error(`Erro na requisição: ${response.status} ${response.statusText}\n\nDetalhes: ${errorText}`);
       }
 
-      return await response.json();
+      const result = await response.json();
+      console.log('✅ UPDATE Success:', result);
+      return result;
     } catch (error) {
-      console.error(`Erro ao atualizar dados em ${table}:`, error);
+      console.error(`❌ Erro ao atualizar dados em ${table}:`, error);
       throw error;
     }
   }
