@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Package, Plus, PencilSimple, Trash, Eye, Upload, Image as ImageIcon, CurrencyCircleDollar, ArrowsClockwise } from 'phosphor-react';
-import { loadProducts as loadProductsUtil, saveProducts, restoreOriginalProducts, loadCategories, useCategoriesSync } from '../../data/productsUtils';
+import { productsAPI } from '../../services/productsAPI';
+import { loadCategories, useCategoriesSync } from '../../data/productsUtils';
 
 const ProductsManager = () => {
   const [categories, setCategories] = useState({});
@@ -29,6 +30,23 @@ const ProductsManager = () => {
     },
     active: true
   });
+
+  // Garantir que specifications sempre existe
+  useEffect(() => {
+    if (!formData.specifications) {
+      setFormData(prev => ({
+        ...prev,
+        specifications: {
+          material: '',
+          capacity: '',
+          dimensions: '',
+          acabamento: '',
+          diametros: [],
+          normas: []
+        }
+      }));
+    }
+  }, [formData]);
   const [imagePreview, setImagePreview] = useState('');
 
   useEffect(() => {
@@ -49,9 +67,15 @@ const ProductsManager = () => {
   }, [selectedCategory, selectedSubcategory, products]);
 
   const loadProducts = async () => {
-    const productsData = await loadProductsUtil();
-    setProducts(productsData);
-    setFilteredProducts(productsData);
+    try {
+      const productsData = await productsAPI.getAll(true); // true = incluir inativos no admin
+      console.log('✅ Produtos carregados do Supabase:', productsData.length);
+      setProducts(productsData);
+      setFilteredProducts(productsData);
+    } catch (error) {
+      console.error('❌ Erro ao carregar produtos:', error);
+      alert('Erro ao carregar produtos do Supabase: ' + error.message);
+    }
   };
 
   const filterProducts = () => {
@@ -96,15 +120,16 @@ const ProductsManager = () => {
     setIsEditing(true);
   };
 
-  const handleDeleteProduct = (id) => {
+  const handleDeleteProduct = async (id) => {
     if (window.confirm('Tem certeza que deseja excluir este produto?')) {
-      const updatedProducts = products.filter(p => p.id !== id);
-      setProducts(updatedProducts);
-      
-      // Salvar usando o utilitário
-      saveProducts(updatedProducts);
-      
-      alert('Produto excluído com sucesso!');
+      try {
+        await productsAPI.delete(id);
+        await loadProducts(); // Recarregar do Supabase
+        alert('Produto excluído com sucesso!');
+      } catch (error) {
+        console.error('❌ Erro ao excluir produto:', error);
+        alert('Erro ao excluir produto: ' + error.message);
+      }
     }
   };
 
@@ -121,27 +146,29 @@ const ProductsManager = () => {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!formData.name || !formData.categoryId) {
       alert('Por favor, preencha pelo menos o nome e a categoria');
       return;
     }
 
-    let updatedProducts;
-    if (currentProduct) {
-      updatedProducts = products.map(p => p.id === currentProduct.id ? { ...formData, id: currentProduct.id } : p);
-      setProducts(updatedProducts);
-      alert('Produto atualizado com sucesso!');
-    } else {
-      updatedProducts = [...products, { ...formData, id: Date.now() }];
-      setProducts(updatedProducts);
-      alert('Produto criado com sucesso!');
+    try {
+      if (currentProduct) {
+        // Atualizar produto existente
+        await productsAPI.update(currentProduct.id, formData);
+        alert('Produto atualizado com sucesso!');
+      } else {
+        // Criar novo produto
+        await productsAPI.create(formData);
+        alert('Produto criado com sucesso!');
+      }
+
+      await loadProducts(); // Recarregar do Supabase
+      setIsEditing(false);
+    } catch (error) {
+      console.error('❌ Erro ao salvar produto:', error);
+      alert('Erro ao salvar produto: ' + error.message);
     }
-
-    // Salvar usando o utilitário
-    saveProducts(updatedProducts);
-
-    setIsEditing(false);
   };
 
   const handleCancel = () => {
@@ -333,10 +360,10 @@ const ProductsManager = () => {
                 </label>
                 <input
                   type="text"
-                  value={formData.specifications.material}
+                  value={formData.specifications?.material || ''}
                   onChange={(e) => setFormData({
                     ...formData,
-                    specifications: { ...formData.specifications, material: e.target.value }
+                    specifications: { ...(formData.specifications || {}), material: e.target.value }
                   })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
                   placeholder="Ex: PPR, PEX, Latão"
@@ -349,10 +376,10 @@ const ProductsManager = () => {
                 </label>
                 <input
                   type="text"
-                  value={formData.specifications.capacity}
+                  value={formData.specifications?.capacity || ''}
                   onChange={(e) => setFormData({
                     ...formData,
-                    specifications: { ...formData.specifications, capacity: e.target.value }
+                    specifications: { ...(formData.specifications || {}), capacity: e.target.value }
                   })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
                   placeholder="Ex: Até 90°C, 10 bar"
@@ -365,10 +392,10 @@ const ProductsManager = () => {
                 </label>
                 <input
                   type="text"
-                  value={formData.specifications.dimensions}
+                  value={formData.specifications?.dimensions || ''}
                   onChange={(e) => setFormData({
                     ...formData,
-                    specifications: { ...formData.specifications, dimensions: e.target.value }
+                    specifications: { ...(formData.specifications || {}), dimensions: e.target.value }
                   })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
                   placeholder="Ex: 20mm, 25mm, 32mm"
@@ -381,10 +408,10 @@ const ProductsManager = () => {
                 </label>
                 <input
                   type="text"
-                  value={formData.specifications.acabamento || ''}
+                  value={formData.specifications?.acabamento || ''}
                   onChange={(e) => setFormData({
                     ...formData,
-                    specifications: { ...formData.specifications, acabamento: e.target.value }
+                    specifications: { ...(formData.specifications || {}), acabamento: e.target.value }
                   })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
                   placeholder="Ex: Natural, Cromado"
@@ -397,11 +424,11 @@ const ProductsManager = () => {
                 </label>
                 <input
                   type="text"
-                  value={formData.specifications.diametros?.join(', ') || ''}
+                  value={formData.specifications?.diametros?.join(', ') || ''}
                   onChange={(e) => setFormData({
                     ...formData,
                     specifications: { 
-                      ...formData.specifications, 
+                      ...(formData.specifications || {}), 
                       diametros: e.target.value.split(',').map(n => n.trim()).filter(n => n)
                     }
                   })}
@@ -416,11 +443,11 @@ const ProductsManager = () => {
                 </label>
                 <input
                   type="text"
-                  value={formData.specifications.normas?.join(', ')}
+                  value={formData.specifications?.normas?.join(', ') || ''}
                   onChange={(e) => setFormData({
                     ...formData,
                     specifications: { 
-                      ...formData.specifications, 
+                      ...(formData.specifications || {}), 
                       normas: e.target.value.split(',').map(n => n.trim()).filter(n => n)
                     }
                   })}

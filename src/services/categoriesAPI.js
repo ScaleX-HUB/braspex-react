@@ -1,4 +1,4 @@
-import supabase from '../lib/supabaseClient';
+import { supabase } from '../lib/supabaseClient';
 
 /**
  * API para gerenciar CATEGORIAS no Supabase

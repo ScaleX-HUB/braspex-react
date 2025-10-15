@@ -22,6 +22,7 @@ import {
   Heart,
   ShoppingCart
 } from 'phosphor-react';
+import { categoriesAPI } from '../../services/categoriesAPI';
 import { productCategories } from '../../data/productCategories';
 
 // Mapeamento de ícones disponíveis (todos testados)
@@ -47,32 +48,32 @@ const renderIcon = (iconName, size = 24, weight = 'bold') => {
   return <IconComponent size={size} weight={weight} />;
 };
 
-// Chave do localStorage
-const STORAGE_KEY = 'braspex_categories';
-
-// Funções de gerenciamento de categorias
-const loadCategoriesFromStorage = () => {
+// Funções de gerenciamento de categorias com Supabase
+const loadCategoriesFromSupabase = async () => {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      console.log('✅ Categorias carregadas do localStorage:', parsed);
-      return parsed;
+    const categoriesFromDB = await categoriesAPI.getAll();
+    
+    if (categoriesFromDB) {
+      console.log('✅ Categorias carregadas do Supabase:', categoriesFromDB);
+      return categoriesFromDB;
     }
   } catch (e) {
-    console.error('❌ Erro ao carregar categorias:', e);
+    console.error('❌ Erro ao carregar categorias do Supabase:', e);
   }
   
   // Fallback: usar categorias padrão do arquivo
-  console.log('⚠️ Usando categorias padrão');
+  console.log('⚠️ Usando categorias padrão (Supabase não disponível)');
   return productCategories;
 };
 
-const saveCategoriesToStorage = (categories) => {
+const saveCategoriesToSupabase = async (categories) => {
   try {
-    const jsonString = JSON.stringify(categories);
-    localStorage.setItem(STORAGE_KEY, jsonString);
-    console.log('✅ Categorias salvas no localStorage');
+    // Salvar cada categoria individualmente
+    for (const [key, category] of Object.entries(categories)) {
+      await categoriesAPI.upsert(category);
+    }
+    
+    console.log('✅ Categorias salvas no Supabase');
     
     // Disparar evento para sincronização
     window.dispatchEvent(new CustomEvent('categoriesUpdated', { detail: categories }));
@@ -109,11 +110,12 @@ const CategoriesManager = () => {
   console.log('Categorias no estado:', Object.keys(categories).length, 'categorias');
 
   useEffect(() => {
-    console.log('🔄 CARREGANDO CATEGORIAS...');
-    const cats = loadCategoriesFromStorage();
-    console.log('📦 Categorias carregadas:', cats);
-    console.log('📊 Tipo de dados:', typeof cats, Array.isArray(cats) ? 'Array' : 'Object');
-    setCategories(cats);
+    console.log('🔄 CARREGANDO CATEGORIAS DO SUPABASE...');
+    loadCategoriesFromSupabase().then(cats => {
+      console.log('📦 Categorias carregadas:', cats);
+      console.log('📊 Tipo de dados:', typeof cats, Array.isArray(cats) ? 'Array' : 'Object');
+      setCategories(cats);
+    });
   }, []);
 
   const handleNewCategory = () => {
@@ -181,17 +183,18 @@ const CategoriesManager = () => {
       
       console.log('Categorias depois de deletar:', updatedCategories);
       
-      // Salvar no localStorage
-      const saved = saveCategoriesToStorage(updatedCategories);
-      console.log('Salvou após deletar?', saved);
-      
-      if (saved) {
-        // Atualizar estado IMEDIATAMENTE
-        setCategories(updatedCategories);
-        alert('Categoria deletada com sucesso!');
-      } else {
-        alert('Erro ao deletar categoria!');
-      }
+      // Salvar no Supabase
+      saveCategoriesToSupabase(updatedCategories).then(saved => {
+        console.log('Salvou após deletar?', saved);
+        
+        if (saved) {
+          // Atualizar estado IMEDIATAMENTE
+          setCategories(updatedCategories);
+          alert('Categoria deletada com sucesso!');
+        } else {
+          alert('Erro ao deletar categoria!');
+        }
+      });
     }
   };
 
@@ -221,18 +224,18 @@ const CategoriesManager = () => {
     console.log('🗂️ Categorias atualizadas:', updatedCategories);
 
     setCategories(updatedCategories);
-    const saved = saveCategoriesToStorage(updatedCategories);
-    
-    console.log('💿 Resultado do salvamento:', saved);
-    
-    if (saved) {
-      setIsEditing(false);
-      console.log('✅ Categoria salva com sucesso! Fechando modal...');
-      alert(editingCategory ? 'Categoria atualizada com sucesso!' : 'Categoria criada com sucesso!');
-    } else {
-      console.error('❌ Falha ao salvar categoria');
-      alert('Erro ao salvar categoria. Verifique o console.');
-    }
+    saveCategoriesToSupabase(updatedCategories).then(saved => {
+      console.log('💿 Resultado do salvamento:', saved);
+      
+      if (saved) {
+        setIsEditing(false);
+        console.log('✅ Categoria salva com sucesso! Fechando modal...');
+        alert(editingCategory ? 'Categoria atualizada com sucesso!' : 'Categoria criada com sucesso!');
+      } else {
+        console.error('❌ Falha ao salvar categoria');
+        alert('Erro ao salvar categoria. Verifique o console.');
+      }
+    });
   };
 
   const handleAddSubcategory = () => {
@@ -264,10 +267,9 @@ const CategoriesManager = () => {
 
   const handleRestoreDefaults = () => {
     if (window.confirm('Tem certeza que deseja restaurar as categorias padrão? Todas as alterações serão perdidas.')) {
-      localStorage.removeItem(STORAGE_KEY);
       const defaultCategories = productCategories;
       setCategories(defaultCategories);
-      saveCategoriesToStorage(defaultCategories);
+      saveCategoriesToSupabase(defaultCategories);
       alert('Categorias padrão restauradas com sucesso!');
     }
   };

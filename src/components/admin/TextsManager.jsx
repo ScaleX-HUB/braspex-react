@@ -5,7 +5,6 @@ import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Save, RefreshCw } from 'lucide-react';
 
 /**
@@ -16,6 +15,7 @@ export default function TextsManager() {
   const { content, updateContent, loading, refreshContent } = useSiteContent();
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
+  const [activeTab, setActiveTab] = useState('hero');
 
   // Hero Section
   const handleHeroChange = async (field, value) => {
@@ -141,18 +141,28 @@ export default function TextsManager() {
         </div>
       )}
 
-      <Tabs defaultValue="hero" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-6">
-          <TabsTrigger value="hero">Hero</TabsTrigger>
-          <TabsTrigger value="vantagens">Vantagens</TabsTrigger>
-          <TabsTrigger value="sobre">Sobre</TabsTrigger>
-          <TabsTrigger value="parceiros">Parceiros</TabsTrigger>
-          <TabsTrigger value="contato">Contato</TabsTrigger>
-          <TabsTrigger value="footer">Footer</TabsTrigger>
-        </TabsList>
+      {/* Tab Navigation */}
+      <div className="border-b border-gray-200">
+        <div className="flex space-x-2 overflow-x-auto">
+          {['hero', 'vantagens', 'sobre', 'parceiros', 'contato', 'footer'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-2 font-medium text-sm whitespace-nowrap border-b-2 transition-colors ${
+                activeTab === tab
+                  ? 'border-[#005563] text-[#005563]'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
 
+      <div className="mt-6">
         {/* HERO */}
-        <TabsContent value="hero">
+        {activeTab === 'hero' && (
           <Card>
             <CardHeader>
               <CardTitle>Seção Hero (Banner Principal)</CardTitle>
@@ -219,10 +229,10 @@ export default function TextsManager() {
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
+        )}
 
         {/* VANTAGENS */}
-        <TabsContent value="vantagens">
+        {activeTab === 'vantagens' && (
           <Card>
             <CardHeader>
               <CardTitle>Seção Vantagens</CardTitle>
@@ -255,10 +265,10 @@ export default function TextsManager() {
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
+        )}
 
         {/* SOBRE */}
-        <TabsContent value="sobre">
+        {activeTab === 'sobre' && (
           <Card>
             <CardHeader>
               <CardTitle>Seção Sobre Nós</CardTitle>
@@ -327,10 +337,10 @@ export default function TextsManager() {
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
+        )}
 
         {/* PARCEIROS */}
-        <TabsContent value="parceiros">
+        {activeTab === 'parceiros' && (
           <Card>
             <CardHeader>
               <CardTitle>Seção Parceiros</CardTitle>
@@ -363,10 +373,10 @@ export default function TextsManager() {
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
+        )}
 
         {/* CONTATO */}
-        <TabsContent value="contato">
+        {activeTab === 'contato' && (
           <Card>
             <CardHeader>
               <CardTitle>Seção Contato</CardTitle>
@@ -446,10 +456,10 @@ export default function TextsManager() {
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
+        )}
 
         {/* FOOTER */}
-        <TabsContent value="footer">
+        {activeTab === 'footer' && (
           <Card>
             <CardHeader>
               <CardTitle>Rodapé</CardTitle>
@@ -504,8 +514,8 @@ export default function TextsManager() {
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
-      </Tabs>
+        )}
+      </div>
 
       <div className="flex items-center gap-2 text-sm text-gray-600 bg-blue-50 p-4 rounded-lg">
         <Save className="w-4 h-4" />
