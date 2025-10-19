@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabaseClient';
+import { generateUUID } from '../lib/uuid';
 
 /**
  * API para gerenciar CATEGORIAS no Supabase
@@ -74,7 +75,10 @@ export const categoriesAPI = {
    */
   upsert: async (category) => {
     try {
-      console.log('💾 Salvando categoria:', category);
+      console.log('💾 ========================================');
+      console.log('💾 INICIANDO UPSERT DE CATEGORIA');
+      console.log('💾 ========================================');
+      console.log('📥 Categoria recebida:', JSON.stringify(category, null, 2));
       
       const categoryData = {
         name: category.id || category.name,
@@ -90,7 +94,7 @@ export const categoriesAPI = {
         updated_at: new Date().toISOString()
       };
 
-      console.log('📦 Dados formatados para Supabase:', categoryData);
+      console.log('📦 Dados formatados para Supabase:', JSON.stringify(categoryData, null, 2));
 
       // Buscar categoria existente por name
       const existing = await supabase.get('categories', { name: categoryData.name });
@@ -103,19 +107,20 @@ export const categoriesAPI = {
         return true;
       }
 
-      // Categoria não existe - inserir nova com UUID
+      // Categoria não existe - inserir nova
+      const uuid = category.uuid || generateUUID();
+      
       const insertData = {
+        id: uuid, // SEMPRE tem UUID
         ...categoryData,
         created_at: new Date().toISOString()
       };
       
-      // Se tiver UUID fornecido, usar. Senão, deixar o DB gerar automaticamente
-      if (category.uuid) {
-        insertData.id = category.uuid;
-      }
+      console.log('📤 Criando nova categoria com UUID:', uuid);
+      console.log('📦 Dados completos:', JSON.stringify(insertData, null, 2));
       
       const insertResult = await supabase.insert('categories', insertData);
-      console.log('✅ Categoria criada no Supabase:', insertResult);
+      console.log('✅ Categoria criada no Supabase!');
       return true;
       
     } catch (error) {

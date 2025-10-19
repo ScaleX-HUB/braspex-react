@@ -15,9 +15,20 @@ const ProductsPage = () => {
 
   // Carregar produtos e categorias
   useEffect(() => {
-    loadProducts().then(setProducts);
-    const cats = loadCategories();
-    setCategoriesData(cats);
+    console.log('🔄 ProductsPage: Carregando produtos e categorias...');
+    
+    // Carregar produtos
+    loadProducts().then(products => {
+      console.log('✅ Produtos carregados:', products.length);
+      setProducts(products);
+    });
+    
+    // Carregar categorias (async!)
+    loadCategories().then(cats => {
+      console.log('✅ Categorias carregadas:', Object.keys(cats).length);
+      console.log('📦 Categorias:', cats);
+      setCategoriesData(cats);
+    });
   }, []);
 
   // Sincronizar quando produtos forem atualizados no admin

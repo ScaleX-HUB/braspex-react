@@ -223,12 +223,18 @@ const CategoriesManager = () => {
   };
 
   const handleSaveCategory = async () => {
-    console.log('💾 TENTANDO SALVAR CATEGORIA');
-    console.log('FormData atual:', formData);
+    console.log('💾 Salvando categoria:', formData.id);
     
+    // Validação básica
     if (!formData.id || !formData.displayName) {
-      console.error('❌ Validação falhou - ID ou DisplayName vazio');
-      alert('Por favor, preencha pelo menos o ID e o Nome de Exibição');
+      alert('⚠️ ERRO DE VALIDAÇÃO\n\nPor favor, preencha:\n• ID da categoria\n• Nome de Exibição');
+      return;
+    }
+
+    // Validação do ID (sem espaços, caracteres especiais)
+    const idRegex = /^[A-Za-z0-9_-]+$/;
+    if (!idRegex.test(formData.id)) {
+      alert('⚠️ ID INVÁLIDO\n\nO ID deve conter apenas:\n• Letras (A-Z, a-z)\n• Números (0-9)\n• Underscores (_)\n• Hífens (-)');
       return;
     }
 
@@ -236,15 +242,21 @@ const CategoriesManager = () => {
       // Gerar name baseado no id se não fornecido
       const categoryData = {
         ...formData,
-        name: formData.name || formData.id
+        name: formData.name || formData.id,
+        active: formData.active !== false,
+        order_index: formData.order_index || 0
       };
 
-      console.log('📦 Dados da categoria processados:', categoryData);
-
+      console.log('� Iniciando salvamento:', categoryData.name);
+      
       // 1. Salvar no Supabase primeiro
-      console.log('🔄 Salvando no Supabase...');
-      await categoriesAPI.upsert(categoryData);
-      console.log('✅ Categoria salva no Supabase');
+      const result = await categoriesAPI.upsert(categoryData);
+      
+      if (!result) {
+        throw new Error('Falha ao salvar no Supabase - sem retorno');
+      }
+      
+      console.log('✅ Categoria salva no Supabase!');
 
       // 2. Atualizar estado local
       const updatedCategories = {
@@ -252,7 +264,6 @@ const CategoriesManager = () => {
         [formData.id]: categoryData
       };
 
-      console.log('🗂️ Categorias atualizadas:', updatedCategories);
       setCategories(updatedCategories);
 
       // 3. Salvar no localStorage como cache
@@ -260,16 +271,29 @@ const CategoriesManager = () => {
 
       // 4. Disparar evento para notificar outros componentes
       window.dispatchEvent(new CustomEvent('categoriesUpdated', { detail: updatedCategories }));
-      console.log('� Evento categoriesUpdated disparado');
 
       // 5. Fechar modal e mostrar sucesso
       setIsEditing(false);
-      console.log('✅ Categoria salva com sucesso! Fechando modal...');
-      alert(editingCategory ? 'Categoria atualizada com sucesso!' : 'Categoria criada com sucesso!');
+      alert(editingCategory 
+        ? '✅ Categoria atualizada com sucesso!' 
+        : '✅ Nova categoria criada!\n\n• ID: ' + categoryData.name + '\n• Nome: ' + categoryData.displayName
+      );
       
     } catch (error) {
       console.error('❌ Erro ao salvar categoria:', error);
-      alert('Erro ao salvar categoria: ' + error.message);
+      
+      // Tentar extrair detalhes do erro do Supabase
+      let errorMessage = error.message || 'Erro desconhecido';
+      
+      if (errorMessage.includes('duplicate key')) {
+        errorMessage = '⚠️ CATEGORIA JÁ EXISTE\n\nUma categoria com este ID já está cadastrada.\n\nTente um ID diferente.';
+      } else if (errorMessage.includes('violates not-null constraint')) {
+        errorMessage = '⚠️ CAMPO OBRIGATÓRIO VAZIO\n\nAlgum campo obrigatório não foi preenchido.\n\nVerifique o console (F12) para detalhes:\n' + errorMessage;
+      } else if (errorMessage.includes('violates check constraint')) {
+        errorMessage = '⚠️ VALIDAÇÃO DO BANCO\n\nOs dados não passaram na validação do banco de dados.\n\nDetalhes: ' + errorMessage;
+      }
+      
+      alert('❌ ERRO AO SALVAR CATEGORIA\n\n' + errorMessage);
     }
   };
 
@@ -417,12 +441,14 @@ const CategoriesManager = () => {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Ícone da Categoria
             </label>
-            <p className="text-xs text-gray-500 mb-3">Selecione um ícone para representar esta categoria no menu</p>
+            <p className="text-xs text-gray-500 mb-3">
+              Selecione um ícone para representar esta categoria no menu ({Object.keys(iconMap).length} ícones disponíveis)
+            </p>
             
             <div className="grid grid-cols-8 gap-2 max-h-64 overflow-y-auto p-4 bg-gray-50 rounded-lg border border-gray-300">
-              {Object.keys(iconMap).map((iconName) => (
+              {Object.keys(iconMap).sort().map((iconName) => (
                 <button
-                  key={iconName}
+                  key={`icon-${iconName}`}
                   type="button"
                   onClick={() => setFormData({ ...formData, icon: iconName })}
                   className={`p-3 rounded-lg border-2 transition-all hover:scale-110 ${
