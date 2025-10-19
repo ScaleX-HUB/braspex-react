@@ -20,7 +20,12 @@ import {
   CheckCircle,
   Star,
   Heart,
-  ShoppingCart
+  ShoppingCart,
+  Drop,
+  Droplet,
+  ThermometerHot,
+  ThermometerCold,
+  Wind
 } from 'phosphor-react';
 import { categoriesAPI } from '../../services/categoriesAPI';
 import { productCategories } from '../../data/productCategories';
@@ -39,7 +44,12 @@ const iconMap = {
   CheckCircle,
   Star,
   Heart,
-  ShoppingCart
+  ShoppingCart,
+  Drop,
+  Droplet,
+  ThermometerHot,
+  ThermometerCold,
+  Wind
 };
 
 // Função para renderizar ícone

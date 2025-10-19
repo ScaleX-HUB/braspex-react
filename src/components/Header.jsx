@@ -173,7 +173,14 @@ const Header = () => {
                         {categoriesArray.map((category) => (
                           <Link
                             key={category.id}
-                            to={`/produtos?categoria=${category.id}`}
+                            to="/produtos"
+                            onClick={() => {
+                              // Usar timeout para garantir que a página carregue antes de selecionar
+                              setTimeout(() => {
+                                const event = new CustomEvent('selectCategory', { detail: category.id });
+                                window.dispatchEvent(event);
+                              }, 100);
+                            }}
                             className="group p-4 rounded-lg hover:bg-gray-50 transition-all border border-transparent hover:border-gray-200"
                           >
                             <div className="flex flex-col items-center text-center gap-3">

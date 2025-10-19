@@ -30,6 +30,18 @@ const ProductsPage = () => {
     setCategoriesData(updatedCategories);
   });
 
+  // Listener para seleção de categoria do Header
+  useEffect(() => {
+    const handleSelectCategory = (event) => {
+      const categoryId = event.detail;
+      console.log('📂 Selecionando categoria:', categoryId);
+      setSelectedCategory(categoryId);
+    };
+
+    window.addEventListener('selectCategory', handleSelectCategory);
+    return () => window.removeEventListener('selectCategory', handleSelectCategory);
+  }, []);
+
   // Estrutura de categorias dinâmica
   const categoriesArray = Object.values(categoriesData);
   
@@ -49,10 +61,13 @@ const ProductsPage = () => {
   
   const filteredProducts = selectedCategory === 'todos' 
     ? products.filter(p => p.active !== false)
-    : products.filter(p => p.categoryId === selectedCategory && p.active !== false);
+    : products.filter(p => {
+        // Suporta tanto categoryId quanto categoryName
+        return (p.categoryId === selectedCategory || p.categoryName === selectedCategory) && p.active !== false;
+      });
 
   const getCategoryIcon = (categoryId) => {
-    const cat = categories.find(c => c.id === categoryId);
+    const cat = categories.find(c => c.id === categoryId || c.name === categoryId);
     return cat?.icon || <Gear className="w-5 h-5" />;
   };
 
@@ -141,7 +156,7 @@ const ProductsPage = () => {
                         </div>
                       )}
                       <div className="absolute top-3 left-3 bg-[#005563] text-white text-xs font-bold px-3 py-1 rounded-full">
-                        {categories.find(c => c.id === product.category)?.name || 'Kit'}
+                        {categories.find(c => c.id === product.categoryId || c.id === product.categoryName)?.name || product.categoryName || 'Kit'}
                       </div>
                     </div>
                   </Link>

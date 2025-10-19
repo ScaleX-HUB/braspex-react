@@ -105,10 +105,14 @@ export const categoriesAPI = {
 
       // Categoria não existe - inserir nova com UUID
       const insertData = {
-        id: category.uuid || null, // Usar UUID se fornecido, senão o DB gera
         ...categoryData,
         created_at: new Date().toISOString()
       };
+      
+      // Se tiver UUID fornecido, usar. Senão, deixar o DB gerar automaticamente
+      if (category.uuid) {
+        insertData.id = category.uuid;
+      }
       
       const insertResult = await supabase.insert('categories', insertData);
       console.log('✅ Categoria criada no Supabase:', insertResult);
