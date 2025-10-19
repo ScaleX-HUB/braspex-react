@@ -16,6 +16,7 @@ const DEFAULT_SECTION_ORDER = [
   { id: 'sobre', name: 'Sobre Nós', component: 'Sobre', enabled: true },
   { id: 'products-showcase', name: 'Produtos em Destaque', component: 'ProductsShowcase', enabled: true },
   { id: 'vantagens', name: 'Por que escolher os Kits BRASPEX?', component: 'Vantagens', enabled: true },
+  { id: 'kits-showcase', name: 'Galeria de Kits', component: 'KitsShowcase', enabled: true },
   { id: 'parceiros', name: 'Parceiros de Confiança', component: 'Parceiros', enabled: true },
   { id: 'comparacao', name: 'Comparação de Produtos', component: 'Comparacao', enabled: true },
   { id: 'fluxo', name: 'Fluxo de Execução', component: 'Fluxo', enabled: true },
@@ -37,23 +38,29 @@ export const SectionOrderProvider = ({ children }) => {
     return DEFAULT_SECTION_ORDER;
   });
 
-  // Salvar no localStorage sempre que mudar
-  useEffect(() => {
-    localStorage.setItem('braspex_section_order', JSON.stringify(sectionOrder));
-  }, [sectionOrder]);
+  // Função para salvar manualmente
+  const saveSectionOrder = async () => {
+    return new Promise((resolve) => {
+      localStorage.setItem('braspex_section_order', JSON.stringify(sectionOrder));
+      resolve();
+    });
+  };
 
   const updateSectionOrder = (newOrder) => {
     setSectionOrder(newOrder);
   };
 
   const toggleSectionEnabled = (sectionId) => {
-    setSectionOrder(prev => 
-      prev.map(section => 
+    setSectionOrder(prev => {
+      const newOrder = prev.map(section => 
         section.id === sectionId 
           ? { ...section, enabled: !section.enabled }
           : section
-      )
-    );
+      );
+      // Salvar automaticamente após toggle
+      localStorage.setItem('braspex_section_order', JSON.stringify(newOrder));
+      return newOrder;
+    });
   };
 
   const moveSectionUp = (index) => {
@@ -61,6 +68,8 @@ export const SectionOrderProvider = ({ children }) => {
     setSectionOrder(prev => {
       const newOrder = [...prev];
       [newOrder[index - 1], newOrder[index]] = [newOrder[index], newOrder[index - 1]];
+      // Salvar automaticamente após mover
+      localStorage.setItem('braspex_section_order', JSON.stringify(newOrder));
       return newOrder;
     });
   };
@@ -70,12 +79,10 @@ export const SectionOrderProvider = ({ children }) => {
     setSectionOrder(prev => {
       const newOrder = [...prev];
       [newOrder[index], newOrder[index + 1]] = [newOrder[index + 1], newOrder[index]];
+      // Salvar automaticamente após mover
+      localStorage.setItem('braspex_section_order', JSON.stringify(newOrder));
       return newOrder;
     });
-  };
-
-  const resetToDefault = () => {
-    setSectionOrder(DEFAULT_SECTION_ORDER);
   };
 
   const getEnabledSections = () => {
@@ -90,7 +97,7 @@ export const SectionOrderProvider = ({ children }) => {
         toggleSectionEnabled,
         moveSectionUp,
         moveSectionDown,
-        resetToDefault,
+        saveSectionOrder,
         getEnabledSections,
       }}
     >

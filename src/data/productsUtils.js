@@ -1,24 +1,44 @@
-// Utilitário para gerenciar produtos (sincroniza localStorage com mockProducts)
+// Utilitário para gerenciar produtos (integrado com Supabase)
 import { useEffect } from 'react';
 import { productCategories } from './productCategories';
+import { productsAPI } from '../services/productsAPI';
+import { categoriesAPI } from '../services/categoriesAPI';
 
 const STORAGE_KEY = 'braspex_products';
 const CATEGORIES_STORAGE_KEY = 'braspex_categories';
 
 /**
- * Carrega categorias do localStorage ou retorna padrão
+ * Carrega categorias: PRIORIDADE Supabase → localStorage → Padrão
  */
-export const loadCategories = () => {
+export const loadCategories = async () => {
+  try {
+    // 1. Tentar carregar do Supabase
+    console.log('🔍 Buscando categorias do Supabase...');
+    const supabaseCategories = await categoriesAPI.getAll();
+    
+    if (supabaseCategories && Object.keys(supabaseCategories).length > 0) {
+      console.log('✅ Categorias carregadas do Supabase:', Object.keys(supabaseCategories).length);
+      // Salvar no localStorage como cache
+      localStorage.setItem(CATEGORIES_STORAGE_KEY, JSON.stringify(supabaseCategories));
+      return supabaseCategories;
+    }
+  } catch (error) {
+    console.error('❌ Erro ao carregar categorias do Supabase:', error);
+  }
+
+  // 2. Fallback: carregar do localStorage
   try {
     const stored = localStorage.getItem(CATEGORIES_STORAGE_KEY);
     if (stored) {
+      console.log('✅ Categorias carregadas do localStorage (cache)');
       return JSON.parse(stored);
     }
   } catch (e) {
-    console.error('❌ Erro ao carregar categorias:', e);
+    console.error('❌ Erro ao carregar categorias do localStorage:', e);
   }
   
-  // Fallback: retornar categorias padrão
+  // 3. Fallback final: retornar categorias padrão
+  console.log('⚠️ Usando categorias padrão (productCategories)');
   return productCategories;
 };
 
@@ -37,23 +57,55 @@ export const useCategoriesSync = (callback) => {
 };
 
 /**
- * Carrega produtos: APENAS do localStorage (não usa fallback mockProducts)
+ * Carrega produtos: PRIORIDADE Supabase → localStorage → Array vazio
  */
 export const loadProducts = async () => {
-  // Tentar carregar do localStorage primeiro
+  try {
+    // 1. Tentar carregar do Supabase primeiro
+    console.log('🔍 Buscando produtos do Supabase...');
+    const supabaseProducts = await productsAPI.getAll();
+    
+    if (supabaseProducts && supabaseProducts.length > 0) {
+      console.log('✅ Produtos carregados do Supabase:', supabaseProducts.length);
+      
+      // Converter formato do Supabase para formato do site
+      const products = supabaseProducts.map(p => ({
+        id: p.id,
+        name: p.name,
+        description: p.description,
+        categoryId: p.category_id,
+        categoryName: p.category_name,
+        subcategoryId: p.subcategory_id,
+        image: p.image_url || p.image_path,
+        price: p.price || p.price_label || 'Sob Consulta',
+        specifications: p.specifications || {},
+        active: p.active !== false,
+        featured: p.featured || false,
+        slug: p.slug
+      }));
+      
+      // Salvar no localStorage como cache
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+      return products;
+    }
+  } catch (error) {
+    console.error('❌ Erro ao carregar produtos do Supabase:', error);
+  }
+
+  // 2. Fallback: carregar do localStorage
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved) {
     try {
       const products = JSON.parse(saved);
-      console.log('✅ Produtos carregados do localStorage:', products.length);
+      console.log('✅ Produtos carregados do localStorage (cache):', products.length);
       return products;
     } catch (e) {
       console.error('❌ Erro ao carregar produtos do localStorage:', e);
     }
   }
 
-  // Se não houver produtos no localStorage, retornar array vazio
-  console.log('⚠️ Nenhum produto encontrado no localStorage. Retornando array vazio.');
+  // 3. Se não houver produtos, retornar array vazio
+  console.log('⚠️ Nenhum produto encontrado. Retornando array vazio.');
   return [];
 };
 

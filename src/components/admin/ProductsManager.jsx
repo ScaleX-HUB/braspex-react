@@ -50,9 +50,14 @@ const ProductsManager = () => {
   const [imagePreview, setImagePreview] = useState('');
 
   useEffect(() => {
-    const cats = loadCategories();
-    setCategories(cats);
-    setCategoriesArray(Object.values(cats));
+    const loadCats = async () => {
+      console.log('🏁 ProductsManager: Carregando categorias...');
+      const cats = await loadCategories();
+      console.log('✅ ProductsManager: Categorias carregadas:', cats);
+      setCategories(cats);
+      setCategoriesArray(Object.values(cats));
+    };
+    loadCats();
     loadProducts();
   }, []);
 
@@ -153,17 +158,41 @@ const ProductsManager = () => {
     }
 
     try {
+      // Preparar dados para enviar ao Supabase (converter camelCase para snake_case)
+      const dataToSend = {
+        name: formData.name,
+        description: formData.description,
+        category_id: formData.categoryId, // Converter categoryId para category_id
+        subcategory_id: formData.subcategoryId || null,
+        image_url: formData.image || null,
+        price: formData.price || null,
+        specifications: formData.specifications || {},
+        active: formData.active !== undefined ? formData.active : true
+      };
+
+      console.log('📦 Dados a enviar:', dataToSend);
+
       if (currentProduct) {
         // Atualizar produto existente
-        await productsAPI.update(currentProduct.id, formData);
+        console.log('🔄 Atualizando produto no Supabase...', currentProduct.id);
+        await productsAPI.update(currentProduct.id, dataToSend);
+        console.log('✅ Produto atualizado no Supabase');
         alert('Produto atualizado com sucesso!');
       } else {
         // Criar novo produto
-        await productsAPI.create(formData);
+        console.log('🆕 Criando novo produto no Supabase...');
+        await productsAPI.create(dataToSend);
+        console.log('✅ Produto criado no Supabase');
         alert('Produto criado com sucesso!');
       }
 
-      await loadProducts(); // Recarregar do Supabase
+      // Recarregar produtos do Supabase
+      await loadProducts();
+      
+      // Disparar evento para atualizar o site
+      window.dispatchEvent(new CustomEvent('productsUpdated'));
+      console.log('📡 Evento productsUpdated disparado');
+      
       setIsEditing(false);
     } catch (error) {
       console.error('❌ Erro ao salvar produto:', error);
@@ -309,7 +338,9 @@ const ProductsManager = () => {
               >
                 <option value="">Selecione uma categoria</option>
                 {categoriesArray.map(cat => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  <option key={cat.id} value={cat.id}>
+                    {cat.display_name || cat.displayName || cat.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -489,29 +520,13 @@ const ProductsManager = () => {
             {filteredProducts.length} de {products.length} produtos
           </p>
         </div>
-        <div className="flex gap-3">
-          <button
-            onClick={async () => {
-              if (window.confirm('Tem certeza que deseja restaurar os produtos originais? Todas as alterações serão perdidas.')) {
-                const restored = await restoreOriginalProducts();
-                setProducts(restored);
-                setFilteredProducts(restored);
-                alert('Produtos originais restaurados com sucesso!');
-              }
-            }}
-            className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2"
-          >
-            <ArrowsClockwise size={20} weight="bold" />
-            Restaurar Originais
-          </button>
-          <button
-            onClick={handleNewProduct}
-            className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
-          >
-            <Plus size={20} weight="bold" />
-            Novo Produto
-          </button>
-        </div>
+        <button
+          onClick={handleNewProduct}
+          className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
+        >
+          <Plus size={20} weight="bold" />
+          Novo Produto
+        </button>
       </div>
 
       {/* Filtros */}

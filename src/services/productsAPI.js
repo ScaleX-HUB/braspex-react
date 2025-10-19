@@ -118,6 +118,8 @@ export const productsAPI = {
    */
   async create(productData) {
     try {
+      console.log('🆕 Criando produto:', productData);
+      
       // Gerar slug se não fornecido
       const slug = productData.slug || 
         productData.name
@@ -127,35 +129,50 @@ export const productsAPI = {
           .replace(/[^a-z0-9\s-]/g, '')
           .replace(/\s+/g, '-');
 
-      const data = await supabase.insert(TABLE_NAME, {
+      // Preparar dados básicos (colunas que sempre existem)
+      const data = {
         name: productData.name,
-        slug: slug,
         description: productData.description || null,
         category_id: productData.category_id || productData.categoryId || null,
-        category_name: productData.category_name || productData.categoryName || null,
-        subcategory_id: productData.subcategory_id || productData.subcategoryId || null,
-        subcategory_name: productData.subcategory_name || productData.subcategoryName || null,
         image_url: productData.image_url || productData.imageUrl || productData.image || null,
-        image_path: productData.image_path || productData.imagePath || null,
-        thumbnail_url: productData.thumbnail_url || productData.thumbnailUrl || null,
-        gallery: productData.gallery || [],
         price: productData.price || null,
-        price_label: productData.price_label || productData.priceLabel || 'Sob Consulta',
-        sku: productData.sku || null,
         specifications: productData.specifications || {},
-        features: productData.features || [],
         active: productData.active !== undefined ? productData.active : true,
-        featured: productData.featured || false,
-        stock_status: productData.stock_status || productData.stockStatus || 'in_stock',
-        order_index: productData.order_index || productData.orderIndex || 0,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
-      });
+      };
+
+      // Adicionar campos opcionais apenas se fornecidos
+      if (slug) data.slug = slug;
+      if (productData.subcategory_id || productData.subcategoryId) {
+        data.subcategory_id = productData.subcategory_id || productData.subcategoryId;
+      }
+      if (productData.image_path || productData.imagePath) {
+        data.image_path = productData.image_path || productData.imagePath;
+      }
+      if (productData.features) {
+        data.features = productData.features;
+      }
+      if (productData.featured !== undefined) {
+        data.featured = productData.featured;
+      }
+      if (productData.sku) {
+        data.sku = productData.sku;
+      }
+
+      console.log('📦 Dados preparados para INSERT:', data);
       
-      console.log('✅ Produto criado no Supabase:', data[0]);
-      return data[0];
+      const result = await supabase.insert(TABLE_NAME, data);
+      
+      console.log('✅ Produto criado no Supabase:', result);
+      return result && result.length > 0 ? result[0] : result;
+      
     } catch (error) {
       console.error('❌ Erro ao criar produto:', error);
+      // Logar erro detalhado
+      if (error.message) {
+        console.error('Mensagem de erro:', error.message);
+      }
       throw error;
     }
   },

@@ -168,37 +168,51 @@ const CategoriesManager = () => {
     console.log('✅ editingCategory setado para:', catId);
   };
 
-  const handleDeleteCategory = (catId) => {
+  const handleDeleteCategory = async (catId) => {
     console.log('🗑️ TENTANDO DELETAR CATEGORIA:', catId);
     console.log('Categorias antes:', categories);
     
     if (window.confirm('Tem certeza que deseja deletar esta categoria? Todos os produtos desta categoria ficarão sem categoria.')) {
-      // Criar novo objeto sem a categoria deletada
-      const updatedCategories = {};
-      Object.keys(categories).forEach(key => {
-        if (key !== catId) {
-          updatedCategories[key] = categories[key];
-        }
-      });
-      
-      console.log('Categorias depois de deletar:', updatedCategories);
-      
-      // Salvar no Supabase
-      saveCategoriesToSupabase(updatedCategories).then(saved => {
-        console.log('Salvou após deletar?', saved);
+      try {
+        // 1. Deletar do Supabase primeiro
+        console.log('🔄 Deletando do Supabase...');
+        const deleted = await categoriesAPI.delete(catId);
         
-        if (saved) {
-          // Atualizar estado IMEDIATAMENTE
-          setCategories(updatedCategories);
-          alert('Categoria deletada com sucesso!');
-        } else {
-          alert('Erro ao deletar categoria!');
+        if (!deleted) {
+          throw new Error('Falha ao deletar do Supabase');
         }
-      });
+        
+        console.log('✅ Categoria deletada do Supabase');
+        
+        // 2. Criar novo objeto sem a categoria deletada
+        const updatedCategories = {};
+        Object.keys(categories).forEach(key => {
+          if (key !== catId) {
+            updatedCategories[key] = categories[key];
+          }
+        });
+        
+        console.log('📦 Categorias atualizadas:', updatedCategories);
+        
+        // 3. Atualizar estado local
+        setCategories(updatedCategories);
+        
+        // 4. Salvar no localStorage como cache
+        localStorage.setItem('braspex_categories', JSON.stringify(updatedCategories));
+        
+        // 5. Disparar evento para notificar outros componentes
+        window.dispatchEvent(new CustomEvent('categoriesUpdated', { detail: updatedCategories }));
+        console.log('📡 Evento categoriesUpdated disparado');
+        
+        alert('Categoria deletada com sucesso!');
+      } catch (error) {
+        console.error('❌ Erro ao deletar categoria:', error);
+        alert('Erro ao deletar categoria: ' + error.message);
+      }
     }
   };
 
-  const handleSaveCategory = () => {
+  const handleSaveCategory = async () => {
     console.log('💾 TENTANDO SALVAR CATEGORIA');
     console.log('FormData atual:', formData);
     
@@ -208,34 +222,45 @@ const CategoriesManager = () => {
       return;
     }
 
-    // Gerar name baseado no id se não fornecido
-    const categoryData = {
-      ...formData,
-      name: formData.name || formData.id
-    };
+    try {
+      // Gerar name baseado no id se não fornecido
+      const categoryData = {
+        ...formData,
+        name: formData.name || formData.id
+      };
 
-    console.log('📦 Dados da categoria processados:', categoryData);
+      console.log('📦 Dados da categoria processados:', categoryData);
 
-    const updatedCategories = {
-      ...categories,
-      [formData.id]: categoryData
-    };
+      // 1. Salvar no Supabase primeiro
+      console.log('🔄 Salvando no Supabase...');
+      await categoriesAPI.upsert(categoryData);
+      console.log('✅ Categoria salva no Supabase');
 
-    console.log('🗂️ Categorias atualizadas:', updatedCategories);
+      // 2. Atualizar estado local
+      const updatedCategories = {
+        ...categories,
+        [formData.id]: categoryData
+      };
 
-    setCategories(updatedCategories);
-    saveCategoriesToSupabase(updatedCategories).then(saved => {
-      console.log('💿 Resultado do salvamento:', saved);
+      console.log('🗂️ Categorias atualizadas:', updatedCategories);
+      setCategories(updatedCategories);
+
+      // 3. Salvar no localStorage como cache
+      localStorage.setItem('braspex_categories', JSON.stringify(updatedCategories));
+
+      // 4. Disparar evento para notificar outros componentes
+      window.dispatchEvent(new CustomEvent('categoriesUpdated', { detail: updatedCategories }));
+      console.log('� Evento categoriesUpdated disparado');
+
+      // 5. Fechar modal e mostrar sucesso
+      setIsEditing(false);
+      console.log('✅ Categoria salva com sucesso! Fechando modal...');
+      alert(editingCategory ? 'Categoria atualizada com sucesso!' : 'Categoria criada com sucesso!');
       
-      if (saved) {
-        setIsEditing(false);
-        console.log('✅ Categoria salva com sucesso! Fechando modal...');
-        alert(editingCategory ? 'Categoria atualizada com sucesso!' : 'Categoria criada com sucesso!');
-      } else {
-        console.error('❌ Falha ao salvar categoria');
-        alert('Erro ao salvar categoria. Verifique o console.');
-      }
-    });
+    } catch (error) {
+      console.error('❌ Erro ao salvar categoria:', error);
+      alert('Erro ao salvar categoria: ' + error.message);
+    }
   };
 
   const handleAddSubcategory = () => {

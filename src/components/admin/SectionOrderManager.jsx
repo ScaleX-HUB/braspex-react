@@ -1,5 +1,5 @@
-import React from 'react';
-import { ArrowUp, ArrowDown, Eye, EyeSlash, ArrowsClockwise } from 'phosphor-react';
+import React, { useState } from 'react';
+import { ArrowUp, ArrowDown, Eye, EyeSlash, FloppyDisk } from 'phosphor-react';
 import { useSectionOrder } from '../../contexts/SectionOrderContext';
 
 const SectionOrderManager = () => {
@@ -8,8 +8,25 @@ const SectionOrderManager = () => {
     moveSectionUp, 
     moveSectionDown, 
     toggleSectionEnabled,
-    resetToDefault 
+    saveSectionOrder 
   } = useSectionOrder();
+  
+  const [saveMessage, setSaveMessage] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  const handleSave = async () => {
+    setSaving(true);
+    setSaveMessage('');
+    try {
+      await saveSectionOrder();
+      setSaveMessage('✅ Ordem salva com sucesso!');
+      setTimeout(() => setSaveMessage(''), 3000);
+    } catch (error) {
+      setSaveMessage('❌ Erro ao salvar');
+      console.error('Erro ao salvar ordem:', error);
+    }
+    setSaving(false);
+  };
 
   return (
     <div className="space-y-6">
@@ -19,16 +36,24 @@ const SectionOrderManager = () => {
             Ordem das Seções da Página Principal
           </h3>
           <p className="text-sm text-gray-600 mt-1">
-            Arraste ou use as setas para reordenar as seções. Clique no olho para ativar/desativar.
+            Use as setas para reordenar as seções. Clique no olho para ativar/desativar.
           </p>
         </div>
-        <button
-          onClick={resetToDefault}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-        >
-          <ArrowsClockwise size={20} />
-          Restaurar Ordem Padrão
-        </button>
+        <div className="flex items-center gap-3">
+          {saveMessage && (
+            <span className={`text-sm font-medium ${saveMessage.includes('✅') ? 'text-green-600' : 'text-red-600'}`}>
+              {saveMessage}
+            </span>
+          )}
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <FloppyDisk size={20} weight="fill" />
+            {saving ? 'Salvando...' : 'Salvar Ordem'}
+          </button>
+        </div>
       </div>
 
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
@@ -147,7 +172,7 @@ const SectionOrderManager = () => {
       {/* Aviso */}
       <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
         <p className="text-sm text-yellow-800">
-          <strong>⚠️ Atenção:</strong> As alterações são aplicadas imediatamente na página principal. 
+          <strong>⚠️ Atenção:</strong> Clique em "Salvar Ordem" para aplicar as alterações na página principal. 
           Seções desativadas não serão exibidas para os visitantes.
         </p>
       </div>

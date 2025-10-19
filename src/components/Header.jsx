@@ -27,11 +27,15 @@ const Header = () => {
   const textColorClass = (isScrolled || isLightBackground) ? 'text-[#005563] hover:text-[#FFD027]' : 'text-white hover:text-[#FFD027]';
   const bgClass = (isScrolled || isLightBackground) ? 'bg-white shadow-md' : 'bg-transparent';
 
-  // Carregar categorias
+  // Carregar categorias do Supabase
   useEffect(() => {
-    const cats = loadCategories();
-    console.log('🏁 HEADER: Carregando categorias iniciais:', cats);
-    setCategories(cats);
+    const loadCats = async () => {
+      console.log('🏁 HEADER: Carregando categorias do Supabase...');
+      const cats = await loadCategories();
+      console.log('✅ HEADER: Categorias carregadas:', cats);
+      setCategories(cats);
+    };
+    loadCats();
   }, []);
 
   // Log quando categories mudar

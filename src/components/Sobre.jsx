@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle, Sparkle, Target, Lightbulb } from 'phosphor-react';
+import { useSiteContent } from '../contexts/SiteContentContext';
 
 const Sobre = () => {
+  const { content } = useSiteContent();
+  
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
     visible: {
@@ -34,7 +37,7 @@ const Sobre = () => {
           className="text-center mb-12 md:mb-16"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#005563] mb-4">
-            Sobre a Braspex
+            {content.sobre?.title || 'Sobre a Braspex'}
           </h2>
           <div className="w-20 h-1 bg-[#FFD027] mx-auto rounded-full" />
         </motion.div>
@@ -48,17 +51,33 @@ const Sobre = () => {
             variants={staggerContainer}
             className="space-y-6"
           >
-            <motion.p variants={fadeInUp} className="text-base md:text-lg text-gray-700 leading-relaxed">
-              A Braspex é uma empresa inovadora no setor de <strong className="text-[#005563]">soluções industrializadas para instalações prediais</strong>. Nascida da sólida experiência do <strong className="text-[#005563]">Grupo Protogás</strong>, atua com excelência na fabricação de kits hidráulicos, de gás e frigorígenos, oferecendo produtos que unem qualidade, padronização e eficiência.
-            </motion.p>
+            {/* Renderizar o texto completo do admin ou fallback para o texto padrão */}
+            {content.sobre?.content ? (
+              // Dividir por parágrafos (quebras de linha duplas)
+              content.sobre.content.split('\n\n').map((paragraph, index) => (
+                <motion.p 
+                  key={index} 
+                  variants={fadeInUp} 
+                  className="text-base md:text-lg text-gray-700 leading-relaxed"
+                >
+                  {paragraph}
+                </motion.p>
+              ))
+            ) : (
+              <>
+                <motion.p variants={fadeInUp} className="text-base md:text-lg text-gray-700 leading-relaxed">
+                  A Braspex é uma empresa inovadora no setor de <strong className="text-[#005563]">soluções industrializadas para instalações prediais</strong>. Nascida da sólida experiência do <strong className="text-[#005563]">Grupo Protogás</strong>, atua com excelência na fabricação de kits hidráulicos, de gás e frigorígenos, oferecendo produtos que unem qualidade, padronização e eficiência.
+                </motion.p>
 
-            <motion.p variants={fadeInUp} className="text-base md:text-lg text-gray-700 leading-relaxed">
-              Com um modelo produtivo moderno e altamente controlado, a Braspex garante que suas soluções cheguem <strong className="text-[#005563]">prontas para a obra</strong>, simplificando as etapas de instalação e reduzindo significativamente prazos, custos e retrabalhos. Cada kit é desenvolvido com tecnologia de ponta e rigor técnico, assegurando desempenho superior e confiabilidade em todas as aplicações.
-            </motion.p>
+                <motion.p variants={fadeInUp} className="text-base md:text-lg text-gray-700 leading-relaxed">
+                  Com um modelo produtivo moderno e altamente controlado, a Braspex garante que suas soluções cheguem <strong className="text-[#005563]">prontas para a obra</strong>, simplificando as etapas de instalação e reduzindo significativamente prazos, custos e retrabalhos. Cada kit é desenvolvido com tecnologia de ponta e rigor técnico, assegurando desempenho superior e confiabilidade em todas as aplicações.
+                </motion.p>
 
-            <motion.p variants={fadeInUp} className="text-base md:text-lg text-gray-700 leading-relaxed">
-              Mais do que fornecer produtos, a Braspex entrega <strong className="text-[#005563]">praticidade, segurança e inovação</strong>, contribuindo para a evolução do setor e para o sucesso de cada projeto executado.
-            </motion.p>
+                <motion.p variants={fadeInUp} className="text-base md:text-lg text-gray-700 leading-relaxed">
+                  Mais do que fornecer produtos, a Braspex entrega <strong className="text-[#005563]">praticidade, segurança e inovação</strong>, contribuindo para a evolução do setor e para o sucesso de cada projeto executado.
+                </motion.p>
+              </>
+            )}
           </motion.div>
 
           {/* Diferenciais */}

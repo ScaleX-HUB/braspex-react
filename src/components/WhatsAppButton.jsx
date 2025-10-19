@@ -1,11 +1,13 @@
 import React from 'react';
-import { WhatsappLogo } from 'phosphor-react'; // Ícone para o WhatsApp
+import { WhatsappLogo } from 'phosphor-react';
+import { useSiteContent } from '../contexts/SiteContentContext';
 
 const WhatsAppButton = () => {
-  // Coloque aqui o número de WhatsApp da sua empresa
-  // Formato: código do país + DDD + número (tudo junto, sem espaços ou símbolos)
-  const phoneNumber = '5581989635638'; 
-  const message = 'Olá! Gostaria de solicitar uma cotação.';
+  const { content } = useSiteContent();
+  
+  // Usa valores do admin ou valores padrão
+  const phoneNumber = content.whatsapp?.phone || '5581989635638'; 
+  const message = content.whatsapp?.message || 'Olá! Gostaria de solicitar uma cotação.';
   
   // A URL é construída dinamicamente com as variáveis acima
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;

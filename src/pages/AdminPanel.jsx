@@ -23,7 +23,7 @@ import SectionOrderManager from '../components/admin/SectionOrderManager';
 import BlogManager from '../components/admin/BlogManager';
 import ClientsKanban from '../components/admin/ClientsKanban';
 import ProductsManager from '../components/admin/ProductsManager';
-import CategoriesManager from '../components/admin/CategoriesManager';
+import CategoriesManager from '../components/admin/CategoriesManagerSimple';
 import QuotesManager from '../components/admin/QuotesManager';
 
 const AdminPanel = () => {

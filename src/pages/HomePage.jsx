@@ -4,6 +4,7 @@ import Hero from '../components/Hero';
 import Sobre from '../components/Sobre';
 import ProductsShowcase from '../components/ProductsShowcase';
 import Vantagens from '../components/Vantagens';
+import KitsShowcase from '../components/KitsShowcase';
 import Parceiros from '../components/Parceiros';
 import Comparacao from '../components/Comparacao';
 import Fluxo from '../components/Fluxo';
@@ -22,6 +23,7 @@ const HomePage = () => {
     'Sobre': Sobre,
     'ProductsShowcase': ProductsShowcase,
     'Vantagens': Vantagens,
+    'KitsShowcase': KitsShowcase,
     'Parceiros': Parceiros,
     'Comparacao': Comparacao,
     'Fluxo': Fluxo,
