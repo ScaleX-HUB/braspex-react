@@ -12,7 +12,8 @@ import {
   Buildings,
   Calendar,
   ChartBar,
-  FunnelSimple
+  FunnelSimple,
+  Gear
 } from 'phosphor-react';
 import { 
   loadClients, 
@@ -30,6 +31,13 @@ const ClientsKanban = () => {
   const [editingClient, setEditingClient] = useState(null);
   const [viewMode, setViewMode] = useState('kanban'); // 'kanban' | 'list'
   const [searchTerm, setSearchTerm] = useState('');
+  const [isEditingKanban, setIsEditingKanban] = useState(false);
+  const [kanbanStages, setKanbanStages] = useState([
+    { id: 'new', name: 'Novos Clientes', color: '#3B82F6', icon: 'User' },
+    { id: 'contact', name: 'Em Contato', color: '#F59E0B', icon: 'FunnelSimple' },
+    { id: 'active', name: 'Clientes Ativos', color: '#10B981', icon: 'Buildings' },
+    { id: 'inactive', name: 'Inativos', color: '#EF4444', icon: 'X' }
+  ]);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -40,7 +48,7 @@ const ClientsKanban = () => {
     state: '',
     zipCode: '',
     notes: '',
-    stage: 'lead', // lead, prospect, client, inactive
+    stage: 'new',
     inactive: false
   });
 
@@ -55,12 +63,15 @@ const ClientsKanban = () => {
 
   const stats = getClientsStats();
 
-  const stages = [
-    { id: 'lead', name: 'Leads', color: '#94A3B8', icon: User },
-    { id: 'prospect', name: 'Prospects', color: '#3B82F6', icon: FunnelSimple },
-    { id: 'client', name: 'Clientes', color: '#10B981', icon: Buildings },
-    { id: 'inactive', name: 'Inativos', color: '#EF4444', icon: X }
-  ];
+  const getIconComponent = (iconName) => {
+    const icons = {
+      'User': User,
+      'FunnelSimple': FunnelSimple,
+      'Buildings': Buildings,
+      'X': X
+    };
+    return icons[iconName] || User;
+  };
 
   const handleNewClient = () => {
     setFormData({
@@ -73,7 +84,7 @@ const ClientsKanban = () => {
       state: '',
       zipCode: '',
       notes: '',
-      stage: 'lead',
+      stage: 'new',
       inactive: false
     });
     setEditingClient(null);
@@ -91,11 +102,26 @@ const ClientsKanban = () => {
       state: client.state || '',
       zipCode: client.zipCode || '',
       notes: client.notes || '',
-      stage: client.stage || 'lead',
+      stage: client.stage || 'new',
       inactive: client.inactive || false
     });
     setEditingClient(client);
     setIsEditing(true);
+  };
+
+  const handleSaveKanbanSettings = () => {
+    // Salvar configurações do kanban no localStorage
+    localStorage.setItem('kanban-stages', JSON.stringify(kanbanStages));
+    setIsEditingKanban(false);
+    alert('Configurações do Kanban salvas com sucesso!');
+  };
+
+  const handleUpdateStageConfig = (stageId, field, value) => {
+    setKanbanStages(prevStages =>
+      prevStages.map(stage =>
+        stage.id === stageId ? { ...stage, [field]: value } : stage
+      )
+    );
   };
 
   const handleSaveClient = () => {
@@ -146,6 +172,110 @@ const ClientsKanban = () => {
   const getClientsByStage = (stage) => {
     return filteredClients.filter(c => c.stage === stage);
   };
+
+  // Carregar configurações salvas do kanban
+  useEffect(() => {
+    const savedStages = localStorage.getItem('kanban-stages');
+    if (savedStages) {
+      try {
+        setKanbanStages(JSON.parse(savedStages));
+      } catch (error) {
+        console.error('Erro ao carregar configurações do kanban:', error);
+      }
+    }
+  }, []);
+
+  if (isEditingKanban) {
+    return (
+      <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-gray-900">
+            ⚙️ Configurar Colunas do Kanban
+          </h2>
+          <button
+            type="button"
+            onClick={() => setIsEditingKanban(false)}
+            className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            <X size={24} weight="bold" />
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {kanbanStages.map((stage, index) => (
+            <div key={stage.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Nome da Coluna
+                  </label>
+                  <input
+                    type="text"
+                    value={stage.name}
+                    onChange={(e) => handleUpdateStageConfig(stage.id, 'name', e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Cor
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="color"
+                      value={stage.color}
+                      onChange={(e) => handleUpdateStageConfig(stage.id, 'color', e.target.value)}
+                      className="w-16 h-10 rounded border border-gray-300"
+                    />
+                    <input
+                      type="text"
+                      value={stage.color}
+                      onChange={(e) => handleUpdateStageConfig(stage.id, 'color', e.target.value)}
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent font-mono text-sm"
+                      placeholder="#000000"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Ícone
+                  </label>
+                  <select
+                    value={stage.icon}
+                    onChange={(e) => handleUpdateStageConfig(stage.id, 'icon', e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                  >
+                    <option value="User">👤 Usuário</option>
+                    <option value="FunnelSimple">🔀 Funil</option>
+                    <option value="Buildings">🏢 Empresa</option>
+                    <option value="X">❌ X</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex gap-4 pt-6 border-t mt-6">
+          <button
+            type="button"
+            onClick={handleSaveKanbanSettings}
+            className="flex-1 px-6 py-3 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center justify-center gap-2 font-semibold"
+          >
+            <FloppyDisk size={20} weight="bold" />
+            Salvar Configurações
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsEditingKanban(false)}
+            className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (isEditing) {
     return (
@@ -286,10 +416,9 @@ const ClientsKanban = () => {
                 onChange={(e) => setFormData({ ...formData, stage: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
               >
-                <option value="lead">Lead</option>
-                <option value="prospect">Prospect</option>
-                <option value="client">Cliente</option>
-                <option value="inactive">Inativo</option>
+                {kanbanStages.map(stage => (
+                  <option key={stage.id} value={stage.id}>{stage.name}</option>
+                ))}
               </select>
             </div>
             <div className="flex items-end">
@@ -353,10 +482,18 @@ const ClientsKanban = () => {
               Gerenciar Clientes
             </h2>
             <p className="text-gray-600 mt-1">
-              Gerencie seus leads, prospects e clientes
+              Organize seus clientes convertidos de cotações
             </p>
           </div>
           <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={() => setIsEditingKanban(true)}
+              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
+            >
+              <Gear size={20} weight="bold" />
+              Editar Kanban
+            </button>
             <button
               type="button"
               onClick={() => setViewMode(viewMode === 'kanban' ? 'list' : 'kanban')}
@@ -419,9 +556,9 @@ const ClientsKanban = () => {
       {/* Visualização Kanban */}
       {viewMode === 'kanban' && (
         <div className="grid grid-cols-4 gap-4">
-          {stages.map((stage) => {
+          {kanbanStages.map((stage) => {
             const stageClients = getClientsByStage(stage.id);
-            const StageIcon = stage.icon;
+            const StageIcon = getIconComponent(stage.icon);
             
             return (
               <div key={stage.id} className="bg-gray-50 rounded-xl p-4">
@@ -483,7 +620,7 @@ const ClientsKanban = () => {
                         onChange={(e) => handleMoveStage(client.id, e.target.value)}
                         className="w-full text-xs px-2 py-1 border border-gray-300 rounded mb-2 focus:ring-1 focus:ring-[#005563]"
                       >
-                        {stages.map(s => (
+                        {kanbanStages.map(s => (
                           <option key={s.id} value={s.id}>{s.name}</option>
                         ))}
                       </select>
@@ -537,7 +674,7 @@ const ClientsKanban = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredClients.map((client) => {
-                  const stage = stages.find(s => s.id === client.stage);
+                  const stage = kanbanStages.find(s => s.id === client.stage);
                   return (
                     <tr key={client.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4">

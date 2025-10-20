@@ -61,20 +61,24 @@ const ProductsPage = () => {
     {
       id: 'todos',
       name: 'Todos os Produtos',
-      icon: null
+      icon: null,
+      subcategories: []
     },
     ...categoriesArray.map(cat => ({
       id: cat.id,
       name: cat.displayName,
-      icon: <Gear className="w-5 h-5" />
+      icon: <Gear className="w-5 h-5" />,
+      subcategories: cat.subcategories || []
     }))
   ];
   
   const filteredProducts = selectedCategory === 'todos' 
     ? products.filter(p => p.active !== false)
     : products.filter(p => {
-        // Suporta tanto categoryId quanto categoryName
-        return (p.categoryId === selectedCategory || p.categoryName === selectedCategory) && p.active !== false;
+        // Verifica se o produto pertence à categoria ou subcategoria selecionada
+        const matchesCategory = p.categoryId === selectedCategory || p.categoryName === selectedCategory;
+        const matchesSubcategory = p.subcategoryId === selectedCategory;
+        return (matchesCategory || matchesSubcategory) && p.active !== false;
       });
 
   const getCategoryIcon = (categoryId) => {
@@ -121,18 +125,38 @@ const ProductsPage = () => {
               </div>
               <div className="p-4">
                 {categories.map((category) => (
-                  <button
-                    key={category.id}
-                    onClick={() => setSelectedCategory(category.id)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all mb-2 ${
-                      selectedCategory === category.id
-                        ? 'bg-[#005563] text-white font-semibold shadow-md'
-                        : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    {category.icon && <span className={selectedCategory === category.id ? 'text-[#FFD027]' : 'text-[#005563]'}>{category.icon}</span>}
-                    <span>{category.name}</span>
-                  </button>
+                  <div key={category.id} className="mb-2">
+                    <button
+                      onClick={() => setSelectedCategory(category.id)}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${
+                        selectedCategory === category.id
+                          ? 'bg-[#005563] text-white font-semibold shadow-md'
+                          : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                      }`}
+                    >
+                      {category.icon && <span className={selectedCategory === category.id ? 'text-[#FFD027]' : 'text-[#005563]'}>{category.icon}</span>}
+                      <span>{category.name}</span>
+                    </button>
+                    
+                    {/* Subcategorias */}
+                    {category.subcategories && category.subcategories.length > 0 && (
+                      <div className="ml-6 mt-1 space-y-1">
+                        {category.subcategories.map((subcategory) => (
+                          <button
+                            key={subcategory.id}
+                            onClick={() => setSelectedCategory(subcategory.id)}
+                            className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-all ${
+                              selectedCategory === subcategory.id
+                                ? 'bg-[#FFD027] text-[#005563] font-semibold'
+                                : 'text-gray-600 hover:bg-gray-50 hover:text-[#005563]'
+                            }`}
+                          >
+                            {subcategory.name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 ))}
               </div>
             </div>
