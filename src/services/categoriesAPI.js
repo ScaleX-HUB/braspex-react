@@ -155,7 +155,11 @@ export const categoriesAPI = {
     try {
       console.log('🆕 Criando categoria:', categoryData);
       
+      // IMPORTANTE: Gerar UUID se não existir
+      const uuid = categoryData.id || generateUUID();
+      
       const data = {
+        id: uuid, // UUID obrigatório
         name: categoryData.name,
         display_name: categoryData.display_name || categoryData.displayName,
         icon: categoryData.icon || 'Package',
@@ -166,6 +170,8 @@ export const categoriesAPI = {
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       };
+
+      console.log('📤 Dados completos para INSERT:', data);
 
       const result = await supabase.insert('categories', data);
       console.log('✅ Categoria criada:', result);

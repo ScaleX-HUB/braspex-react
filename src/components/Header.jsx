@@ -167,7 +167,7 @@ const Header = () => {
 
                 {/* Mega Menu Dropdown */}
                 {isProductsOpen && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-screen max-w-4xl">
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-screen max-w-4xl">
                     <div className="bg-white rounded-xl shadow-2xl border border-gray-200 p-6">
                       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {categoriesArray.map((category) => (

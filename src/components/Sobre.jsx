@@ -178,7 +178,7 @@ const Sobre = () => {
             <div className="text-4xl md:text-5xl font-bold text-[#005563] mb-2">100%</div>
             <div className="text-sm md:text-base text-gray-600">Satisfação dos Clientes</div>
           </motion.div>
-          <motion.div variants={fadeInUp} className="text-center">
+          <motion.div variantsv={fadeInUp} className="text-center">
             <div className="text-4xl md:text-5xl font-bold text-[#005563] mb-2">24h</div>
             <div className="text-sm md:text-base text-gray-600">Suporte Técnico</div>
           </motion.div>

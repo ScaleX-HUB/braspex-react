@@ -145,16 +145,16 @@ const Header = () => {
                 onMouseLeave={() => setIsProductsOpen(false)}
               >
                 <button 
-                  className={`font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
+                  className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
                 >
-                  <Package size={20} weight="bold" />
+                  <Package size={18} weight="bold" />
                   Produtos
-                  <CaretDown size={16} weight="bold" className={`transition-transform ${isProductsOpen ? 'rotate-180' : ''}`} />
+                  <CaretDown size={14} weight="bold" className={`transition-transform ${isProductsOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {/* Mega Menu Dropdown */}
                 {isProductsOpen && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-screen max-w-4xl">
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-screen max-w-4xl">
                     <div className="bg-white rounded-xl shadow-2xl border border-gray-200 p-6">
                       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {categoriesArray.map((category) => (
