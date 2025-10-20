@@ -87,11 +87,11 @@ const ProductsManager = () => {
     let filtered = products;
 
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(p => p.categoryId === selectedCategory);
+      filtered = filtered.filter(p => p.categoryId === selectedCategory || p.category_id === selectedCategory);
     }
 
     if (selectedSubcategory !== 'all') {
-      filtered = filtered.filter(p => p.subcategoryId === selectedSubcategory);
+      filtered = filtered.filter(p => p.subcategoryId === selectedSubcategory || p.subcategory_id === selectedSubcategory);
     }
 
     setFilteredProducts(filtered);
@@ -119,9 +119,18 @@ const ProductsManager = () => {
   };
 
   const handleEditProduct = (product) => {
+    console.log('📝 Editando produto:', product);
     setCurrentProduct(product);
-    setFormData(product);
-    setImagePreview(product.image);
+    // Garantir que categoryId seja mapeado corretamente do Supabase (category_id -> categoryId)
+    const editFormData = {
+      ...product,
+      categoryId: product.categoryId || product.category_id || '',
+      subcategoryId: product.subcategoryId || product.subcategory_id || '',
+      image: product.image || product.image_url || ''
+    };
+    console.log('📝 FormData para edição:', editFormData);
+    setFormData(editFormData);
+    setImagePreview(product.image || product.image_url || '');
     setIsEditing(true);
   };
 
@@ -252,11 +261,11 @@ const ProductsManager = () => {
             </label>
             <div className="flex items-start gap-4">
               <div className="flex-shrink-0">
-                {imagePreview ? (
+                {(imagePreview || formData.image) ? (
                   <img
-                    src={imagePreview}
+                    src={imagePreview || formData.image}
                     alt="Preview"
-                    className="w-32 h-32 object-cover rounded-lg border-2 border-gray-300"
+                    className="w-32 h-32 object-contain rounded-lg border-2 border-gray-300"
                   />
                 ) : (
                   <div className="w-32 h-32 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
@@ -589,9 +598,9 @@ const ProductsManager = () => {
             >
               {/* Imagem */}
               <div className="relative h-48 bg-gray-100">
-                {product.image ? (
+                {(product.image || product.image_url) ? (
                   <img
-                    src={product.image}
+                    src={product.image || product.image_url}
                     alt={product.name}
                     className="w-full h-full object-contain p-4"
                   />
@@ -618,11 +627,11 @@ const ProductsManager = () => {
 
                 <div className="flex flex-wrap gap-2">
                   <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">
-                    {getCategoryName(product.categoryId)}
+                    {getCategoryName(product.categoryId || product.category_id)}
                   </span>
-                  {product.subcategoryId && (
+                  {(product.subcategoryId || product.subcategory_id) && (
                     <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded">
-                      {getSubcategoryName(product.categoryId, product.subcategoryId)}
+                      {getSubcategoryName(product.categoryId || product.category_id, product.subcategoryId || product.subcategory_id)}
                     </span>
                   )}
                 </div>
