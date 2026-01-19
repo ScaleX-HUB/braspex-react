@@ -38,13 +38,18 @@ export const productsAPI = {
    */
   async getAll(includeInactive = false) {
     try {
-      const filters = includeInactive ? {} : { active: true };
-      const data = await supabase.get(TABLE_NAME, filters, {
+      // IMPORTANTE:
+      // Não filtrar `active=true` no PostgREST porque valores NULL não passam no filtro
+      // (muito comum em bases antigas). No site, tratamos NULL como ativo.
+      const data = await supabase.get(TABLE_NAME, {}, {
         order: 'order_index.asc,name.asc'
       });
-      
-      console.log('📦 Produtos carregados do Supabase:', data?.length || 0);
-      return data || [];
+
+      const rows = data || [];
+      const filtered = includeInactive ? rows : rows.filter(p => p.active !== false);
+
+      console.log('📦 Produtos carregados do Supabase:', filtered.length, `(raw: ${rows.length})`);
+      return filtered;
     } catch (error) {
       console.error('❌ Erro ao buscar produtos:', error);
       throw error;
@@ -56,13 +61,12 @@ export const productsAPI = {
    */
   async getByCategory(categoryId) {
     try {
-      const data = await supabase.get(TABLE_NAME, { 
-        category_id: categoryId,
-        active: true 
+      const data = await supabase.get(TABLE_NAME, {
+        category_id: categoryId
       }, {
         order: 'order_index.asc,name.asc'
       });
-      return data || [];
+      return (data || []).filter(p => p.active !== false);
     } catch (error) {
       console.error(`❌ Erro ao buscar produtos da categoria ${categoryId}:`, error);
       throw error;
@@ -74,13 +78,12 @@ export const productsAPI = {
    */
   async getFeatured() {
     try {
-      const data = await supabase.get(TABLE_NAME, { 
-        featured: true,
-        active: true 
+      const data = await supabase.get(TABLE_NAME, {
+        featured: true
       }, {
         order: 'order_index.asc,name.asc'
       });
-      return data || [];
+      return (data || []).filter(p => p.active !== false);
     } catch (error) {
       console.error('❌ Erro ao buscar produtos em destaque:', error);
       throw error;
