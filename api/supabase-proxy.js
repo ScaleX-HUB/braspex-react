@@ -8,9 +8,22 @@
  */
 
 export default async function handler(req, res) {
-  // URL e Schema do Supabase self-hosted (HTTP) - Pegar das variáveis de ambiente
-  const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'http://173.249.32.99:54321';
-  const SUPABASE_SCHEMA = process.env.VITE_SUPABASE_SCHEMA || 'braspex';
+  // Preferir variáveis server-side na Vercel (SUPABASE_*), mantendo fallback para VITE_*.
+  // Observação: VITE_* é pensado para o frontend (build-time) e não é ideal para functions.
+  const SUPABASE_URL =
+    process.env.SUPABASE_URL ||
+    process.env.VITE_SUPABASE_URL ||
+    'http://173.249.32.99:54321';
+
+  const SUPABASE_SCHEMA =
+    process.env.SUPABASE_SCHEMA ||
+    process.env.VITE_SUPABASE_SCHEMA ||
+    'braspex';
+
+  const SUPABASE_ANON_KEY =
+    process.env.SUPABASE_ANON_KEY ||
+    process.env.VITE_SUPABASE_ANON_KEY ||
+    '';
   
   // CORS headers essenciais
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -42,10 +55,18 @@ export default async function handler(req, res) {
   console.log('📂 Schema:', SUPABASE_SCHEMA);
 
   // Headers PostgREST obrigatórios
+  // IMPORTANTE: em produção, não dependa do client enviar apikey/Authorization.
+  // Se não vierem, injeta anon key configurada na Vercel.
+  const clientApiKey = req.headers['apikey'] || '';
+  const apiKeyToUse = clientApiKey || SUPABASE_ANON_KEY;
+
+  const clientAuth = req.headers['authorization'] || '';
+  const authToUse = clientAuth || (apiKeyToUse ? `Bearer ${apiKeyToUse}` : '');
+
   const headers = {
     'Content-Type': req.headers['content-type'] || 'application/json',
-    'Authorization': req.headers['authorization'] || '',
-    'apikey': req.headers['apikey'] || '',
+    'Authorization': authToUse,
+    'apikey': apiKeyToUse,
     'Prefer': req.headers['prefer'] || '',
     // FORÇAR schema do .env (não confiar no cliente)
     'Accept-Profile': SUPABASE_SCHEMA,
@@ -90,17 +111,20 @@ export default async function handler(req, res) {
     });
 
     // Processar resposta
-    const contentType = response.headers.get('content-type');
-    let data;
-    
-    if (contentType && contentType.includes('application/json')) {
-      data = await response.json();
-    } else {
-      data = await response.text();
+    if (response.status === 204) {
+      res.status(204).end();
+      return;
     }
 
-    // Retornar resposta com status correto
-    res.status(response.status).json(data);
+    const contentType = response.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      const data = await response.json();
+      res.status(response.status).json(data);
+      return;
+    }
+
+    const text = await response.text();
+    res.status(response.status).send(text);
     
   } catch (error) {
     console.error('❌ Proxy error:', error);
