@@ -7,6 +7,24 @@ import { categoriesAPI } from '../services/categoriesAPI';
 const STORAGE_KEY = 'braspex_products';
 const CATEGORIES_STORAGE_KEY = 'braspex_categories';
 
+const safeSetItem = (key, value) => {
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch (e) {
+    // Em produção, o payload pode exceder a quota do localStorage.
+    // Cache é opcional: nunca deve quebrar o carregamento de dados.
+    try {
+      // Tentar liberar o próprio cache e gravar novamente.
+      localStorage.removeItem(key);
+      localStorage.setItem(key, value);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+};
+
 /**
  * Carrega categorias: PRIORIDADE Supabase → localStorage → Padrão
  */
@@ -19,7 +37,10 @@ export const loadCategories = async () => {
     if (supabaseCategories && Object.keys(supabaseCategories).length > 0) {
       console.log('✅ Categorias carregadas do Supabase:', Object.keys(supabaseCategories).length);
       // Salvar no localStorage como cache
-      localStorage.setItem(CATEGORIES_STORAGE_KEY, JSON.stringify(supabaseCategories));
+      const cached = safeSetItem(CATEGORIES_STORAGE_KEY, JSON.stringify(supabaseCategories));
+      if (!cached) {
+        console.warn('⚠️ Não foi possível salvar categorias no localStorage (quota).');
+      }
       return supabaseCategories;
     }
   } catch (error) {
@@ -60,14 +81,14 @@ export const useCategoriesSync = (callback) => {
  * Carrega produtos: PRIORIDADE Supabase → localStorage → Array vazio
  */
 export const loadProducts = async () => {
+  // 1. Tentar carregar do Supabase primeiro
   try {
-    // 1. Tentar carregar do Supabase primeiro
     console.log('🔍 Buscando produtos do Supabase...');
     const supabaseProducts = await productsAPI.getAll();
-    
+
     if (supabaseProducts && supabaseProducts.length > 0) {
       console.log('✅ Produtos carregados do Supabase:', supabaseProducts.length);
-      
+
       // Converter formato do Supabase para formato do site
       const products = supabaseProducts.map(p => ({
         id: p.id,
@@ -83,9 +104,14 @@ export const loadProducts = async () => {
         featured: p.featured || false,
         slug: p.slug
       }));
-      
-      // Salvar no localStorage como cache
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+
+      // Salvar no localStorage como cache (best-effort)
+      const cached = safeSetItem(STORAGE_KEY, JSON.stringify(products));
+      if (!cached) {
+        console.warn('⚠️ Não foi possível salvar produtos no localStorage (quota). Exibindo sem cache.');
+      }
+
+      // IMPORTANTE: mesmo sem cache, retorna os produtos carregados
       return products;
     }
   } catch (error) {
