@@ -3,11 +3,22 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ShoppingCart, Trash, Plus, Minus } from 'phosphor-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { useSiteContent } from '../contexts/SiteContentContext';
 
 const CartDrawer = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const { cartItems, removeFromCart, updateQuantity, clearCart, getCartCount } = useCart();
   const cartCount = getCartCount();
+  const { content } = useSiteContent();
+  const cartContent = content.cartDrawer;
+
+  const itemsLabel = cartCount === 1
+    ? (cartContent?.itemSingular || 'item')
+    : (cartContent?.itemPlural || 'itens');
+
+  const requestQuoteText = (cartContent?.requestQuoteTemplate || 'Solicitar Orçamento ({count} {items})')
+    .replace('{count}', String(cartCount))
+    .replace('{items}', itemsLabel);
 
   const handleQuantityChange = (productId, currentQuantity, change) => {
     const newQuantity = currentQuantity + change;
@@ -51,8 +62,8 @@ const CartDrawer = ({ isOpen, onClose }) => {
               <div className="flex items-center gap-3">
                 <ShoppingCart size={28} weight="bold" />
                 <div>
-                  <h2 className="text-xl font-bold">Carrinho de Orçamento</h2>
-                  <p className="text-sm text-white/80">{cartCount} {cartCount === 1 ? 'item' : 'itens'}</p>
+                  <h2 className="text-xl font-bold">{cartContent?.title || 'Carrinho de Orçamento'}</h2>
+                  <p className="text-sm text-white/80">{cartCount} {itemsLabel}</p>
                 </div>
               </div>
               <button
@@ -69,17 +80,17 @@ const CartDrawer = ({ isOpen, onClose }) => {
                 <div className="flex flex-col items-center justify-center h-full text-center">
                   <ShoppingCart size={80} className="text-slate-300 mb-4" />
                   <h3 className="text-xl font-bold text-slate-900 mb-2">
-                    Carrinho Vazio
+                    {cartContent?.emptyTitle || 'Carrinho Vazio'}
                   </h3>
                   <p className="text-slate-600 mb-6">
-                    Adicione produtos para solicitar um orçamento
+                    {cartContent?.emptyDescription || 'Adicione produtos para solicitar um orçamento'}
                   </p>
                   <Link
                     to="/produtos"
                     onClick={onClose}
                     className="bg-[#005563] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#003d47] transition-colors"
                   >
-                    Ver Produtos
+                    {cartContent?.emptyButtonText || 'Ver Produtos'}
                   </Link>
                 </div>
               ) : (
@@ -140,7 +151,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                             <button
                               onClick={() => removeFromCart(item.id)}
                               className="ml-auto text-red-500 hover:text-red-700 transition-colors"
-                              title="Remover"
+                              title={cartContent?.removeTitle || 'Remover'}
                             >
                               <Trash size={20} weight="bold" />
                             </button>
@@ -160,13 +171,13 @@ const CartDrawer = ({ isOpen, onClose }) => {
                   onClick={handleRequestQuote}
                   className="w-full bg-[#005563] text-white px-6 py-4 rounded-xl font-bold text-lg hover:bg-[#003d47] transition-all shadow-lg hover:shadow-xl"
                 >
-                  Solicitar Orçamento ({cartCount} {cartCount === 1 ? 'item' : 'itens'})
+                  {requestQuoteText}
                 </button>
                 <button
                   onClick={clearCart}
                   className="w-full bg-white border-2 border-slate-300 text-slate-700 px-6 py-3 rounded-xl font-semibold hover:bg-slate-50 transition-all"
                 >
-                  Limpar Carrinho
+                  {cartContent?.clearCart || 'Limpar Carrinho'}
                 </button>
               </div>
             )}

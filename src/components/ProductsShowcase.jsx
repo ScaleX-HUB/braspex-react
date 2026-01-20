@@ -4,10 +4,13 @@ import { ArrowRight, Package, ShoppingCart } from 'phosphor-react';
 import { Link } from 'react-router-dom';
 import { loadProducts, useProductsSync } from '../data/productsUtils';
 import { useCart } from '../contexts/CartContext';
+import { useSiteContent } from '../contexts/SiteContentContext';
 
 const ProductsShowcase = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const { addToCart, isInCart } = useCart();
+  const { content } = useSiteContent();
+  const showcaseContent = content.productsShowcase;
 
   // Carregar produtos em destaque
   useEffect(() => {
@@ -63,13 +66,13 @@ const ProductsShowcase = () => {
           transition={{ duration: 0.6 }}
         >
           <p className="text-[#005563] font-semibold text-lg mb-2 uppercase tracking-wide">
-            Produtos em Destaque
+            {showcaseContent?.kicker || 'Produtos em Destaque'}
           </p>
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-            Soluções Completas em Tubulações
+            {showcaseContent?.title || 'Soluções Completas em Tubulações'}
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Conheça nossos principais kits industriais desenvolvidos para máxima eficiência e durabilidade
+            {showcaseContent?.subtitle || 'Conheça nossos principais kits industriais desenvolvidos para máxima eficiência e durabilidade'}
           </p>
           <div className="w-24 h-1 bg-[#FFD027] mx-auto mt-6 rounded-full"></div>
         </motion.div>
@@ -129,7 +132,7 @@ const ProductsShowcase = () => {
                   )}
                   {(!product.specifications?.material && !product.specifications?.acabamento && !product.specifications?.capacity) && (
                     <span className="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
-                      {product.price || 'Sob Consulta'}
+                      {product.price || showcaseContent?.priceFallback || 'Sob Consulta'}
                     </span>
                   )}
                 </div>
@@ -140,7 +143,7 @@ const ProductsShowcase = () => {
                     to={`/produtos/${product.id}`}
                     className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#005563] text-white font-semibold rounded-lg hover:bg-[#004450] transition-all shadow-md hover:shadow-lg"
                   >
-                    Ver Detalhes
+                    {showcaseContent?.detailsButtonText || 'Ver Detalhes'}
                     <ArrowRight className="w-5 h-5" weight="bold" />
                   </Link>
                   <button
@@ -176,11 +179,11 @@ const ProductsShowcase = () => {
             className="inline-flex items-center gap-3 bg-[#005563] text-white font-bold text-lg px-10 py-4 rounded-xl shadow-lg hover:bg-[#003d47] hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
           >
             <Package size={24} weight="bold" />
-            Ver Todos os Produtos
+            {showcaseContent?.viewAllButtonText || 'Ver Todos os Produtos'}
             <ArrowRight size={24} weight="bold" />
           </Link>
           <p className="mt-4 text-slate-600">
-            Explore nossa linha completa de kits industriais
+            {showcaseContent?.viewAllSubtitle || 'Explore nossa linha completa de kits industriais'}
           </p>
         </motion.div>
       </div>

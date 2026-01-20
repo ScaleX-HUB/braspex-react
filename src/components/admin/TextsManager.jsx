@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useSiteContent } from '../../contexts/SiteContentContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Label } from '../ui/label';
@@ -16,6 +16,38 @@ export default function TextsManager() {
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
   const [activeTab, setActiveTab] = useState('hero');
+  const [activeAllSection, setActiveAllSection] = useState('hero');
+  const [fieldFilter, setFieldFilter] = useState('');
+  const [allSearch, setAllSearch] = useState('');
+  const [allSearchScope, setAllSearchScope] = useState('all'); // 'all' | sectionName
+  const [selectedAllField, setSelectedAllField] = useState(null); // { section, field }
+
+  // Lista canônica (sem redundância) de seções editáveis
+  const SECTION_TABS = useMemo(
+    () => [
+      { id: 'hero', label: 'Home' },
+      { id: 'vantagens', label: 'Vantagens' },
+      { id: 'sobre', label: 'Sobre' },
+      { id: 'parceiros', label: 'Parceiros' },
+      { id: 'contato', label: 'Contato' },
+      { id: 'whatsapp', label: 'WhatsApp' },
+      { id: 'footer', label: 'Rodapé' },
+      { id: 'all', label: 'Tudo' }
+    ],
+    []
+  );
+
+  const PRIMARY_SECTIONS = useMemo(
+    () => SECTION_TABS.filter((t) => t.id !== 'all'),
+    [SECTION_TABS]
+  );
+
+  const getSectionLabel = (sectionId) => {
+    const match = PRIMARY_SECTIONS.find((s) => s.id === sectionId);
+    return match?.label || sectionId;
+  };
+
+  const isPrimarySection = (sectionId) => PRIMARY_SECTIONS.some((s) => s.id === sectionId);
   
   // Estados locais para cada seção (não salva automaticamente)
   const [localHero, setLocalHero] = useState(content.hero || {});
@@ -25,6 +57,7 @@ export default function TextsManager() {
   const [localContato, setLocalContato] = useState(content.contato || {});
   const [localFooter, setLocalFooter] = useState(content.footer || {});
   const [localWhatsapp, setLocalWhatsapp] = useState(content.whatsapp || {});
+  const [localAll, setLocalAll] = useState(content || {});
 
   // Atualiza estado local quando content muda
   useEffect(() => {
@@ -35,7 +68,58 @@ export default function TextsManager() {
     setLocalContato(content.contato || {});
     setLocalFooter(content.footer || {});
     setLocalWhatsapp(content.whatsapp || {});
+    setLocalAll(content || {});
   }, [content]);
+
+  const allSections = useMemo(() => {
+    return Object.keys(localAll || {})
+      .filter((k) => typeof localAll?.[k] === 'object' && localAll?.[k] !== null)
+      .sort();
+  }, [localAll]);
+
+  const allEntries = useMemo(() => {
+    const entries = [];
+    for (const section of allSections) {
+      const sectionObj = localAll?.[section] || {};
+      for (const [field, value] of Object.entries(sectionObj)) {
+        entries.push({
+          section,
+          field,
+          value: value == null ? '' : String(value)
+        });
+      }
+    }
+    // Ordenação consistente para navegação
+    entries.sort((a, b) => {
+      const s = a.section.localeCompare(b.section);
+      if (s !== 0) return s;
+      return a.field.localeCompare(b.field);
+    });
+    return entries;
+  }, [localAll, allSections]);
+
+  const filteredAllEntries = useMemo(() => {
+    const query = allSearch.trim().toLowerCase();
+    const scoped = allSearchScope !== 'all';
+    return allEntries.filter((entry) => {
+      if (scoped && entry.section !== allSearchScope) return false;
+      if (!query) return true;
+
+      return (
+        entry.section.toLowerCase().includes(query) ||
+        entry.field.toLowerCase().includes(query) ||
+        entry.value.toLowerCase().includes(query)
+      );
+    });
+  }, [allEntries, allSearch, allSearchScope]);
+
+  // Garantir que o editor em lote do "Tudo" permaneça nas seções principais
+  useEffect(() => {
+    if (activeTab !== 'all') return;
+    if (!isPrimarySection(activeAllSection)) {
+      setActiveAllSection('hero');
+    }
+  }, [activeTab, activeAllSection]);
 
   // Funções para atualizar estado local (não salva automaticamente)
   const handleHeroChange = (field, value) => {
@@ -65,6 +149,16 @@ export default function TextsManager() {
     setLocalWhatsapp(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleAllChange = (section, field, value) => {
+    setLocalAll(prev => ({
+      ...prev,
+      [section]: {
+        ...(prev?.[section] || {}),
+        [field]: value
+      }
+    }));
+  };
+
   // Função para salvar todas as alterações de uma seção
   const saveSection = async (sectionName, sectionData) => {
     setSaving(true);
@@ -91,6 +185,24 @@ export default function TextsManager() {
   const saveContato = () => saveSection('contato', localContato);
   const saveFooter = () => saveSection('footer', localFooter);
   const saveWhatsapp = () => saveSection('whatsapp', localWhatsapp);
+  const saveAllSection = () => saveSection(activeAllSection, localAll?.[activeAllSection] || {});
+
+  const saveSelectedAllField = async () => {
+    if (!selectedAllField?.section || !selectedAllField?.field) return;
+    const { section, field } = selectedAllField;
+    const value = localAll?.[section]?.[field];
+    setSaving(true);
+    setSaveMessage('');
+    try {
+      await updateContent(section, field, value == null ? '' : String(value));
+      setSaveMessage('✅ Salvo com sucesso!');
+      setTimeout(() => setSaveMessage(''), 3000);
+    } catch (error) {
+      setSaveMessage('❌ Erro ao salvar');
+      console.error(`Erro ao salvar ${section}.${field}:`, error);
+    }
+    setSaving(false);
+  };
 
   if (loading) {
     return (
@@ -129,15 +241,7 @@ export default function TextsManager() {
       {/* Tab Navigation */}
       <div className="border-b border-gray-200">
         <div className="flex space-x-2 overflow-x-auto">
-          {[
-            { id: 'hero', label: 'Home' },
-            { id: 'vantagens', label: 'Vantagens' },
-            { id: 'sobre', label: 'Sobre' },
-            { id: 'parceiros', label: 'Parceiros' },
-            { id: 'contato', label: 'Contato' },
-            { id: 'whatsapp', label: 'WhatsApp' },
-            { id: 'footer', label: 'Rodapé' }
-          ].map((tab) => (
+          {SECTION_TABS.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
@@ -224,6 +328,81 @@ export default function TextsManager() {
                 </p>
               </div>
 
+              <div>
+                <Label htmlFor="hero-videoButtonText">Texto do Botão de Vídeo</Label>
+                <Input
+                  id="hero-videoButtonText"
+                  value={localHero.videoButtonText || ''}
+                  onChange={(e) => handleHeroChange('videoButtonText', e.target.value)}
+                  disabled={saving}
+                  className="mt-2"
+                />
+              </div>
+
+              <div className="pt-2 border-t">
+                <p className="text-sm font-medium text-gray-700">
+                  Card de destaque (lado direito)
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Textos: Qualidade Certificada, Produtos homologados e itens do checklist
+                </p>
+              </div>
+
+              <div>
+                <Label htmlFor="hero-featureCardTitle">Título do Card</Label>
+                <Input
+                  id="hero-featureCardTitle"
+                  value={localHero.featureCardTitle || ''}
+                  onChange={(e) => handleHeroChange('featureCardTitle', e.target.value)}
+                  disabled={saving}
+                  className="mt-2"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="hero-featureCardSubtitle">Subtítulo do Card</Label>
+                <Input
+                  id="hero-featureCardSubtitle"
+                  value={localHero.featureCardSubtitle || ''}
+                  onChange={(e) => handleHeroChange('featureCardSubtitle', e.target.value)}
+                  disabled={saving}
+                  className="mt-2"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="hero-featureCardItem1">Item 1</Label>
+                <Input
+                  id="hero-featureCardItem1"
+                  value={localHero.featureCardItem1 || ''}
+                  onChange={(e) => handleHeroChange('featureCardItem1', e.target.value)}
+                  disabled={saving}
+                  className="mt-2"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="hero-featureCardItem2">Item 2</Label>
+                <Input
+                  id="hero-featureCardItem2"
+                  value={localHero.featureCardItem2 || ''}
+                  onChange={(e) => handleHeroChange('featureCardItem2', e.target.value)}
+                  disabled={saving}
+                  className="mt-2"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="hero-featureCardItem3">Item 3</Label>
+                <Input
+                  id="hero-featureCardItem3"
+                  value={localHero.featureCardItem3 || ''}
+                  onChange={(e) => handleHeroChange('featureCardItem3', e.target.value)}
+                  disabled={saving}
+                  className="mt-2"
+                />
+              </div>
+
               <div className="flex justify-end pt-4 border-t">
                 <Button
                   onClick={saveHero}
@@ -233,6 +412,285 @@ export default function TextsManager() {
                   <Save className="w-4 h-4" />
                   {saving ? 'Salvando...' : 'Salvar Alterações'}
                 </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* TUDO (EDITOR DINÂMICO) */}
+        {activeTab === 'all' && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Todos os Textos (Editor Completo)</CardTitle>
+              <CardDescription>
+                Edita qualquer chave do conteúdo do site (inclui Home, Header, páginas e textos em JSON).
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div className="lg:col-span-1">
+                  <Label htmlFor="all-search">Pesquisar (seção, campo ou texto)</Label>
+                  <Input
+                    id="all-search"
+                    value={allSearch}
+                    onChange={(e) => setAllSearch(e.target.value)}
+                    disabled={saving}
+                    placeholder="Ex: vídeo, orçamento, subtitle, Braspex..."
+                    className="mt-2"
+                  />
+                  <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <Label htmlFor="all-scope">Buscar em</Label>
+                      <select
+                        id="all-scope"
+                        value={allSearchScope}
+                        onChange={(e) => setAllSearchScope(e.target.value)}
+                        className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                        disabled={saving}
+                      >
+                        <option value="all">Todas as seções</option>
+                        {PRIMARY_SECTIONS.map((section) => (
+                          <option key={section.id} value={section.id}>
+                            {section.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="all-section">Seção (edição em lote)</Label>
+                      <select
+                        id="all-section"
+                        value={activeAllSection}
+                        onChange={(e) => setActiveAllSection(e.target.value)}
+                        className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                        disabled={saving}
+                      >
+                        {PRIMARY_SECTIONS.map((section) => (
+                          <option key={section.id} value={section.id}>
+                            {section.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex items-center justify-between">
+                    <p className="text-sm text-gray-600">
+                      {filteredAllEntries.length} resultado(s)
+                    </p>
+                    {allSearch.trim() && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setAllSearch('')}
+                        disabled={saving}
+                      >
+                        Limpar
+                      </Button>
+                    )}
+                  </div>
+
+                  <div className="mt-3 border rounded-lg bg-gray-50 max-h-[520px] overflow-auto">
+                    {filteredAllEntries.slice(0, 250).map((entry) => {
+                      const isSelected =
+                        selectedAllField?.section === entry.section &&
+                        selectedAllField?.field === entry.field;
+
+                      const preview = entry.value
+                        .replace(/\s+/g, ' ')
+                        .trim()
+                        .slice(0, 90);
+
+                      return (
+                        <button
+                          key={`${entry.section}.${entry.field}`}
+                          type="button"
+                          onClick={() => {
+                            setSelectedAllField({ section: entry.section, field: entry.field });
+                            // Evita "poluir" o seletor em lote com chaves extras.
+                            // Se o usuário clicar num campo de outra seção, ele ainda consegue editar o campo individual.
+                            if (isPrimarySection(entry.section)) {
+                              setActiveAllSection(entry.section);
+                            }
+                          }}
+                          className={`w-full text-left px-3 py-2 border-b border-gray-200 hover:bg-white transition-colors ${
+                            isSelected ? 'bg-white ring-2 ring-[#005563]/20' : 'bg-transparent'
+                          }`}
+                          disabled={saving}
+                        >
+                          <div className="text-sm font-semibold text-gray-800">
+                            {entry.section}.<span className="font-mono">{entry.field}</span>
+                          </div>
+                          <div className="text-xs text-gray-600 mt-1">
+                            {preview || <span className="italic">(vazio)</span>}
+                          </div>
+                        </button>
+                      );
+                    })}
+
+                    {filteredAllEntries.length === 0 && (
+                      <div className="p-4 text-sm text-gray-600">Nenhum resultado encontrado.</div>
+                    )}
+                    {filteredAllEntries.length > 250 && (
+                      <div className="p-3 text-xs text-gray-500 border-t">
+                        Mostrando 250 de {filteredAllEntries.length}. Refine a busca para ver menos.
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="lg:col-span-2">
+                  <div className="border rounded-lg p-4 bg-white space-y-4">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900">Editor do campo</h3>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Selecione um item na lista para editar. Você pode salvar só o campo ou salvar a seção inteira.
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={saveSelectedAllField}
+                          disabled={saving || !selectedAllField}
+                          className="gap-2"
+                          title="Salva apenas o campo selecionado"
+                        >
+                          <Save className="w-4 h-4" />
+                          Salvar Campo
+                        </Button>
+                        <Button
+                          type="button"
+                          onClick={saveAllSection}
+                          disabled={saving}
+                          className="gap-2"
+                          title="Salva todos os campos da seção selecionada"
+                        >
+                          <Save className="w-4 h-4" />
+                          {saving ? 'Salvando...' : 'Salvar Seção'}
+                        </Button>
+                      </div>
+                    </div>
+
+                    {!selectedAllField ? (
+                      <div className="text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-lg p-4">
+                        Dica: use a busca para achar qualquer texto rapidamente (ex: “vídeo”, “orçamento”, “whatsapp”).
+                      </div>
+                    ) : (
+                      (() => {
+                        const { section, field } = selectedAllField;
+                        const rawValue = localAll?.[section]?.[field];
+                        const stringValue = rawValue == null ? '' : String(rawValue);
+                        const isLong = stringValue.length > 160 || stringValue.includes('\n');
+
+                        return (
+                          <div className="space-y-3">
+                            <div>
+                              <Label className="text-sm font-semibold text-gray-800">Chave</Label>
+                              <div className="mt-1 text-sm text-gray-800">
+                                {section}.<span className="font-mono">{field}</span>
+                              </div>
+                            </div>
+
+                            <div>
+                              <Label className="text-sm font-semibold text-gray-800">Valor</Label>
+                              {isLong ? (
+                                <Textarea
+                                  value={stringValue}
+                                  onChange={(e) => handleAllChange(section, field, e.target.value)}
+                                  disabled={saving}
+                                  rows={10}
+                                  className="mt-2 font-mono text-sm"
+                                />
+                              ) : (
+                                <Input
+                                  value={stringValue}
+                                  onChange={(e) => handleAllChange(section, field, e.target.value)}
+                                  disabled={saving}
+                                  className="mt-2"
+                                />
+                              )}
+                              <p className="text-xs text-gray-500 mt-2">
+                                Para campos JSON (ex: *Json), cole um JSON válido.
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })()
+                    )}
+                  </div>
+
+                  <div className="mt-4 border rounded-lg p-4 bg-gray-50 space-y-4">
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <h4 className="text-sm font-semibold text-gray-900">Edição em lote da seção: {getSectionLabel(activeAllSection)}</h4>
+                        <p className="text-xs text-gray-600 mt-1">Use quando quiser revisar vários campos rapidamente.</p>
+                      </div>
+                      <div className="w-full max-w-sm">
+                        <Label htmlFor="all-filter">Filtrar campos (nome do campo)</Label>
+                        <Input
+                          id="all-filter"
+                          value={fieldFilter}
+                          onChange={(e) => setFieldFilter(e.target.value)}
+                          disabled={saving}
+                          placeholder="Ex: title, subtitle, stepsJson..."
+                          className="mt-2"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {Object.entries(localAll?.[activeAllSection] || {})
+                        .filter(([field]) => {
+                          if (!fieldFilter.trim()) return true;
+                          return field.toLowerCase().includes(fieldFilter.trim().toLowerCase());
+                        })
+                        .sort(([a], [b]) => a.localeCompare(b))
+                        .map(([field, value]) => {
+                          const stringValue = value == null ? '' : String(value);
+                          const isLong = stringValue.length > 120 || stringValue.includes('\n');
+
+                          return (
+                            <div key={field} className="bg-white rounded-lg border border-gray-200 p-4">
+                              <div className="flex items-start justify-between gap-3">
+                                <Label className="text-sm font-semibold text-gray-800">{field}</Label>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  onClick={() => setSelectedAllField({ section: activeAllSection, field })}
+                                  disabled={saving}
+                                >
+                                  Abrir
+                                </Button>
+                              </div>
+                              {isLong ? (
+                                <Textarea
+                                  value={stringValue}
+                                  onChange={(e) => handleAllChange(activeAllSection, field, e.target.value)}
+                                  disabled={saving}
+                                  rows={6}
+                                  className="mt-2 font-mono text-sm"
+                                />
+                              ) : (
+                                <Input
+                                  value={stringValue}
+                                  onChange={(e) => handleAllChange(activeAllSection, field, e.target.value)}
+                                  disabled={saving}
+                                  className="mt-2"
+                                />
+                              )}
+                            </div>
+                          );
+                        })}
+
+                      {Object.keys(localAll?.[activeAllSection] || {}).length === 0 && (
+                        <div className="text-sm text-gray-600">Nenhum campo encontrado nesta seção.</div>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>

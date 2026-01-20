@@ -3,12 +3,16 @@ import { motion } from 'framer-motion';
 import { X, ShoppingCart, Check, Package } from 'phosphor-react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { useSiteContent } from '../contexts/SiteContentContext';
 import { saveQuote } from '../data/quotesUtils';
+import { safeJsonParse } from '../lib/safeJson';
 
 const QuoteCheckout = () => {
   const navigate = useNavigate();
   const { cartItems, clearCart, getCartCount } = useCart();
   const cartCount = getCartCount();
+  const { content } = useSiteContent();
+  const quoteContent = content.quoteCheckout;
 
   const [formData, setFormData] = useState({
     nomeCompleto: '',
@@ -37,19 +41,28 @@ const QuoteCheckout = () => {
   };
 
   const formatProductsForComment = () => {
-    let productsText = '\n\n=== PRODUTOS DO ORÇAMENTO ===\n\n';
+    const template = safeJsonParse(quoteContent?.commentTemplateJson, null);
+    const header = template?.header || '\n\n=== PRODUTOS DO ORÇAMENTO ===\n\n';
+    const quantityLabel = template?.quantityLabel || 'Quantidade';
+    const priceLabel = template?.priceLabel || 'Preço';
+    const materialLabel = template?.materialLabel || 'Material';
+    const capacityLabel = template?.capacityLabel || 'Capacidade';
+    const totalItemsLabel = template?.totalItemsLabel || 'TOTAL DE ITENS';
+    const footer = template?.footer || '================================\n';
+
+    let productsText = header;
     
     cartItems.forEach((item, index) => {
       productsText += `${index + 1}. ${item.name}\n`;
-      productsText += `   Quantidade: ${item.quantity}\n`;
-      productsText += `   Preço: ${item.price}\n`;
-      if (item.material) productsText += `   Material: ${item.material}\n`;
-      if (item.capacity) productsText += `   Capacidade: ${item.capacity}\n`;
+      productsText += `   ${quantityLabel}: ${item.quantity}\n`;
+      productsText += `   ${priceLabel}: ${item.price}\n`;
+      if (item.material) productsText += `   ${materialLabel}: ${item.material}\n`;
+      if (item.capacity) productsText += `   ${capacityLabel}: ${item.capacity}\n`;
       productsText += `\n`;
     });
     
-    productsText += `\nTOTAL DE ITENS: ${cartCount}\n`;
-    productsText += '================================\n';
+    productsText += `\n${totalItemsLabel}: ${cartCount}\n`;
+    productsText += footer;
     
     return productsText;
   };
@@ -103,7 +116,7 @@ const QuoteCheckout = () => {
     } else {
       console.error('❌ Erro ao salvar cotação');
       setIsSubmitting(false);
-      alert('Erro ao enviar cotação. Por favor, tente novamente.');
+      alert(quoteContent?.submitError || 'Erro ao enviar cotação. Por favor, tente novamente.');
     }
   };
 
@@ -114,16 +127,16 @@ const QuoteCheckout = () => {
           <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
             <ShoppingCart size={80} className="text-slate-300 mx-auto mb-6" />
             <h2 className="text-3xl font-bold text-slate-900 mb-4">
-              Carrinho Vazio
+              {quoteContent?.cartEmptyTitle || 'Carrinho Vazio'}
             </h2>
             <p className="text-slate-600 mb-8">
-              Adicione produtos ao carrinho antes de solicitar um orçamento
+              {quoteContent?.cartEmptyDescription || 'Adicione produtos ao carrinho antes de solicitar um orçamento'}
             </p>
             <button
               onClick={() => navigate('/produtos')}
               className="bg-[#005563] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#003d47] transition-colors"
             >
-              Ver Produtos
+              {quoteContent?.cartEmptyButton || 'Ver Produtos'}
             </button>
           </div>
         </div>
@@ -144,13 +157,13 @@ const QuoteCheckout = () => {
               <Check size={48} className="text-white" weight="bold" />
             </div>
             <h2 className="text-3xl font-bold text-slate-900 mb-4">
-              Orçamento Enviado com Sucesso!
+              {quoteContent?.successTitle || 'Orçamento Enviado com Sucesso!'}
             </h2>
             <p className="text-slate-600 mb-4">
-              Recebemos sua solicitação e entraremos em contato em breve.
+              {quoteContent?.successDescription || 'Recebemos sua solicitação e entraremos em contato em breve.'}
             </p>
             <p className="text-sm text-slate-500">
-              Redirecionando para a página inicial...
+              {quoteContent?.successRedirecting || 'Redirecionando para a página inicial...'}
             </p>
           </motion.div>
         </div>
@@ -164,10 +177,10 @@ const QuoteCheckout = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-slate-900 mb-2">
-            Finalizar Orçamento
+            {quoteContent?.pageTitle || 'Finalizar Orçamento'}
           </h1>
           <p className="text-slate-600">
-            Preencha seus dados para receber um orçamento personalizado
+            {quoteContent?.pageSubtitle || 'Preencha seus dados para receber um orçamento personalizado'}
           </p>
         </div>
 
@@ -177,18 +190,18 @@ const QuoteCheckout = () => {
             <div className="bg-[#005563] text-white px-6 py-4">
               <h2 className="text-xl font-bold flex items-center gap-2">
                 <span className="bg-white text-[#005563] px-3 py-1 rounded text-sm font-bold">
-                  Passo 01
+                  {quoteContent?.step01Label || 'Passo 01'}
                 </span>
-                Confira e preencha a quantidade de cada produto adicionado
+                {quoteContent?.step01Title || 'Confira e preencha a quantidade de cada produto adicionado'}
               </h2>
             </div>
             
             <div className="p-6">
               <div className="space-y-4">
                 <div className="grid grid-cols-12 gap-4 pb-2 border-b border-slate-200 text-sm font-semibold text-slate-700">
-                  <div className="col-span-6">Produtos</div>
-                  <div className="col-span-3 text-center">Quantidade</div>
-                  <div className="col-span-3 text-center">Ação</div>
+                  <div className="col-span-6">{quoteContent?.tableProducts || 'Produtos'}</div>
+                  <div className="col-span-3 text-center">{quoteContent?.tableQuantity || 'Quantidade'}</div>
+                  <div className="col-span-3 text-center">{quoteContent?.tableAction || 'Ação'}</div>
                 </div>
                 
                 {cartItems.map((item) => (
@@ -230,7 +243,7 @@ const QuoteCheckout = () => {
                 onClick={() => navigate('/produtos')}
                 className="mt-6 text-[#005563] font-semibold hover:text-[#003d47] transition-colors"
               >
-                Continuar Orçando
+                {quoteContent?.continueShopping || 'Continuar Orçando'}
               </button>
             </div>
           </div>
@@ -240,22 +253,33 @@ const QuoteCheckout = () => {
             <div className="bg-[#005563] text-white px-6 py-4">
               <h2 className="text-xl font-bold flex items-center gap-2">
                 <span className="bg-white text-[#005563] px-3 py-1 rounded text-sm font-bold">
-                  Passo 02
+                  {quoteContent?.step02Label || 'Passo 02'}
                 </span>
-                Preencha seus dados abaixo e envie o orçamento
+                {quoteContent?.step02Title || 'Preencha seus dados abaixo e envie o orçamento'}
               </h2>
             </div>
             
             <div className="p-6">
               <p className="text-sm text-slate-600 mb-6">
-                Os campos marcados com <span className="text-red-500">*</span> são obrigatórios.
+                {(() => {
+                  const raw = quoteContent?.requiredHint || 'Os campos marcados com {required} são obrigatórios.';
+                  const parts = String(raw).split('{required}');
+                  if (parts.length === 1) return raw;
+                  return (
+                    <>
+                      {parts[0]}
+                      <span className="text-red-500">*</span>
+                      {parts.slice(1).join('{required}')}
+                    </>
+                  );
+                })()}
               </p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Nome Completo */}
                 <div className="md:col-span-1">
                   <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Nome Completo <span className="text-red-500">*</span>
+                    {quoteContent?.nameLabel || 'Nome Completo'} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -270,7 +294,7 @@ const QuoteCheckout = () => {
                 {/* E-mail */}
                 <div className="md:col-span-1">
                   <label className="block text-sm font-medium text-slate-700 mb-1">
-                    E-mail <span className="text-red-500">*</span>
+                    {quoteContent?.emailLabel || 'E-mail'} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="email"
@@ -285,7 +309,7 @@ const QuoteCheckout = () => {
                 {/* Empresa */}
                 <div className="md:col-span-1">
                   <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Empresa
+                    {quoteContent?.companyLabel || 'Empresa'}
                   </label>
                   <input
                     type="text"
@@ -300,7 +324,7 @@ const QuoteCheckout = () => {
                 <div className="md:col-span-1 grid grid-cols-3 gap-2">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">
-                      DDD <span className="text-red-500">*</span>
+                      {quoteContent?.dddLabel || 'DDD'} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -309,13 +333,13 @@ const QuoteCheckout = () => {
                       onChange={handleChange}
                       required
                       maxLength="3"
-                      placeholder="11"
+                      placeholder={quoteContent?.dddPlaceholder || '11'}
                       className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
                     />
                   </div>
                   <div className="col-span-2">
                     <label className="block text-sm font-medium text-slate-700 mb-1">
-                      Telefone <span className="text-red-500">*</span>
+                      {quoteContent?.phoneLabel || 'Telefone'} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -323,7 +347,7 @@ const QuoteCheckout = () => {
                       value={formData.telefone}
                       onChange={handleChange}
                       required
-                      placeholder="99999-9999"
+                      placeholder={quoteContent?.phonePlaceholder || '99999-9999'}
                       className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
                     />
                   </div>
@@ -332,7 +356,7 @@ const QuoteCheckout = () => {
                 {/* Endereço */}
                 <div className="md:col-span-1">
                   <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Endereço
+                    {quoteContent?.addressLabel || 'Endereço'}
                   </label>
                   <input
                     type="text"
@@ -346,7 +370,7 @@ const QuoteCheckout = () => {
                 {/* Complemento */}
                 <div className="md:col-span-1">
                   <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Complemento
+                    {quoteContent?.complementLabel || 'Complemento'}
                   </label>
                   <input
                     type="text"
@@ -360,7 +384,7 @@ const QuoteCheckout = () => {
                 {/* Bairro */}
                 <div className="md:col-span-1">
                   <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Bairro
+                    {quoteContent?.neighborhoodLabel || 'Bairro'}
                   </label>
                   <input
                     type="text"
@@ -374,7 +398,7 @@ const QuoteCheckout = () => {
                 {/* Cidade */}
                 <div className="md:col-span-1">
                   <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Cidade
+                    {quoteContent?.cityLabel || 'Cidade'}
                   </label>
                   <input
                     type="text"
@@ -388,14 +412,14 @@ const QuoteCheckout = () => {
                 {/* CEP */}
                 <div className="md:col-span-1">
                   <label className="block text-sm font-medium text-slate-700 mb-1">
-                    CEP
+                    {quoteContent?.zipLabel || 'CEP'}
                   </label>
                   <input
                     type="text"
                     name="cep"
                     value={formData.cep}
                     onChange={handleChange}
-                    placeholder="00000-000"
+                    placeholder={quoteContent?.zipPlaceholder || '00000-000'}
                     className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
                   />
                 </div>
@@ -403,7 +427,7 @@ const QuoteCheckout = () => {
                 {/* Estado */}
                 <div className="md:col-span-1">
                   <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Estado
+                    {quoteContent?.stateLabel || 'Estado'}
                   </label>
                   <select
                     name="estado"
@@ -411,15 +435,28 @@ const QuoteCheckout = () => {
                     onChange={handleChange}
                     className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
                   >
-                    <option value="">Selecione</option>
-                    <option value="SP">São Paulo</option>
-                    <option value="RJ">Rio de Janeiro</option>
-                    <option value="MG">Minas Gerais</option>
-                    <option value="ES">Espírito Santo</option>
-                    <option value="PR">Paraná</option>
-                    <option value="SC">Santa Catarina</option>
-                    <option value="RS">Rio Grande do Sul</option>
-                    {/* Adicionar outros estados conforme necessário */}
+                    <option value="">{quoteContent?.stateSelectPlaceholder || 'Selecione'}</option>
+                    {(() => {
+                      const parsed = safeJsonParse(quoteContent?.stateOptionsJson, null);
+                      const options = Array.isArray(parsed)
+                        ? parsed
+                        : [
+                            { value: 'SP', label: 'São Paulo' },
+                            { value: 'RJ', label: 'Rio de Janeiro' },
+                            { value: 'MG', label: 'Minas Gerais' },
+                            { value: 'ES', label: 'Espírito Santo' },
+                            { value: 'PR', label: 'Paraná' },
+                            { value: 'SC', label: 'Santa Catarina' },
+                            { value: 'RS', label: 'Rio Grande do Sul' }
+                          ];
+                      return options
+                        .filter((opt) => opt && typeof opt === 'object')
+                        .map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ));
+                    })()}
                   </select>
                 </div>
               </div>
@@ -427,12 +464,12 @@ const QuoteCheckout = () => {
               {/* Comentários */}
               <div className="mt-6">
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Comentários
+                  {quoteContent?.commentsLabel || 'Comentários'}
                 </label>
                 <textarea
                   name="comentarios"
                   rows="5"
-                  placeholder="Informações adicionais sobre o orçamento..."
+                  placeholder={quoteContent?.commentsPlaceholder || 'Informações adicionais sobre o orçamento...'}
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent resize-none"
                   defaultValue={formatProductsForComment()}
                 ></textarea>
@@ -449,7 +486,7 @@ const QuoteCheckout = () => {
                     className="mt-1"
                   />
                   <span className="text-sm text-slate-600">
-                    Aceito receber novidades e informações da Braspex.
+                    {quoteContent?.receiveNewsText || 'Aceito receber novidades e informações da Braspex.'}
                   </span>
                 </label>
               </div>
@@ -462,11 +499,11 @@ const QuoteCheckout = () => {
                   className="w-full bg-red-600 text-white font-bold py-4 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (
-                    <>Enviando...</>
+                    <>{quoteContent?.submittingText || 'Enviando...'}</>
                   ) : (
                     <>
                       <Package size={24} weight="bold" />
-                      Enviar Orçamento
+                      {quoteContent?.submitButtonText || 'Enviar Orçamento'}
                     </>
                   )}
                 </button>

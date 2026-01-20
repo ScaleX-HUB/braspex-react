@@ -18,7 +18,7 @@ const WhatsAppButton = () => {
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 bg-[#25D366] text-white p-4 rounded-full shadow-lg hover:bg-[#128C7E] transition-all duration-300 hover:scale-110 z-50 flex items-center justify-center"
-      title="Fale Conosco pelo WhatsApp"
+      title={content.whatsapp?.buttonTitle || 'Fale Conosco pelo WhatsApp'}
     >
       <WhatsappLogo className="w-8 h-8" />
     </a>

@@ -6,6 +6,7 @@ import {
   Article, 
   Users, 
   Package, 
+  FileText,
   Gear, 
   TextAlignLeft,
   ArrowsDownUp,
@@ -25,6 +26,7 @@ import ClientsKanban from '../components/admin/ClientsKanban';
 import ProductsManager from '../components/admin/ProductsManager';
 import CategoriesManager from '../components/admin/CategoriesManagerSimple';
 import QuotesManager from '../components/admin/QuotesManager';
+import CatalogsManager from '../components/admin/CatalogsManager';
 
 const AdminPanel = () => {
   const [activeMenu, setActiveMenu] = useState('page-management');
@@ -68,6 +70,12 @@ const AdminPanel = () => {
         { id: 'products-list', name: 'Gerenciar Produtos', icon: <Package size={20} /> },
         { id: 'categories', name: 'Categorias', icon: <Tag size={20} /> }
       ]
+    },
+    {
+      id: 'catalogs',
+      name: 'Catálogos',
+      icon: <FileText size={24} weight="bold" />,
+      subsections: []
     },
     {
       id: 'admin',
@@ -136,6 +144,11 @@ const AdminPanel = () => {
       if (activeSubsection === 'categories') {
         return <CategoriesManager />;
       }
+    }
+
+    // Catalogs
+    if (activeMenu === 'catalogs') {
+      return <CatalogsManager />;
     }
 
     return null;

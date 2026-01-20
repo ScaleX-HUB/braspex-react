@@ -4,6 +4,7 @@ import { House, ShoppingCart, Drop, Fire, Wind, Gear, Eye } from 'phosphor-react
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useCart } from '../contexts/CartContext';
+import { useSiteContent } from '../contexts/SiteContentContext';
 import { loadProducts, useProductsSync, loadCategories, useCategoriesSync } from '../data/productsUtils';
 
 const ProductsPage = () => {
@@ -12,6 +13,8 @@ const ProductsPage = () => {
   const [products, setProducts] = useState([]);
   const [categoriesData, setCategoriesData] = useState({});
   const { addToCart, isInCart } = useCart();
+  const { content } = useSiteContent();
+  const productsPageContent = content.productsPage;
 
   // Carregar produtos e categorias
   useEffect(() => {
@@ -60,7 +63,7 @@ const ProductsPage = () => {
   const categories = [
     {
       id: 'todos',
-      name: 'Todos os Produtos',
+      name: productsPageContent?.allProductsCategory || 'Todos os Produtos',
       icon: null,
       subcategories: []
     },
@@ -96,10 +99,10 @@ const ProductsPage = () => {
           <div className="flex items-center gap-2 text-sm">
             <button onClick={() => navigate('/')} className="flex items-center gap-1 text-[#005563] hover:text-[#FFD027] transition-colors">
               <House className="w-4 h-4" />
-              Home
+              {productsPageContent?.breadcrumbHome || 'Home'}
             </button>
             <span className="text-gray-400">/</span>
-            <span className="text-gray-900 font-medium">Produtos</span>
+            <span className="text-gray-900 font-medium">{productsPageContent?.breadcrumbProducts || 'Produtos'}</span>
           </div>
         </div>
       </div>
@@ -109,9 +112,9 @@ const ProductsPage = () => {
         
         {/* Page Title */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Kits Hidráulicos Industriais</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">{productsPageContent?.title || 'Kits Hidráulicos Industriais'}</h1>
           <p className="text-lg text-gray-600">
-            Soluções completas e pré-montadas para instalação rápida e eficiente
+            {productsPageContent?.subtitle || 'Soluções completas e pré-montadas para instalação rápida e eficiente'}
           </p>
         </div>
 
@@ -121,7 +124,7 @@ const ProductsPage = () => {
           <aside className="lg:w-72 flex-shrink-0">
             <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden sticky top-24">
               <div className="bg-[#005563] text-white px-6 py-4">
-                <h2 className="text-xl font-bold">Categorias</h2>
+                <h2 className="text-xl font-bold">{productsPageContent?.categoriesTitle || 'Categorias'}</h2>
               </div>
               <div className="p-4">
                 {categories.map((category) => (
@@ -166,7 +169,10 @@ const ProductsPage = () => {
           <main className="flex-1">
             <div className="mb-6">
               <p className="text-gray-600 text-lg">
-                <span className="font-semibold text-gray-900">{filteredProducts.length}</span> {filteredProducts.length === 1 ? 'produto encontrado' : 'produtos encontrados'}
+                <span className="font-semibold text-gray-900">{filteredProducts.length}</span>{' '}
+                {filteredProducts.length === 1
+                  ? (productsPageContent?.productsFoundSingular || 'produto encontrado')
+                  : (productsPageContent?.productsFoundPlural || 'produtos encontrados')}
               </p>
             </div>
 
@@ -191,7 +197,7 @@ const ProductsPage = () => {
                         </div>
                       )}
                       <div className="absolute top-3 left-3 bg-[#005563] text-white text-xs font-bold px-3 py-1 rounded-full">
-                        {categories.find(c => c.id === product.categoryId || c.id === product.categoryName)?.name || product.categoryName || 'Kit'}
+                        {categories.find(c => c.id === product.categoryId || c.id === product.categoryName)?.name || product.categoryName || productsPageContent?.categoryFallback || 'Kit'}
                       </div>
                     </div>
                   </Link>
@@ -243,7 +249,9 @@ const ProductsPage = () => {
                         }`}
                       >
                         <ShoppingCart className="w-5 h-5" />
-                        {isInCart(product.id) ? 'No Carrinho' : 'Adicionar'}
+                        {isInCart(product.id)
+                          ? (productsPageContent?.inCart || 'No Carrinho')
+                          : (productsPageContent?.addToCart || 'Adicionar')}
                       </button>
                       <Link
                         to={`/produtos/${product.id}`}
@@ -262,16 +270,16 @@ const ProductsPage = () => {
               <div className="bg-white rounded-xl shadow-md border border-gray-200 p-16 text-center">
                 <div className="text-gray-300 text-7xl mb-4">📦</div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                  Nenhum produto encontrado
+                  {productsPageContent?.emptyTitle || 'Nenhum produto encontrado'}
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  Não há produtos nesta categoria no momento.
+                  {productsPageContent?.emptyDescription || 'Não há produtos nesta categoria no momento.'}
                 </p>
                 <button
                   onClick={() => setSelectedCategory('todos')}
                   className="bg-[#005563] text-white px-8 py-3 rounded-lg font-bold hover:bg-[#004450] transition-colors"
                 >
-                  Ver Todos os Produtos
+                  {productsPageContent?.emptyButtonText || 'Ver todos os produtos'}
                 </button>
               </div>
             )}

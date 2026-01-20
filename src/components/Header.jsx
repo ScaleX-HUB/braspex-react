@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { List, X, CaretDown, ShoppingCart, House, Info, Package, FlowArrow, AddressBook, Article, EnvelopeSimple } from 'phosphor-react';
+import { List, X, CaretDown, ShoppingCart, House, Info, Package, FlowArrow, AddressBook, Article, EnvelopeSimple, FileText } from 'phosphor-react';
 import { useLocation, Link } from 'react-router-dom';
 import logoBraspex from '../assets/logo-braspex.png';
 import logoBraspexBranca from '../assets/logo-branca-braspex.png';
 import { useCart } from '../contexts/CartContext';
+import { useSiteContent } from '../contexts/SiteContentContext';
 import { loadCategories, useCategoriesSync } from '../data/productsUtils';
 import CartDrawer from './CartDrawer';
 
@@ -19,6 +20,11 @@ const Header = () => {
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
   const location = useLocation();
+  const { content } = useSiteContent();
+  const headerContent = content.header;
+
+  const moreLabel = (count) =>
+    (headerContent?.megaMenuMoreLabelTemplate || '+{count} mais').replace('{count}', String(count));
 
   // Detectar se estamos em páginas com fundo claro (não é a home)
   const isLightBackground = location.pathname !== '/';
@@ -131,7 +137,7 @@ const Header = () => {
             <a href="/" className="flex items-center gap-3">
               <img 
                 src={(isScrolled || isLightBackground) ? logoBraspex : logoBraspexBranca} 
-                alt="BRASPEX" 
+                alt={headerContent?.logoAlt || 'BRASPEX'} 
                 className="h-12 md:h-14 object-contain transition-all duration-300"
               />
             </a>
@@ -140,7 +146,7 @@ const Header = () => {
             <nav className="hidden lg:flex items-center gap-6">
               <a href="/" className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}>
                 <House size={18} weight="bold" />
-                Home
+                {headerContent?.navHome || 'Home'}
               </a>
 
               <button 
@@ -148,7 +154,7 @@ const Header = () => {
                 className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
               >
                 <Info size={18} weight="bold" />
-                Quem Somos
+                {headerContent?.navAbout || 'Quem Somos'}
               </button>
 
               {/* Mega Menu Produtos */}
@@ -161,7 +167,7 @@ const Header = () => {
                   className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
                 >
                   <Package size={18} weight="bold" />
-                  Produtos
+                  {headerContent?.navProducts || 'Produtos'}
                   <CaretDown size={14} weight="bold" className={`transition-transform ${isProductsOpen ? 'rotate-180' : ''}`} />
                 </button>
 
@@ -210,7 +216,7 @@ const Header = () => {
                                       <div key={sub.id}>{sub.name}</div>
                                     ))}
                                     {category.subcategories.length > 3 && (
-                                      <div className="text-[#005563] font-medium">+{category.subcategories.length - 3} mais</div>
+                                      <div className="text-[#005563] font-medium">{moreLabel(category.subcategories.length - 3)}</div>
                                     )}
                                   </div>
                                 )}
@@ -226,8 +232,8 @@ const Header = () => {
                         >
                           <div className="text-center text-white">
                             <Package size={32} weight="bold" className="mx-auto mb-2" />
-                            <div className="font-bold">Ver Todos</div>
-                            <div className="text-xs opacity-90">os Produtos</div>
+                            <div className="font-bold">{headerContent?.megaMenuViewAllTitle || 'Ver Todos'}</div>
+                            <div className="text-xs opacity-90">{headerContent?.megaMenuViewAllSubtitle || 'os Produtos'}</div>
                           </div>
                         </Link>
                       </div>
@@ -241,7 +247,7 @@ const Header = () => {
                 className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
               >
                 <FlowArrow size={18} weight="bold" />
-                Como Funciona
+                {headerContent?.navHowItWorks || 'Como Funciona'}
               </button>
 
               <button 
@@ -249,12 +255,17 @@ const Header = () => {
                 className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
               >
                 <AddressBook size={18} weight="bold" />
-                Contato
+                {headerContent?.navContact || 'Contato'}
               </button>
 
               <a href="/blog" className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}>
                 <Article size={18} weight="bold" />
-                Blog
+                {headerContent?.navBlog || 'Blog'}
+              </a>
+
+              <a href="/catalogo-virtual" className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}>
+                <FileText size={18} weight="bold" />
+                {headerContent?.navCatalogs || 'Catálogos'}
               </a>
 
               {/* Carrinho */}
@@ -276,7 +287,7 @@ const Header = () => {
                 className="px-4 py-2 bg-[#FFD027] text-[#005563] text-sm font-bold rounded-lg hover:bg-[#FFB800] transition-all shadow-md hover:shadow-lg flex items-center gap-2"
               >
                 <EnvelopeSimple size={18} weight="bold" />
-                Solicitar Orçamento
+                {headerContent?.navRequestQuote || 'Solicitar Orçamento'}
               </button>
             </nav>
 
@@ -313,10 +324,10 @@ const Header = () => {
           <div className="lg:hidden bg-white border-t border-gray-200">
             <nav className="px-6 py-4 space-y-2">
               <a href="/" onClick={closeMenu} className="block py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors">
-                Home
+                {headerContent?.navHome || 'Home'}
               </a>
               <button onClick={() => { scrollToSection('sobre'); }} className="block w-full text-left py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors">
-                Quem Somos
+                {headerContent?.navAbout || 'Quem Somos'}
               </button>
               
               {/* Mobile Products Dropdown */}
@@ -325,7 +336,7 @@ const Header = () => {
                   onClick={() => setIsProductsOpen(!isProductsOpen)}
                   className="flex items-center justify-between w-full py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors"
                 >
-                  Produtos
+                  {headerContent?.navProducts || 'Produtos'}
                   <CaretDown size={16} weight="bold" className={`transition-transform ${isProductsOpen ? 'rotate-180' : ''}`} />
                 </button>
                 
@@ -350,20 +361,24 @@ const Header = () => {
                       className="flex items-center gap-3 py-2 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors"
                     >
                       <Package size={20} weight="bold" />
-                      Ver Todos os Produtos
+                      {headerContent?.mobileViewAllProducts || 'Ver Todos os Produtos'}
                     </Link>
                   </div>
                 )}
               </div>
 
               <button onClick={() => { scrollToSection('fluxo'); }} className="block w-full text-left py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors">
-                Como Funciona
+                {headerContent?.navHowItWorks || 'Como Funciona'}
               </button>
               <button onClick={() => { scrollToSection('contato'); }} className="block w-full text-left py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors">
-                Contato
+                {headerContent?.navContact || 'Contato'}
               </button>
               <a href="/blog" onClick={closeMenu} className="block py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors">
-                Blog
+                {headerContent?.navBlog || 'Blog'}
+              </a>
+
+              <a href="/catalogo-virtual" onClick={closeMenu} className="block py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors">
+                {headerContent?.navCatalogs || 'Catálogos'}
               </a>
               
               {/* Solicitar Orçamento Mobile */}
@@ -375,7 +390,7 @@ const Header = () => {
                 className="flex items-center gap-3 py-3 px-4 mt-2 bg-[#FFD027] text-[#005563] font-bold rounded-lg hover:bg-[#FFB800] transition-all shadow-md w-full"
               >
                 <EnvelopeSimple size={20} weight="bold" />
-                Solicitar Orçamento
+                {headerContent?.navRequestQuote || 'Solicitar Orçamento'}
               </button>
             </nav>
           </div>

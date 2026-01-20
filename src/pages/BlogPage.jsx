@@ -1,20 +1,36 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, User, Tag, ArrowRight, MagnifyingGlass } from 'phosphor-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { blogPosts } from '../data/blogData';
+import { useSiteContent } from '../contexts/SiteContentContext';
+import { safeJsonParse } from '../lib/safeJson';
 
 const BlogPage = () => {
+  const { content } = useSiteContent();
+  const blogContent = content.blogPage;
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const categories = useMemo(() => {
+    const parsed = safeJsonParse(blogContent?.categoriesJson, null);
+    return Array.isArray(parsed) && parsed.length
+      ? parsed
+      : ['Todos', 'Chuveiros Industriais', 'Aquecedores', 'Ar-Condicionado', 'Chassis', 'Manutenção', 'Eficiência'];
+  }, [blogContent?.categoriesJson]);
 
-  const categories = ['Todos', 'Chuveiros Industriais', 'Aquecedores', 'Ar-Condicionado', 'Chassis', 'Manutenção', 'Eficiência'];
+  const allCategory = categories[0] || 'Todos';
+  const [selectedCategory, setSelectedCategory] = useState(allCategory);
+
+  useEffect(() => {
+    if (!categories.includes(selectedCategory)) {
+      setSelectedCategory(allCategory);
+    }
+  }, [allCategory, categories, selectedCategory]);
 
   const filteredPosts = blogPosts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                          post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'Todos' || post.category === selectedCategory;
+    const matchesCategory = selectedCategory === allCategory || post.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -31,9 +47,9 @@ const BlogPage = () => {
             transition={{ duration: 0.6 }}
             className="text-center"
           >
-            <h1 className="text-5xl font-bold mb-4">Blog Braspex</h1>
+            <h1 className="text-5xl font-bold mb-4">{blogContent?.heroTitle || 'Blog Braspex'}</h1>
             <p className="text-xl text-gray-200 max-w-3xl mx-auto">
-              Conteúdos técnicos sobre tubulações industriais, manutenção e eficiência energética
+              {blogContent?.heroSubtitle || 'Conteúdos técnicos sobre tubulações industriais, manutenção e eficiência energética'}
             </p>
           </motion.div>
         </div>
@@ -48,7 +64,7 @@ const BlogPage = () => {
               <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Buscar artigos..."
+                placeholder={blogContent?.searchPlaceholder || 'Buscar artigos...'}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#005563]"
@@ -118,7 +134,7 @@ const BlogPage = () => {
                     </div>
                     
                     <div className="flex items-center text-[#005563] font-semibold text-sm">
-                      Ler mais
+                      {blogContent?.readMore || 'Ler mais'}
                       <ArrowRight className="w-4 h-4 ml-1" />
                     </div>
                   </div>
@@ -129,7 +145,7 @@ const BlogPage = () => {
 
           {filteredPosts.length === 0 && (
             <div className="text-center py-16">
-              <p className="text-gray-500 text-lg">Nenhum artigo encontrado com os filtros selecionados.</p>
+              <p className="text-gray-500 text-lg">{blogContent?.emptyText || 'Nenhum artigo encontrado com os filtros selecionados.'}</p>
             </div>
           )}
         </div>

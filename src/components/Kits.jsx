@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useSiteContent } from '../contexts/SiteContentContext';
 import { X, CheckCircle, Drop, Wind, Gear } from 'phosphor-react';
+import { safeJsonParse } from '../lib/safeJson';
 // Imagens agora estão na pasta public
 const imagemppr = "/imagemppr.png";
 const multicamadaairtecno = "/multicamadaairtecno.png";
@@ -23,20 +24,17 @@ const Kits = () => {
     document.body.style.overflow = 'auto';
   };
 
-  // Lista de produtos - AGORA SÃO 3 PRODUTOS
-  const products = [
+  const defaultProducts = [
     {
       id: "sistema-ppr",
       icon: <Drop className="w-8 h-8 text-blue-500" />,
       image: imagemppr,
       title: "Sistema PPR",
       category: "Kits de Água Fria e Quente",
-      description: "Sistema rígido unido por termofusão, ideal para pontos de consumo que exigem máxima segurança e durabilidade. Suas juntas se tornam uma peça única, eliminando o risco de vazamentos.",
+      description:
+        "Sistema rígido unido por termofusão, ideal para pontos de consumo que exigem máxima segurança e durabilidade. Suas juntas se tornam uma peça única, eliminando o risco de vazamentos.",
       caption: "Kits em PPR - Polipropileno Copolímero Random",
-      variations: [
-        "Kit Chuveiro Tê Misturador",
-        "Kit Chuveiro Monocomando"
-      ]
+      variations: ["Kit Chuveiro Tê Misturador", "Kit Chuveiro Monocomando"]
     },
     {
       id: "airtechno",
@@ -44,12 +42,10 @@ const Kits = () => {
       image: multicamadaairtecno,
       title: "AirTechno Multicamada",
       category: "Kits de Ar-Condicionado",
-      description: "Tubulação multicamada com cinco camadas especiais que combinam alumínio e polietileno, proporcionando alta resistência à pressão e flexibilidade para instalação em projetos de climatização.",
+      description:
+        "Tubulação multicamada com cinco camadas especiais que combinam alumínio e polietileno, proporcionando alta resistência à pressão e flexibilidade para instalação em projetos de climatização.",
       caption: "Kit AirTechno - Sistema Multicamada",
-      variations: [
-        "Kit Ar-Condicionado 9000 BTUs",
-        "Kit Ar-Condicionado 12000 BTUs"
-      ]
+      variations: ["Kit Ar-Condicionado 9000 BTUs", "Kit Ar-Condicionado 12000 BTUs"]
     },
     {
       id: "chassis",
@@ -57,14 +53,23 @@ const Kits = () => {
       image: chassismetalicos,
       title: "Chassis Metálicos",
       category: "Chassis Metálicos Industriais",
-      description: "Estruturas fabricadas em aço galvanizado com tratamento anticorrosivo, projetadas para chuveiros, aquecedores e travessas industriais com acabamento premium e montagem precisa.",
+      description:
+        "Estruturas fabricadas em aço galvanizado com tratamento anticorrosivo, projetadas para chuveiros, aquecedores e travessas industriais com acabamento premium e montagem precisa.",
       caption: "Chassis Metálicos Industriais",
-      variations: [
-        "Chassis para Chuveiros Residenciais",
-        "Chassis para Aquecedores Industriais"
-      ]
+      variations: ["Chassis para Chuveiros Residenciais", "Chassis para Aquecedores Industriais"]
     }
   ];
+
+  const productsFromContent = safeJsonParse(kitsContent?.productsJson, null);
+  const products = Array.isArray(productsFromContent)
+    ? productsFromContent.map((p) => {
+        const base = defaultProducts.find((d) => d.id === p.id) || defaultProducts[0];
+        return {
+          ...base,
+          ...p
+        };
+      })
+    : defaultProducts;
 
   // Framer Motion variants
   const containerVariants = {
@@ -165,7 +170,9 @@ const Kits = () => {
                       {/* Variações */}
                       {product.variations && product.variations.length > 0 && (
                         <div>
-                          <h5 className="text-xl font-semibold text-gray-800 mb-4">Modelos Disponíveis:</h5>
+                          <h5 className="text-xl font-semibold text-gray-800 mb-4">
+                            {kitsContent?.variationsTitle || 'Modelos Disponíveis:'}
+                          </h5>
                           <ul className="space-y-3">
                             {product.variations.map((variation, vIndex) => (
                               <li key={vIndex} className="flex items-center gap-3">
@@ -200,7 +207,9 @@ const Kits = () => {
                       {/* Variações */}
                       {product.variations && product.variations.length > 0 && (
                         <div className="mb-6">
-                          <h5 className="text-lg font-semibold text-gray-800 mb-3">Modelos Disponíveis:</h5>
+                          <h5 className="text-lg font-semibold text-gray-800 mb-3">
+                            {kitsContent?.variationsTitle || 'Modelos Disponíveis:'}
+                          </h5>
                           <ul className="space-y-2">
                             {product.variations.map((variation, vIndex) => (
                               <li key={vIndex} className="flex items-center gap-2 justify-center">

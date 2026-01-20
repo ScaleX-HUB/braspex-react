@@ -10,11 +10,12 @@ import {
 } from 'phosphor-react';
 import { Link } from 'react-router-dom';
 import { useSiteContent } from '../contexts/SiteContentContext';
+import { safeJsonParse } from '../lib/safeJson';
 
 const Vantagens = () => {
   const { content } = useSiteContent();
   const vantagensContent = content.vantagens;
-  const steps = [
+  const defaultSteps = [
     {
       icon: <Factory className="w-7 h-7" />,
       title: "Qualidade em Fábrica",
@@ -36,6 +37,15 @@ const Vantagens = () => {
       description: "Do projeto à entrega, com suporte completo"
     }
   ];
+
+  const stepsFromContent = safeJsonParse(vantagensContent?.stepsJson, null);
+  const steps = Array.isArray(stepsFromContent)
+    ? stepsFromContent.map((s, idx) => ({
+        icon: defaultSteps[idx]?.icon || <Factory className="w-7 h-7" />,
+        title: s?.title ?? defaultSteps[idx]?.title,
+        description: s?.description ?? defaultSteps[idx]?.description
+      }))
+    : defaultSteps;
 
   // Hover/touch effect nos ícones para mobile
   const [activeIcon, setActiveIcon] = React.useState(null);
@@ -236,7 +246,7 @@ const Vantagens = () => {
             className="inline-flex items-center gap-3 bg-[#005563] text-white font-bold text-lg px-10 py-4 rounded-xl shadow-lg hover:bg-[#003d47] hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
           >
             <Package size={24} weight="bold" />
-            Conheça Nossos Kits Industriais
+            {vantagensContent.ctaText}
             <ArrowRight size={24} weight="bold" />
           </Link>
         </motion.div>

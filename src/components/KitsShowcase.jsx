@@ -1,94 +1,93 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useSiteContent } from '../contexts/SiteContentContext';
+import { safeJsonParse } from '../lib/safeJson';
 
 const KitsShowcase = () => {
+  const { content } = useSiteContent();
+  const kitsShowcaseContent = content.kitsShowcase;
+
+  const images = (() => {
+    const parsed = safeJsonParse(kitsShowcaseContent?.imagesJson, null);
+    return Array.isArray(parsed) && parsed.length
+      ? parsed
+      : [
+          {
+            id: 'kit-hidraulico',
+            src: '/BRASPEX_kit_hidraulico_industrial.jpg',
+            alt: 'Kit Hidráulico Industrial Braspex',
+            title: 'Kit Hidráulico Industrial',
+            description: 'Soluções robustas e eficientes para aplicações industriais de grande porte',
+            badge: 'Em Destaque'
+          },
+          {
+            id: 'tipos-kits',
+            src: '/BRASPEX_kit_tipos.png',
+            alt: 'Tipos de Kits Braspex',
+            title: 'Variedade de Soluções',
+            description: 'Diferentes tipos de kits para atender todas as necessidades da sua empresa',
+            badge: 'Versátil'
+          }
+        ];
+  })();
+
+  const features = (() => {
+    const parsed = safeJsonParse(kitsShowcaseContent?.featuresJson, null);
+    return Array.isArray(parsed) && parsed.length
+      ? parsed
+      : [
+          { emoji: '💧', title: 'Água Fria', description: 'Sistemas eficientes de distribuição e climatização' },
+          { emoji: '🔥', title: 'Água Quente', description: 'Aquecimento de alta performance e economia' },
+          { emoji: '❄️', title: 'Ar-Condicionado', description: 'Climatização inteligente e sustentável' }
+        ];
+  })();
+
   return (
     <section className="py-16 bg-gradient-to-b from-white via-gray-50 to-white">
       <div className="container mx-auto px-4">
         {/* Título da Seção */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-            Conheça Nossos Kits Industriais
+            {kitsShowcaseContent?.title || 'Conheça Nossos Kits Industriais'}
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Soluções completas e integradas para sistemas de água fria, água quente e ar-condicionado
+            {kitsShowcaseContent?.subtitle || 'Soluções completas e integradas para sistemas de água fria, água quente e ar-condicionado'}
           </p>
         </div>
 
         {/* Grid de Imagens */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto mb-12">
-          {/* Imagem 1 - Kit Hidráulico Industrial */}
-          <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 bg-white">
-            <div className="aspect-w-16 aspect-h-10">
-              <img
-                src="/BRASPEX_kit_hidraulico_industrial.jpg"
-                alt="Kit Hidráulico Industrial Braspex"
-                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-              />
+          {images.slice(0, 2).map((img) => (
+            <div key={img.id || img.src} className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 bg-white">
+              <div className="aspect-w-16 aspect-h-10">
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div className="p-6 bg-gradient-to-t from-gray-50 to-white">
+                <h3 className="text-xl font-bold text-gray-800 mb-2">{img.title}</h3>
+                <p className="text-gray-600 text-sm">{img.description}</p>
+              </div>
+              {!!img.badge && (
+                <div className="absolute top-4 right-4 bg-[#005563] text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+                  {img.badge}
+                </div>
+              )}
             </div>
-            <div className="p-6 bg-gradient-to-t from-gray-50 to-white">
-              <h3 className="text-xl font-bold text-gray-800 mb-2">
-                Kit Hidráulico Industrial
-              </h3>
-              <p className="text-gray-600 text-sm">
-                Soluções robustas e eficientes para aplicações industriais de grande porte
-              </p>
-            </div>
-            {/* Badge de Destaque */}
-            <div className="absolute top-4 right-4 bg-[#005563] text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-              Em Destaque
-            </div>
-          </div>
-
-          {/* Imagem 2 - Tipos de Kits */}
-          <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 bg-white">
-            <div className="aspect-w-16 aspect-h-10">
-              <img
-                src="/BRASPEX_kit_tipos.png"
-                alt="Tipos de Kits Braspex"
-                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-            <div className="p-6 bg-gradient-to-t from-gray-50 to-white">
-              <h3 className="text-xl font-bold text-gray-800 mb-2">
-                Variedade de Soluções
-              </h3>
-              <p className="text-gray-600 text-sm">
-                Diferentes tipos de kits para atender todas as necessidades da sua empresa
-              </p>
-            </div>
-            {/* Badge de Destaque */}
-            <div className="absolute top-4 right-4 bg-[#005563] text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-              Versátil
-            </div>
-          </div>
+          ))}
         </div>
 
         {/* Cards de Características */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
-          <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-            <div className="text-4xl mb-4 text-center">💧</div>
-            <h3 className="text-lg font-bold text-gray-800 mb-2 text-center">Água Fria</h3>
-            <p className="text-gray-600 text-sm text-center">
-              Sistemas eficientes de distribuição e climatização
-            </p>
-          </div>
-          
-          <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-            <div className="text-4xl mb-4 text-center">🔥</div>
-            <h3 className="text-lg font-bold text-gray-800 mb-2 text-center">Água Quente</h3>
-            <p className="text-gray-600 text-sm text-center">
-              Aquecimento de alta performance e economia
-            </p>
-          </div>
-          
-          <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-            <div className="text-4xl mb-4 text-center">❄️</div>
-            <h3 className="text-lg font-bold text-gray-800 mb-2 text-center">Ar-Condicionado</h3>
-            <p className="text-gray-600 text-sm text-center">
-              Climatização inteligente e sustentável
-            </p>
-          </div>
+          {features.slice(0, 3).map((f, idx) => (
+            <div key={f.title || idx} className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+              <div className="text-4xl mb-4 text-center">{f.emoji}</div>
+              <h3 className="text-lg font-bold text-gray-800 mb-2 text-center">{f.title}</h3>
+              <p className="text-gray-600 text-sm text-center">{f.description}</p>
+            </div>
+          ))}
         </div>
 
         {/* Botão de CTA em Destaque */}
@@ -104,7 +103,7 @@ const KitsShowcase = () => {
             >
               <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
             </svg>
-            Ver Todos os Kits Industriais
+            {kitsShowcaseContent?.ctaButtonText || 'Ver Todos os Kits Industriais'}
             <svg 
               className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" 
               fill="none" 
@@ -117,7 +116,7 @@ const KitsShowcase = () => {
           
           {/* Texto adicional abaixo do botão */}
           <p className="mt-6 text-gray-500 text-sm">
-            Explore nossa linha completa de produtos e encontre a solução ideal para sua empresa
+            {kitsShowcaseContent?.ctaSubtext || 'Explore nossa linha completa de produtos e encontre a solução ideal para sua empresa'}
           </p>
         </div>
       </div>

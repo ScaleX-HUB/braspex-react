@@ -80,7 +80,7 @@ const Contato = () => {
       }, 3000);
     } catch (error) {
       setIsSubmitting(false);
-      alert('Erro ao enviar mensagem. Tente novamente.');
+      alert(contatoContent.errorMessage);
     }
   };
 
@@ -173,7 +173,7 @@ const Contato = () => {
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label htmlFor="nome" className="block text-sm font-medium text-gray-900 mb-2">
-                Nome Completo *
+                {contatoContent.nameLabel} {contatoContent.requiredMark}
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-5 h-5" />
@@ -185,13 +185,13 @@ const Contato = () => {
                   onChange={handleInputChange}
                   required
                   className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300 bg-white text-gray-900"
-                  placeholder="Seu nome completo"
+                  placeholder={contatoContent.namePlaceholder}
                 />
               </div>
             </div>
             <div>
               <label htmlFor="empresa" className="block text-sm font-medium text-gray-900 mb-2">
-                Empresa
+                {contatoContent.companyLabel}
               </label>
               <div className="relative">
                 <Buildings className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-5 h-5" />
@@ -202,7 +202,7 @@ const Contato = () => {
                   value={formData.empresa}
                   onChange={handleInputChange}
                   className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300 bg-white text-gray-900"
-                  placeholder="Nome da empresa"
+                  placeholder={contatoContent.companyPlaceholder}
                 />
               </div>
             </div>
@@ -210,7 +210,7 @@ const Contato = () => {
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-2">
-                E-mail *
+                {contatoContent.emailLabel} {contatoContent.requiredMark}
               </label>
               <div className="relative">
                 <Envelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-5 h-5" />
@@ -222,13 +222,13 @@ const Contato = () => {
                   onChange={handleInputChange}
                   required
                   className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300 bg-white text-gray-900"
-                  placeholder="seu@email.com"
+                  placeholder={contatoContent.emailPlaceholder}
                 />
               </div>
             </div>
             <div>
               <label htmlFor="telefone" className="block text-sm font-medium text-gray-900 mb-2">
-                Telefone
+                {contatoContent.phoneLabel}
               </label>
               <div className="relative">
                 <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-5 h-5" />
@@ -239,14 +239,14 @@ const Contato = () => {
                   value={formData.telefone}
                   onChange={handleInputChange}
                   className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300 bg-white text-gray-900"
-                  placeholder="(81) 9999-9999"
+                  placeholder={contatoContent.phonePlaceholder}
                 />
               </div>
             </div>
           </div>
           <div>
             <label htmlFor="mensagem" className="block text-sm font-medium text-gray-900 mb-2">
-              Mensagem *
+              {contatoContent.messageLabel} {contatoContent.requiredMark}
             </label>
             <div className="relative">
               <ChatCircle className="absolute left-3 top-4 text-gray-600 w-5 h-5" />
@@ -258,7 +258,7 @@ const Contato = () => {
                 required
                 rows={5}
                 className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300 resize-none bg-white text-gray-900"
-                placeholder="Descreva seu projeto e necessidades..."
+                placeholder={contatoContent.messagePlaceholder}
               />
             </div>
           </div>
@@ -279,7 +279,7 @@ const Contato = () => {
                   className="flex items-center gap-3"
                 >
                   <CheckCircle className="w-6 h-6 text-green-400" weight="fill" />
-                  <span className="text-white">Mensagem Enviada!</span>
+                  <span className="text-white">{contatoContent.successTitle}</span>
                 </motion.div>
               ) : (
                 <motion.div
@@ -290,7 +290,7 @@ const Contato = () => {
                   className="flex items-center gap-3"
                 >
                   <PaperPlaneTilt className="w-5 h-5" />
-                  {isSubmitting ? 'Enviando...' : 'Enviar Mensagem'}
+                  {isSubmitting ? contatoContent.submittingText : contatoContent.submitButtonText}
                 </motion.div>
               )}
             </AnimatePresence>

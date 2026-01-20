@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useSiteContent } from '../contexts/SiteContentContext';
+import { safeJsonParse } from '../lib/safeJson';
 import parceiro1 from '../assets/parceiro1.png';
 import parceiro2 from '../assets/parceiro2.png';
 import parceria3 from '../assets/parceria3.png';
@@ -10,6 +11,8 @@ import parceria5 from '../assets/parceria5.png';
 const Parceiros = () => {
   const { content } = useSiteContent();
   const parceirosContent = content?.parceiros || { title: 'Nossos Parceiros', subtitle: 'Trabalhamos com as melhores marcas' };
+  const alts = safeJsonParse(parceirosContent.partnersAltJson, null);
+  const partnerAlts = Array.isArray(alts) ? alts : ["Parceiro 1", "Parceiro 2", "Parceiro 3", "Parceiro 4", "Parceiro 5"];
   
   // Estado para controlar o efeito de toque nas imagens no mobile
   const [activeImg, setActiveImg] = React.useState(null);
@@ -80,11 +83,11 @@ const Parceiros = () => {
   };
   
   const parceiros = [
-    { src: parceiro1, alt: "Parceiro 1" },
-    { src: parceiro2, alt: "Parceiro 2" },
-    { src: parceria3, alt: "Parceiro 3" },
-    { src: parceria4, alt: "Parceiro 4" },
-    { src: parceria5, alt: "Parceiro 5" }
+    { src: parceiro1, alt: partnerAlts[0] || "Parceiro 1" },
+    { src: parceiro2, alt: partnerAlts[1] || "Parceiro 2" },
+    { src: parceria3, alt: partnerAlts[2] || "Parceiro 3" },
+    { src: parceria4, alt: partnerAlts[3] || "Parceiro 4" },
+    { src: parceria5, alt: partnerAlts[4] || "Parceiro 5" }
   ];
 
   // Duplicar os parceiros para criar o efeito de loop infinito
@@ -164,7 +167,7 @@ const Parceiros = () => {
       <div className="max-w-6xl mx-auto px-5">
         <motion.div className="text-center mb-16" variants={titleVariants}>
           <p className="text-[#005563] font-semibold text-lg mb-2 uppercase tracking-wide">
-            Parceiros de Confiança
+            {parceirosContent.kicker}
           </p>
           <h2 className="text-4xl md:text-5xl font-bold text-[#005563] mb-4">
             {parceirosContent.title}
@@ -208,7 +211,7 @@ const Parceiros = () => {
         </motion.div>
         <motion.div className="text-center mt-12" variants={carouselVariants}>
           <p className="text-gray-600 text-lg font-poppins">
-            Trabalhamos com os melhores fornecedores do mercado para garantir a qualidade dos nossos produtos.
+            {parceirosContent.bottomText}
           </p>
         </motion.div>
       </div>

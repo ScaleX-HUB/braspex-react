@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useSiteContent } from '../contexts/SiteContentContext';
+import { safeJsonParse } from '../lib/safeJson';
 import { 
   FileText, 
   Gear, 
@@ -16,104 +17,116 @@ const Fluxo = () => {
   
   const [activeStep, setActiveStep] = useState(1);
 
-  const steps = [
-    { 
-      id: 1, 
-      icon: <FileText className="w-7 h-7" />, 
-      shortTitle: "Projeto", 
-      content: { 
-        title: "Recebimento do Projeto Executivo",
-        timeframe: "2-3 dias úteis",
-        description: "Nossa equipe técnica realiza uma análise detalhada do projeto executivo para compreender todas as especificações, requisitos técnicos e particularidades da obra.",
-        items: [
-          "Análise completa do projeto hidráulico",
-          "Identificação de pontos críticos", 
-          "Levantamento de materiais necessários",
-          "Cronograma preliminar de execução"
-        ]
-      }
+  const defaultStepsData = [
+    {
+      id: 1,
+      shortTitle: "Projeto",
+      title: "Recebimento do Projeto Executivo",
+      timeframe: "2-3 dias úteis",
+      description:
+        "Nossa equipe técnica realiza uma análise detalhada do projeto executivo para compreender todas as especificações, requisitos técnicos e particularidades da obra.",
+      items: [
+        "Análise completa do projeto hidráulico",
+        "Identificação de pontos críticos",
+        "Levantamento de materiais necessários",
+        "Cronograma preliminar de execução"
+      ]
     },
-    { 
-      id: 2, 
-      icon: <Gear className="w-7 h-7" />, 
-      shortTitle: "Compatibilização", 
-      content: { 
-        title: "Compatibilização Técnica e Detalhamento",
-        timeframe: "3-5 dias úteis",
-        description: "Desenvolvimento personalizado dos kits conforme as necessidades específicas do projeto, garantindo total compatibilidade com os sistemas prediais.",
-        items: [
-          "Compatibilização com outros sistemas",
-          "Detalhamento técnico dos kits",
-          "Especificação de materiais",
-          "Aprovação do cliente"
-        ]
-      }
+    {
+      id: 2,
+      shortTitle: "Compatibilização",
+      title: "Compatibilização Técnica e Detalhamento",
+      timeframe: "3-5 dias úteis",
+      description:
+        "Desenvolvimento personalizado dos kits conforme as necessidades específicas do projeto, garantindo total compatibilidade com os sistemas prediais.",
+      items: [
+        "Compatibilização com outros sistemas",
+        "Detalhamento técnico dos kits",
+        "Especificação de materiais",
+        "Aprovação do cliente"
+      ]
     },
-    { 
-      id: 3, 
-      icon: <Factory className="w-7 h-7" />, 
-      shortTitle: "Produção", 
-      content: { 
-        title: "Produção em Fábrica",
-        timeframe: "5-10 dias úteis",
-        description: "Fabricação dos kits em ambiente controlado, seguindo rigorosos padrões de qualidade e utilizando equipamentos de última geração.",
-        items: [
-          "Ambiente controlado de produção",
-          "Equipamentos de alta precisão",
-          "Controle de qualidade contínuo",
-          "Rastreabilidade de componentes"
-        ]
-      }
+    {
+      id: 3,
+      shortTitle: "Produção",
+      title: "Produção em Fábrica",
+      timeframe: "5-10 dias úteis",
+      description:
+        "Fabricação dos kits em ambiente controlado, seguindo rigorosos padrões de qualidade e utilizando equipamentos de última geração.",
+      items: [
+        "Ambiente controlado de produção",
+        "Equipamentos de alta precisão",
+        "Controle de qualidade contínuo",
+        "Rastreabilidade de componentes"
+      ]
     },
-    { 
-      id: 4, 
-      icon: <CheckCircle className="w-7 h-7" />, 
-      shortTitle: "Testes", 
-      content: { 
-        title: "Teste de Montagem e Checklist",
-        timeframe: "1-2 dias úteis",
-        description: "Verificação completa de todos os componentes e teste de montagem para garantir perfeito funcionamento antes da entrega.",
-        items: [
-          "Teste de pressão hidráulica",
-          "Verificação de conexões",
-          "Checklist de qualidade",
-          "Documentação técnica"
-        ]
-      }
+    {
+      id: 4,
+      shortTitle: "Testes",
+      title: "Teste de Montagem e Checklist",
+      timeframe: "1-2 dias úteis",
+      description:
+        "Verificação completa de todos os componentes e teste de montagem para garantir perfeito funcionamento antes da entrega.",
+      items: [
+        "Teste de pressão hidráulica",
+        "Verificação de conexões",
+        "Checklist de qualidade",
+        "Documentação técnica"
+      ]
     },
-    { 
-      id: 5, 
-      icon: <Truck className="w-7 h-7" />, 
-      shortTitle: "Entrega", 
-      content: { 
-        title: "Entrega Rastreável e Pronta",
-        timeframe: "Conforme logística",
-        description: "Kits prontos para instalação imediata, com embalagem adequada e sistema de rastreamento completo para acompanhamento da entrega.",
-        items: [
-          "Embalagem protegida e identificada",
-          "Sistema de rastreamento",
-          "Documentação completa",
-          "Manual de instalação"
-        ]
-      }
+    {
+      id: 5,
+      shortTitle: "Entrega",
+      title: "Entrega Rastreável e Pronta",
+      timeframe: "Conforme logística",
+      description:
+        "Kits prontos para instalação imediata, com embalagem adequada e sistema de rastreamento completo para acompanhamento da entrega.",
+      items: [
+        "Embalagem protegida e identificada",
+        "Sistema de rastreamento",
+        "Documentação completa",
+        "Manual de instalação"
+      ]
     },
-    { 
-      id: 6, 
-      icon: <Wrench className="w-7 h-7" />, 
-      shortTitle: "Suporte", 
-      content: { 
-        title: "Suporte Técnico na Obra",
-        timeframe: "Sob demanda",
-        description: "Acompanhamento técnico especializado durante a instalação, quando necessário, garantindo a correta implementação dos kits.",
-        items: [
-          "Suporte técnico especializado",
-          "Acompanhamento da instalação",
-          "Resolução de dúvidas",
-          "Garantia de funcionamento"
-        ]
-      }
-    },
+    {
+      id: 6,
+      shortTitle: "Suporte",
+      title: "Suporte Técnico na Obra",
+      timeframe: "Sob demanda",
+      description:
+        "Acompanhamento técnico especializado durante a instalação, quando necessário, garantindo a correta implementação dos kits.",
+      items: [
+        "Suporte técnico especializado",
+        "Acompanhamento da instalação",
+        "Resolução de dúvidas",
+        "Garantia de funcionamento"
+      ]
+    }
   ];
+
+  const parsedSteps = safeJsonParse(fluxoContent?.stepsJson, null);
+  const stepsData = Array.isArray(parsedSteps) ? parsedSteps : defaultStepsData;
+
+  const iconById = {
+    1: <FileText className="w-7 h-7" />,
+    2: <Gear className="w-7 h-7" />,
+    3: <Factory className="w-7 h-7" />,
+    4: <CheckCircle className="w-7 h-7" />,
+    5: <Truck className="w-7 h-7" />,
+    6: <Wrench className="w-7 h-7" />
+  };
+
+  const steps = stepsData.map((s) => ({
+    id: s.id,
+    icon: iconById[s.id] || <FileText className="w-7 h-7" />,
+    shortTitle: s.shortTitle,
+    content: {
+      title: s.title,
+      timeframe: s.timeframe,
+      description: s.description,
+      items: Array.isArray(s.items) ? s.items : []
+    }
+  }));
 
   const currentStep = steps.find(step => step.id === activeStep);
 

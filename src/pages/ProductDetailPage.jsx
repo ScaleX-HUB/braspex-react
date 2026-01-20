@@ -5,12 +5,16 @@ import { ArrowLeft, ShoppingCart, Check, X } from 'phosphor-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useCart } from '../contexts/CartContext';
+import { useSiteContent } from '../contexts/SiteContentContext';
 import { getProductById, useProductsSync } from '../data/productsUtils';
+import { safeJsonParse } from '../lib/safeJson';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart, isInCart } = useCart();
+  const { content } = useSiteContent();
+  const productDetailContent = content.productDetailPage;
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
   const [product, setProduct] = useState(null);
@@ -40,7 +44,7 @@ const ProductDetailPage = () => {
         <div className="flex items-center justify-center min-h-[60vh] pt-24">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#005563] mx-auto mb-4"></div>
-            <p className="text-gray-600">Carregando produto...</p>
+            <p className="text-gray-600">{productDetailContent?.loadingText || 'Carregando produto...'}</p>
           </div>
         </div>
         <Footer />
@@ -54,13 +58,13 @@ const ProductDetailPage = () => {
         <Header />
         <div className="pt-32 pb-20 px-4">
           <div className="max-w-7xl mx-auto text-center">
-            <h1 className="text-4xl font-bold text-slate-900 mb-4">Produto não encontrado</h1>
+            <h1 className="text-4xl font-bold text-slate-900 mb-4">{productDetailContent?.notFoundTitle || 'Produto não encontrado'}</h1>
             <Link 
               to="/produtos" 
               className="inline-flex items-center gap-2 text-[#005563] hover:text-[#003d47] transition-colors"
             >
               <ArrowLeft size={20} />
-              Voltar para produtos
+              {productDetailContent?.backToProducts || 'Voltar para produtos'}
             </Link>
           </div>
         </div>
@@ -71,17 +75,24 @@ const ProductDetailPage = () => {
 
   // Preparar especificações para exibição
   const specifications = product.specifications || {};
+  const specLabels = safeJsonParse(productDetailContent?.specLabelsJson, null);
+  const getSpecLabel = (key, fallback) => {
+    if (specLabels && typeof specLabels === 'object' && typeof specLabels[key] === 'string' && specLabels[key].trim()) {
+      return specLabels[key].trim();
+    }
+    return fallback;
+  };
   const specsArray = [];
   
-  if (specifications.material) specsArray.push(`Material: ${specifications.material}`);
-  if (specifications.acabamento) specsArray.push(`Acabamento: ${specifications.acabamento}`);
-  if (specifications.capacity) specsArray.push(`Capacidade: ${specifications.capacity}`);
-  if (specifications.dimensions) specsArray.push(`Dimensões: ${specifications.dimensions}`);
+  if (specifications.material) specsArray.push(`${getSpecLabel('material', 'Material')}: ${specifications.material}`);
+  if (specifications.acabamento) specsArray.push(`${getSpecLabel('acabamento', 'Acabamento')}: ${specifications.acabamento}`);
+  if (specifications.capacity) specsArray.push(`${getSpecLabel('capacity', 'Capacidade')}: ${specifications.capacity}`);
+  if (specifications.dimensions) specsArray.push(`${getSpecLabel('dimensions', 'Dimensões')}: ${specifications.dimensions}`);
   if (specifications.diametros && specifications.diametros.length > 0) {
-    specsArray.push(`Diâmetros: ${specifications.diametros.join(', ')}`);
+    specsArray.push(`${getSpecLabel('diametros', 'Diâmetros')}: ${specifications.diametros.join(', ')}`);
   }
   if (specifications.normas && specifications.normas.length > 0) {
-    specsArray.push(`Normas: ${specifications.normas.join(', ')}`);
+    specsArray.push(`${getSpecLabel('normas', 'Normas')}: ${specifications.normas.join(', ')}`);
   }
 
   // Preparar imagens (usar product.image se images não existir)
@@ -113,7 +124,7 @@ const ProductDetailPage = () => {
               className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-[#005563] transition-colors"
             >
               <ArrowLeft size={16} />
-              Voltar para produtos
+              {productDetailContent?.backToProducts || 'Voltar para produtos'}
             </Link>
           </div>
 
@@ -174,7 +185,7 @@ const ProductDetailPage = () => {
               {/* Variations */}
               {product.variations && product.variations.length > 0 && (
                 <div className="mb-8">
-                  <h3 className="text-sm font-semibold text-slate-900 mb-3">Variações Disponíveis:</h3>
+                  <h3 className="text-sm font-semibold text-slate-900 mb-3">{productDetailContent?.variationsTitle || 'Variações Disponíveis:'}</h3>
                   <div className="flex flex-wrap gap-2">
                     {product.variations.map((variation, index) => (
                       <span 
@@ -202,12 +213,12 @@ const ProductDetailPage = () => {
                   {isInCart(product.id) ? (
                     <span className="flex items-center justify-center gap-2">
                       <Check size={24} weight="bold" />
-                      No Carrinho
+                      {productDetailContent?.inCart || 'No Carrinho'}
                     </span>
                   ) : (
                     <span className="flex items-center justify-center gap-2">
                       <ShoppingCart size={24} />
-                      Adicionar ao Orçamento
+                      {productDetailContent?.addToBudget || 'Adicionar ao Orçamento'}
                     </span>
                   )}
                 </button>
@@ -216,13 +227,13 @@ const ProductDetailPage = () => {
                   to="/#contato"
                   className="px-8 py-4 bg-white border-2 border-[#005563] text-[#005563] rounded-xl font-semibold text-lg hover:bg-[#005563] hover:text-white transition-all text-center"
                 >
-                  Solicitar Cotação
+                  {productDetailContent?.requestQuote || 'Solicitar Cotação'}
                 </Link>
               </div>
 
               {/* Specifications */}
               <div className="bg-white rounded-xl p-6 border border-slate-200 mb-8">
-                <h3 className="text-lg font-semibold text-slate-900 mb-4">Especificações Técnicas</h3>
+                <h3 className="text-lg font-semibold text-slate-900 mb-4">{productDetailContent?.specsTitle || 'Especificações Técnicas'}</h3>
                 <ul className="space-y-2">
                   {specsArray.map((spec, index) => (
                     <li key={index} className="flex items-start gap-3 text-slate-700">
@@ -231,7 +242,7 @@ const ProductDetailPage = () => {
                     </li>
                   ))}
                   {specsArray.length === 0 && (
-                    <li className="text-sm text-gray-500">Nenhuma especificação disponível</li>
+                    <li className="text-sm text-gray-500">{productDetailContent?.specsEmpty || 'Nenhuma especificação disponível'}</li>
                   )}
                 </ul>
               </div>
@@ -239,7 +250,7 @@ const ProductDetailPage = () => {
               {/* What's Included */}
               {product.includes && product.includes.length > 0 && (
                 <div className="bg-gradient-to-br from-[#005563] to-[#003d47] rounded-xl p-6 text-white">
-                  <h3 className="text-lg font-semibold mb-4">O que está incluído:</h3>
+                  <h3 className="text-lg font-semibold mb-4">{productDetailContent?.includesTitle || 'O que está incluído:'}</h3>
                   <ul className="space-y-2">
                     {product.includes.map((item, index) => (
                       <li key={index} className="flex items-start gap-3">

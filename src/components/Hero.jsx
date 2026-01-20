@@ -121,13 +121,16 @@ const Hero = () => {
               </motion.button>
 
               <motion.button
-                onClick={() => window.open('https://www.youtube.com/watch?v=SEU_VIDEO_ID', '_blank')}
+                onClick={() => {
+                  const url = heroContent.videoUrl || 'https://www.youtube.com/watch?v=SEU_VIDEO_ID';
+                  window.open(url, '_blank');
+                }}
                 className="group inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm text-white font-semibold text-base md:text-lg px-8 md:px-10 py-3.5 md:py-4 rounded-lg border-2 border-white/30 hover:bg-white hover:text-[#005563] hover:border-white transition-all duration-300"
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <PlayCircle className="w-6 h-6" weight="fill" />
-                Ver Vídeo
+                {heroContent.videoButtonText || 'Ver Vídeo'}
               </motion.button>
             </motion.div>
           </motion.div>
@@ -149,23 +152,23 @@ const Hero = () => {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-[#005563]">Qualidade Certificada</h3>
-                    <p className="text-sm text-gray-600 mt-1">Produtos homologados</p>
+                    <h3 className="text-xl font-bold text-[#005563]">{heroContent.featureCardTitle}</h3>
+                    <p className="text-sm text-gray-600 mt-1">{heroContent.featureCardSubtitle}</p>
                   </div>
                 </div>
 
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
                     <div className="w-2 h-2 bg-[#FFD027] rounded-full" />
-                    <span className="text-base text-gray-700">Sistema PPR Alemão</span>
+                    <span className="text-base text-gray-700">{heroContent.featureCardItem1}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="w-2 h-2 bg-[#FFD027] rounded-full" />
-                    <span className="text-base text-gray-700">Kits Ar-Condicionado</span>
+                    <span className="text-base text-gray-700">{heroContent.featureCardItem2}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="w-2 h-2 bg-[#FFD027] rounded-full" />
-                    <span className="text-base text-gray-700">Chassis Metálicos</span>
+                    <span className="text-base text-gray-700">{heroContent.featureCardItem3}</span>
                   </div>
                 </div>
 
@@ -173,7 +176,7 @@ const Hero = () => {
                   to="/produtos"
                   className="block w-full bg-[#005563] text-white font-semibold py-3.5 rounded-lg hover:bg-[#00424d] transition-colors duration-300 text-center"
                 >
-                  Ver Produtos
+                  {heroContent.featureCardButtonText}
                 </Link>
               </div>
 
@@ -200,7 +203,7 @@ const Hero = () => {
               transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
             />
           </div>
-          <span className="text-white/60 text-xs">Role para explorar</span>
+          <span className="text-white/60 text-xs">{heroContent.scrollIndicatorText}</span>
         </div>
       </motion.div>
     </motion.section>

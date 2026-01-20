@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useSiteContent } from '../contexts/SiteContentContext';
 import comparacaoImg from '../assets/comparacao-tradicionalxprazo.png';
+import { safeJsonParse } from '../lib/safeJson';
 
 const Comparacao = () => {
   const { content } = useSiteContent();
@@ -13,7 +14,7 @@ const Comparacao = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
 
-  const chartData = [
+  const defaultChartData = [
     {
       value: 40,
       label: "De economia de mão de obra",
@@ -34,7 +35,10 @@ const Comparacao = () => {
       label: "Menos retrabalho",
       color: "bg-gradient-to-r from-red-400 to-red-600"
     }
-  ].reverse();
+  ];
+
+  const parsedChartData = safeJsonParse(comparacaoContent?.chartDataJson, null);
+  const chartData = (Array.isArray(parsedChartData) ? parsedChartData : defaultChartData).slice().reverse();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -186,7 +190,7 @@ const Comparacao = () => {
             >
               <img
                 src={comparacaoImg}
-                alt="Comparação visual entre instalação tradicional e Kits BRASPEX"
+                alt={comparacaoContent.imageAlt}
                 className="object-contain max-h-[450px] max-w-full border-2 border-[#FFD027] rounded-2xl"
               />
             </div>

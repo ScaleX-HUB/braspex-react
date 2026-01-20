@@ -5,6 +5,7 @@
 
 export { textsAPI } from './textsAPI';
 export { productsAPI } from './productsAPI';
+export { catalogsAPI } from './catalogsAPI';
 export { analyticsAPI } from './analyticsAPI';
 export { usersAPI } from './usersAPI';
 export { supabase } from '../lib/supabaseClient';

@@ -14,7 +14,7 @@ const Footer = () => {
           <div className="flex justify-center md:justify-start w-full mb-4">
             <img 
               src={logoBraspexBranca}
-              alt="BRASPEX Logo"
+              alt={footerContent.logoAlt || 'BRASPEX Logo'}
               className="h-16 w-auto object-contain brightness-0 invert"
               style={{ filter: 'brightness(0) invert(1)' }}
             />
@@ -30,7 +30,7 @@ const Footer = () => {
         </div>
 
         <div>
-          <h4 className="text-lg font-bold text-[#FFD027] mb-4">Contato</h4>
+          <h4 className="text-lg font-bold text-[#FFD027] mb-4">{footerContent.contactTitle || 'Contato'}</h4>
           <ul className="space-y-3 text-gray-300 text-sm">
             {footerContent.email && (
               <li className="flex items-center">
@@ -60,7 +60,7 @@ const Footer = () => {
         </div>
 
         <div>
-          <h4 className="text-lg font-bold text-[#FFD027] mb-4">Redes Sociais</h4>
+          <h4 className="text-lg font-bold text-[#FFD027] mb-4">{footerContent.socialTitle || 'Redes Sociais'}</h4>
           <div className="flex space-x-4">
             {footerContent.facebook && (
               <a href={footerContent.facebook} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#FFD027] transition-colors">
@@ -91,13 +91,21 @@ const Footer = () => {
           {footerContent.copyright || ' 2025 Braspex. Todos os direitos reservados.'}
         </p>
         <p className="mt-2 text-sm font-light font-montserrat text-[#FFD027]">
-          Desenvolvido por <a href="https://www.linkedin.com/company/converseia" target="_blank" rel="noopener noreferrer" className="underline hover:text-white font-montserrat font-light">ConverseIA Tech</a>
+          {footerContent.developedByPrefix || 'Desenvolvido por'}{' '}
+          <a
+            href={footerContent.developedByUrl || 'https://www.linkedin.com/company/converseia'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-white font-montserrat font-light"
+          >
+            {footerContent.developedByName || 'ConverseIA Tech'}
+          </a>
         </p>
         <div className="mt-4">
           <a 
             href="/admin" 
             className="text-xs font-light font-montserrat text-gray-500 hover:text-gray-300 transition-colors opacity-50 hover:opacity-75"
-            title="Painel Administrativo"
+            title={footerContent.adminTitle || 'Painel Administrativo'}
           >
             
           </a>

@@ -12,13 +12,19 @@
 // Detectar ambiente
 const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost';
 
+// Em alguns cenários (ex.: banco bloqueando anon por GRANT/RLS), é útil forçar o uso do proxy
+// mesmo em desenvolvimento, apontando para o domínio do deploy (HTTPS).
+const forceProxy = String(import.meta.env.VITE_SUPABASE_FORCE_PROXY || '').toLowerCase() === 'true';
+const customProxyUrl = import.meta.env.VITE_SUPABASE_PROXY_URL || '/api/supabase-proxy';
+
 // URL base - em produção usa o proxy da Vercel
-const SUPABASE_BASE_URL = isDevelopment 
-  ? (import.meta.env.VITE_SUPABASE_URL || 'http://173.249.32.99:54321')
-  : '/api/supabase-proxy'; // Proxy da Vercel em produção
+const useProxy = !isDevelopment || forceProxy;
+const SUPABASE_BASE_URL = useProxy
+  ? customProxyUrl
+  : (import.meta.env.VITE_SUPABASE_URL || 'http://173.249.32.99:54321');
 
 // Adicionar /rest/v1 apenas em desenvolvimento (proxy já inclui)
-const SUPABASE_URL = isDevelopment ? `${SUPABASE_BASE_URL}/rest/v1` : SUPABASE_BASE_URL;
+const SUPABASE_URL = useProxy ? SUPABASE_BASE_URL : `${SUPABASE_BASE_URL}/rest/v1`;
 
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzYwMDE1NTc0LCJleHAiOjIwNzUzNzU1NzR9.zOkNw3Bh2qhDjrOYK8Gptx7Kv_ADs-9x0732M9pLYoQ';
 const SUPABASE_SCHEMA = import.meta.env.VITE_SUPABASE_SCHEMA || 'braspex';
@@ -27,7 +33,7 @@ console.log('🔧 Supabase Client Config:', {
   environment: isDevelopment ? 'development' : 'production',
   baseURL: SUPABASE_URL,
   schema: SUPABASE_SCHEMA,
-  usingProxy: !isDevelopment
+  usingProxy: useProxy
 });
 
 class SupabaseClient {

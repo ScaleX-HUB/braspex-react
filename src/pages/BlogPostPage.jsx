@@ -5,10 +5,13 @@ import { Calendar, User, Tag, ArrowLeft, Share } from 'phosphor-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { getPostBySlug, getRelatedPosts } from '../data/blogData';
+import { useSiteContent } from '../contexts/SiteContentContext';
 
 const BlogPostPage = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const { content } = useSiteContent();
+  const blogPostContent = content.blogPostPage;
   const post = getPostBySlug(slug);
 
   useEffect(() => {
@@ -20,13 +23,13 @@ const BlogPostPage = () => {
       <div className="min-h-screen bg-gray-50">
         <Header />
         <div className="max-w-4xl mx-auto px-6 py-32 text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Artigo não encontrado</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">{blogPostContent?.notFoundTitle || 'Artigo não encontrado'}</h1>
           <button
             onClick={() => navigate('/blog')}
             className="text-[#005563] hover:underline flex items-center gap-2 mx-auto"
           >
             <ArrowLeft className="w-5 h-5" />
-            Voltar para o blog
+            {blogPostContent?.backToBlog || 'Voltar para o blog'}
           </button>
         </div>
         <Footer />
@@ -45,7 +48,7 @@ const BlogPostPage = () => {
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
-      alert('Link copiado para a área de transferência!');
+      alert(blogPostContent?.copyLinkSuccess || 'Link copiado para a área de transferência!');
     }
   };
 
@@ -61,7 +64,7 @@ const BlogPostPage = () => {
             className="flex items-center gap-2 text-gray-200 hover:text-white mb-6 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
-            Voltar para o blog
+            {blogPostContent?.backToBlog || 'Voltar para o blog'}
           </button>
           
           <motion.div
@@ -89,7 +92,7 @@ const BlogPostPage = () => {
                 className="flex items-center gap-2 hover:text-white transition-colors"
               >
                 <Share className="w-5 h-5" />
-                Compartilhar
+                {blogPostContent?.shareLabel || 'Compartilhar'}
               </button>
             </div>
           </motion.div>
@@ -126,7 +129,7 @@ const BlogPostPage = () => {
 
             {/* Keywords */}
             <div className="mt-12 pt-8 border-t border-gray-200">
-              <h3 className="text-sm font-semibold text-gray-500 mb-3">Palavras-chave:</h3>
+              <h3 className="text-sm font-semibold text-gray-500 mb-3">{blogPostContent?.keywordsTitle || 'Palavras-chave:'}</h3>
               <div className="flex flex-wrap gap-2">
                 {post.keywords.map((keyword, index) => (
                   <span
@@ -141,15 +144,15 @@ const BlogPostPage = () => {
 
             {/* CTA */}
             <div className="mt-12 p-6 bg-gradient-to-r from-[#005563] to-[#003840] rounded-xl text-white">
-              <h3 className="text-2xl font-bold mb-3">Precisa de uma solução personalizada?</h3>
+              <h3 className="text-2xl font-bold mb-3">{blogPostContent?.ctaTitle || 'Precisa de uma solução personalizada?'}</h3>
               <p className="text-gray-200 mb-4">
-                Entre em contato com a Braspex e receba uma cotação gratuita para seu projeto.
+                {blogPostContent?.ctaDescription || 'Entre em contato com a Braspex e receba uma cotação gratuita para seu projeto.'}
               </p>
               <a
                 href="/#contato"
                 className="inline-block bg-[#FFD027] text-[#005563] px-6 py-3 rounded-lg font-semibold hover:bg-[#ffd942] transition-all"
               >
-                Solicitar Cotação
+                {blogPostContent?.ctaButton || 'Solicitar Cotação'}
               </a>
             </div>
           </motion.article>
@@ -162,7 +165,7 @@ const BlogPostPage = () => {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="mt-16"
             >
-              <h2 className="text-3xl font-bold text-gray-900 mb-8">Artigos Relacionados</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8">{blogPostContent?.relatedTitle || 'Artigos Relacionados'}</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {relatedPosts.map((relatedPost) => (
                   <a

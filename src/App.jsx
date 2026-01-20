@@ -10,6 +10,7 @@ import QuoteCheckout from './pages/QuoteCheckout';
 import AdminLogin from './pages/AdminLogin';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
+import CatalogsPage from './pages/CatalogsPage';
 import './App.css';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
                 <Route path="/admin" element={<AdminLogin />} />
                 <Route path="/blog" element={<BlogPage />} />
                 <Route path="/blog/:slug" element={<BlogPostPage />} />
+                <Route path="/catalogo-virtual" element={<CatalogsPage />} />
               </Routes>
             </div>
           </Router>
