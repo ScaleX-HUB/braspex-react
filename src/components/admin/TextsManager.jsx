@@ -775,7 +775,7 @@ export default function TextsManager() {
                   rows={12}
                   placeholder="A Braspex é uma empresa inovadora no setor de soluções industrializadas para instalações prediais. Nascida da sólida experiência do Grupo Protogás, atua com excelência na fabricação de kits hidráulicos, de gás e frigorígenos, oferecendo produtos que unem qualidade, padronização e eficiência.
 
-Com um modelo produtivo moderno e altamente controlado, a Braspex garante que suas soluções cheguem prontas para a obra, simplificando as etapas de instalação e reduzindo significativamente prazos, custos e retrabalhos. Cada kit é desenvolvido com tecnologia de ponta e rigor técnico, assegurando desempenho superior e confiabilidade em todas as aplicações.
+Com um modelo produtivo moderno e altamente controlado, a Braspex garante que suas soluções cheguem prontas para a obra, simplificando as etapas de instalação e reduzindo significativamente prazos, custos e retrabalhos. Cada kit é desenvolvido com tecnologia de ponta e rigor técnico, assegurando desempenho superior e confiabilidade.
 
 Mais do que fornecer produtos, a Braspex entrega praticidade, segurança e inovação, contribuindo para a evolução do setor e para o sucesso de cada projeto executado."
                   className="mt-2"
