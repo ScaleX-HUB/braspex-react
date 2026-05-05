@@ -91,13 +91,12 @@ export default async function handler(req, res) {
   const method = (req.method || 'GET').toUpperCase();
   const isWrite = !['GET', 'HEAD', 'OPTIONS'].includes(method);
 
-  // Regra: usar service role SOMENTE para escrita em catálogos e uploads no bucket catalogs.
+  // Regra: usar service role para QUALQUER escrita REST ou storage quando a chave estiver disponível.
   // Isso destrava o admin sem precisar mexer em GRANT/RLS via Studio.
   const allowServiceRole = Boolean(SUPABASE_SERVICE_ROLE_KEY);
-  const isCatalogsWrite = isWrite && pathname.startsWith('/rest/v1/catalogs');
-  const isCatalogsStorageWrite =
-    isWrite && (pathname.startsWith('/storage/v1/object/catalogs/') || pathname === '/storage/v1/object/catalogs');
-  const useServiceRole = allowServiceRole && (isCatalogsWrite || isCatalogsStorageWrite);
+  const isRestWrite = isWrite && pathname.startsWith('/rest/v1/');
+  const isStorageWrite = isWrite && pathname.startsWith('/storage/v1/object/');
+  const useServiceRole = allowServiceRole && (isRestWrite || isStorageWrite);
 
   const clientApiKey = req.headers['apikey'] || '';
   const apiKeyToUse = useServiceRole ? SUPABASE_SERVICE_ROLE_KEY : (clientApiKey || SUPABASE_ANON_KEY);
@@ -117,6 +116,9 @@ export default async function handler(req, res) {
     'Content-Profile': SUPABASE_SCHEMA,
   };
 
+  if (!allowServiceRole && isWrite) {
+    console.warn('⚠️ Proxy: SUPABASE_SERVICE_ROLE_KEY não configurada. Escrita vai usar anon key (pode falhar com 401 se GRANT/RLS bloquearem).');
+  }
   if (useServiceRole) {
     console.log('🔐 Proxy auth: using service role for', method, pathname);
   }
