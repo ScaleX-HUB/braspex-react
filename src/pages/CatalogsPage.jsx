@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { catalogsAPI } from '../services/catalogsAPI';
-import { FileText } from 'phosphor-react';
+import { FileText } from 'lucide-react';
 import { useSiteContent } from '../contexts/SiteContentContext';
 
 const CatalogsPage = () => {
@@ -57,7 +57,7 @@ const CatalogsPage = () => {
         {!loading && !error && catalogs.length === 0 && (
           <div className="bg-white rounded-xl border border-gray-200 p-10 text-center">
             <div className="mx-auto w-16 h-16 rounded-full bg-[#005563]/10 flex items-center justify-center mb-4">
-              <FileText size={32} className="text-[#005563]" weight="bold" />
+              <FileText size={32} className="text-[#005563]" />
             </div>
             <h2 className="text-xl font-bold text-gray-900">{catalogsContent?.emptyTitle || 'Nenhum catálogo publicado'}</h2>
             <p className="text-gray-600 mt-1">

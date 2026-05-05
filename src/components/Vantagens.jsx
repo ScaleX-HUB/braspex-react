@@ -2,12 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   Lock, 
-  Lightning, 
+  Zap, 
   Factory, 
   Target,
-  ArrowRight,
-  Package
-} from 'phosphor-react';
+  ArrowRight
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useSiteContent } from '../contexts/SiteContentContext';
 import { safeJsonParse } from '../lib/safeJson';
@@ -27,7 +26,7 @@ const Vantagens = () => {
       description: "Todos os componentes são rastreáveis e seguros"
     },
     {
-      icon: <Lightning className="w-7 h-7" />,
+      icon: <Zap className="w-7 h-7" />,
       title: "Agilidade",
       description: "Instalação até 3x mais rápida que sistemas convencionais"
     },
@@ -245,9 +244,8 @@ const Vantagens = () => {
             to="/produtos"
             className="inline-flex items-center gap-3 bg-[#005563] text-white font-bold text-lg px-10 py-4 rounded-xl shadow-lg hover:bg-[#003d47] hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
           >
-            <Package size={24} weight="bold" />
             {vantagensContent.ctaText}
-            <ArrowRight size={24} weight="bold" />
+            <ArrowRight size={24} />
           </Link>
         </motion.div>
       </div>

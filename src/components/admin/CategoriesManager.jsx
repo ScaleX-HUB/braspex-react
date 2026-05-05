@@ -1,61 +1,61 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Plus, 
-  PencilSimple, 
-  Trash, 
-  FloppyDisk, 
+  Pencil, 
+  Trash2, 
+  Save, 
   X,
   Tag,
   FolderOpen,
-  ArrowsClockwise,
+  RefreshCw,
   Package,
-  Fire,
-  Lightning,
-  Gear,
+  Flame,
+  Zap,
+  Settings,
   Wrench,
-  Cube,
+  Box,
   Factory,
-  House,
-  Buildings,
+  Home,
+  Building2,
   CheckCircle,
   Star,
   Heart,
   ShoppingCart,
-  Drop,
+  Droplets,
   Droplet,
-  ThermometerHot,
-  ThermometerCold,
+  Thermometer,
   Wind
-} from 'phosphor-react';
+} from 'lucide-react';
 import { categoriesAPI } from '../../services/categoriesAPI';
 import { productCategories } from '../../data/productCategories';
 
 // Mapeamento de ícones disponíveis (todos testados)
 const iconMap = {
   Package,
-  Fire,
-  Lightning,
-  Gear,
+  Flame,
+  Zap,
+  Settings,
   Wrench,
-  Cube,
+  Box,
   Factory,
-  House,
-  Buildings,
+  Home,
+  Building2,
   CheckCircle,
   Star,
   Heart,
   ShoppingCart,
-  Drop,
+  Droplets,
   Droplet,
-  ThermometerHot,
-  ThermometerCold,
+  Thermometer,
   Wind
 };
 
 // Função para renderizar ícone
-const renderIcon = (iconName, size = 24, weight = 'bold') => {
-  const IconComponent = iconMap[iconName] || Package;
-  return <IconComponent size={size} weight={weight} />;
+const renderIcon = (iconName, size = 24) => {
+  const nameMap = { Fire: 'Flame', Lightning: 'Zap', Gear: 'Settings', Cube: 'Box', Drop: 'Droplets', House: 'Home', Buildings: 'Building2', ThermometerHot: 'Thermometer', ThermometerCold: 'Thermometer' };
+  const lucideName = nameMap[iconName] || iconName;
+  const IconComponent = iconMap[lucideName] || Package;
+  return <IconComponent size={size} />;
 };
 
 // Funções de gerenciamento de categorias com Supabase
@@ -346,7 +346,7 @@ const CategoriesManager = () => {
             onClick={() => setIsEditing(false)}
             className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
           >
-            <X size={24} weight="bold" />
+            <X size={24} />
           </button>
         </div>
 
@@ -482,7 +482,7 @@ const CategoriesManager = () => {
           {/* Subcategorias */}
           <div className="border-t pt-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <FolderOpen size={20} weight="bold" />
+              <FolderOpen size={20} />
               Subcategorias
             </h3>
 
@@ -499,7 +499,7 @@ const CategoriesManager = () => {
                       onClick={() => handleRemoveSubcategory(index)}
                       className="p-1 text-red-600 hover:text-red-700 transition-colors"
                     >
-                      <Trash size={18} weight="bold" />
+                      <Trash2 size={18} />
                     </button>
                   </div>
                 ))}
@@ -528,7 +528,7 @@ const CategoriesManager = () => {
               onClick={handleAddSubcategory}
               className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
             >
-              <Plus size={20} weight="bold" />
+              <Plus size={20} />
               Adicionar Subcategoria
             </button>
           </div>
@@ -540,7 +540,7 @@ const CategoriesManager = () => {
               onClick={handleSaveCategory}
               className="flex-1 px-6 py-3 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center justify-center gap-2 font-semibold"
             >
-              <FloppyDisk size={20} weight="bold" />
+              <Save size={20} />
               Salvar Categoria
             </button>
             <button
@@ -563,7 +563,7 @@ const CategoriesManager = () => {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Tag size={28} weight="bold" className="text-[#005563]" />
+              <Tag size={28} className="text-[#005563]" />
               Gerenciar Categorias
             </h2>
             <p className="text-gray-600 mt-1">
@@ -576,7 +576,7 @@ const CategoriesManager = () => {
               onClick={handleRestoreDefaults}
               className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2"
             >
-              <ArrowsClockwise size={20} weight="bold" />
+              <RefreshCw size={20} />
               Restaurar Padrão
             </button>
             <button
@@ -587,7 +587,7 @@ const CategoriesManager = () => {
               }}
               className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
             >
-              <Plus size={20} weight="bold" />
+              <Plus size={20} />
               Nova Categoria
             </button>
           </div>
@@ -640,7 +640,7 @@ const CategoriesManager = () => {
                   }}
                   className="flex-1 px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center justify-center gap-2"
                 >
-                  <PencilSimple size={18} weight="bold" />
+                  <Pencil size={18} />
                   Editar
                 </button>
                 <button
@@ -651,7 +651,7 @@ const CategoriesManager = () => {
                   }}
                   className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
                 >
-                  <Trash size={18} weight="bold" />
+                  <Trash2 size={18} />
                 </button>
               </div>
             </div>
@@ -661,13 +661,13 @@ const CategoriesManager = () => {
 
       {categoriesArray.length === 0 && (
         <div className="bg-white rounded-xl shadow-md border border-gray-200 p-12 text-center">
-          <Tag size={48} weight="light" className="text-gray-300 mx-auto mb-4" />
+          <Tag size={48} className="text-gray-300 mx-auto mb-4" />
           <p className="text-gray-500 text-lg mb-4">Nenhuma categoria cadastrada</p>
           <button
             onClick={handleNewCategory}
             className="px-6 py-3 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors inline-flex items-center gap-2"
           >
-            <Plus size={20} weight="bold" />
+            <Plus size={20} />
             Criar Primeira Categoria
           </button>
         </div>

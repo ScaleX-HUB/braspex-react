@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 
-  ChartBar, 
-  Article, 
+  BarChart2, 
+  Newspaper, 
   Users, 
   Package, 
   FileText,
-  Gear, 
-  TextAlignLeft,
-  ArrowsDownUp,
+  Settings, 
+  AlignLeft,
+  ArrowUpDown,
   Database,
   Tag,
-  EnvelopeSimple
-} from 'phosphor-react';
+  Mail
+} from 'lucide-react';
 import logoBraspex from '../assets/logo-braspex.png';
 
 // Importar componentes modulares
@@ -38,34 +38,34 @@ const AdminPanel = () => {
     {
       id: 'page-management',
       name: 'Página Principal',
-      icon: <TextAlignLeft size={24} weight="bold" />,
+      icon: <AlignLeft size={24} />,
       subsections: [
-        { id: 'section-order', name: 'Ordem das Seções', icon: <ArrowsDownUp size={20} /> },
-        { id: 'hero-edit', name: 'Editar Textos', icon: <TextAlignLeft size={20} /> }
+        { id: 'section-order', name: 'Ordem das Seções', icon: <ArrowUpDown size={20} /> },
+        { id: 'hero-edit', name: 'Editar Textos', icon: <AlignLeft size={20} /> }
       ]
     },
     {
       id: 'blog',
       name: 'Blog',
-      icon: <Article size={24} weight="bold" />,
+      icon: <Newspaper size={24} />,
       subsections: []
     },
     {
       id: 'clients',
       name: 'Clientes',
-      icon: <Users size={24} weight="bold" />,
+      icon: <Users size={24} />,
       subsections: []
     },
     {
       id: 'quotes',
       name: 'Cotações',
-      icon: <EnvelopeSimple size={24} weight="bold" />,
+      icon: <Mail size={24} />,
       subsections: []
     },
     {
       id: 'products',
       name: 'Produtos',
-      icon: <Package size={24} weight="bold" />,
+      icon: <Package size={24} />,
       subsections: [
         { id: 'products-list', name: 'Gerenciar Produtos', icon: <Package size={20} /> },
         { id: 'categories', name: 'Categorias', icon: <Tag size={20} /> }
@@ -74,15 +74,15 @@ const AdminPanel = () => {
     {
       id: 'catalogs',
       name: 'Catálogos',
-      icon: <FileText size={24} weight="bold" />,
+      icon: <FileText size={24} />,
       subsections: []
     },
     {
       id: 'admin',
       name: 'Admin',
-      icon: <Gear size={24} weight="bold" />,
+      icon: <Settings size={24} />,
       subsections: [
-        { id: 'analytics', name: 'Analytics', icon: <ChartBar size={20} /> },
+        { id: 'analytics', name: 'Analytics', icon: <BarChart2 size={20} /> },
         { id: 'supabase-test', name: 'Teste Supabase', icon: <Database size={20} /> }
       ]
     }

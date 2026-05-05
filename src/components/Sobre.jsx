@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle, Sparkle, Target, Lightbulb } from 'phosphor-react';
+import { CheckCircle, Sparkles, Target, Lightbulb } from 'lucide-react';
 import { useSiteContent } from '../contexts/SiteContentContext';
 import { safeJsonParse } from '../lib/safeJson';
 
@@ -10,22 +10,22 @@ const Sobre = () => {
 
   const defaultDifferentials = [
     {
-      icon: <CheckCircle className="w-6 h-6 text-[#FFD027]" weight="bold" />,
+      icon: <CheckCircle className="w-6 h-6 text-[#FFD027]" strokeWidth={2.5} />,
       title: 'Qualidade Certificada',
       description: 'Produtos desenvolvidos com tecnologia de ponta e rigor técnico, garantindo desempenho superior.'
     },
     {
-      icon: <Target className="w-6 h-6 text-[#FFD027]" weight="bold" />,
+      icon: <Target className="w-6 h-6 text-[#FFD027]" strokeWidth={2.5} />,
       title: 'Eficiência Garantida',
       description: 'Soluções prontas para obra que reduzem prazos, custos e retrabalhos significativamente.'
     },
     {
-      icon: <Lightbulb className="w-6 h-6 text-[#FFD027]" weight="bold" />,
+      icon: <Lightbulb className="w-6 h-6 text-[#FFD027]" strokeWidth={2.5} />,
       title: 'Inovação Constante',
       description: 'Modelo produtivo moderno e altamente controlado, sempre buscando evoluir e inovar.'
     },
     {
-      icon: <Sparkle className="w-6 h-6 text-[#FFD027]" weight="bold" />,
+      icon: <Sparkles className="w-6 h-6 text-[#FFD027]" strokeWidth={2.5} />,
       title: 'Experiência Sólida',
       description: 'Respaldados pela expertise do Grupo Protogás, líder no segmento de instalações de gás.'
     }

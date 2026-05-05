@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { X, ShoppingCart, Check, Package } from 'phosphor-react';
+import { X, ShoppingCart, Check, Package } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import { useSiteContent } from '../contexts/SiteContentContext';
@@ -154,7 +154,7 @@ const QuoteCheckout = () => {
             className="bg-white rounded-2xl shadow-lg p-12 text-center"
           >
             <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Check size={48} className="text-white" weight="bold" />
+              <Check size={48} className="text-white" />
             </div>
             <h2 className="text-3xl font-bold text-slate-900 mb-4">
               {quoteContent?.successTitle || 'Orçamento Enviado com Sucesso!'}
@@ -231,7 +231,7 @@ const QuoteCheckout = () => {
                         type="button"
                         className="text-red-500 hover:text-red-700"
                       >
-                        <X size={24} weight="bold" />
+                        <X size={24} />
                       </button>
                     </div>
                   </div>
@@ -502,7 +502,7 @@ const QuoteCheckout = () => {
                     <>{quoteContent?.submittingText || 'Enviando...'}</>
                   ) : (
                     <>
-                      <Package size={24} weight="bold" />
+                      <Package size={24} />
                       {quoteContent?.submitButtonText || 'Enviar Orçamento'}
                     </>
                   )}

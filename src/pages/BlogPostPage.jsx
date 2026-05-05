@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Calendar, User, Tag, ArrowLeft, Share } from 'phosphor-react';
+import { Calendar, User, Tag, ArrowLeft, Share2 } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { getPostBySlug, getRelatedPosts } from '../data/blogData';
@@ -17,6 +17,14 @@ const BlogPostPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [slug]);
+
+  useEffect(() => {
+    if (post) {
+      document.title = `${post.title} | Blog Braspex`;
+      const meta = document.querySelector('meta[name="description"]');
+      if (meta) meta.setAttribute('content', post.excerpt || 'Artigo técnico sobre sistemas hidráulicos da Braspex.');
+    }
+  }, [post]);
 
   if (!post) {
     return (
@@ -91,7 +99,7 @@ const BlogPostPage = () => {
                 onClick={handleShare}
                 className="flex items-center gap-2 hover:text-white transition-colors"
               >
-                <Share className="w-5 h-5" />
+                <Share2 className="w-5 h-5" />
                 {blogPostContent?.shareLabel || 'Compartilhar'}
               </button>
             </div>

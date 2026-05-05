@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ShoppingCart, Check, X } from 'phosphor-react';
+import { ArrowLeft, ShoppingCart, Check, X } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useCart } from '../contexts/CartContext';
@@ -27,6 +27,7 @@ const ProductDetailPage = () => {
       const prod = await getProductById(id);
       setProduct(prod);
       setLoading(false);
+      if (prod) document.title = `${prod.name} | Braspex`;
     };
     loadProduct();
   }, [id]);
@@ -212,7 +213,7 @@ const ProductDetailPage = () => {
                 >
                   {isInCart(product.id) ? (
                     <span className="flex items-center justify-center gap-2">
-                      <Check size={24} weight="bold" />
+                      <Check size={24} />
                       {productDetailContent?.inCart || 'No Carrinho'}
                     </span>
                   ) : (
@@ -254,7 +255,7 @@ const ProductDetailPage = () => {
                   <ul className="space-y-2">
                     {product.includes.map((item, index) => (
                       <li key={index} className="flex items-start gap-3">
-                        <Check size={20} weight="bold" className="text-[#FFD027] mt-0.5 flex-shrink-0" />
+                        <Check size={20} className="text-[#FFD027] mt-0.5 flex-shrink-0" />
                         <span className="text-sm">{item}</span>
                       </li>
                     ))}
@@ -276,7 +277,7 @@ const ProductDetailPage = () => {
             onClick={() => setImageModalOpen(false)}
             className="absolute top-4 right-4 text-white hover:text-[#FFD027] transition-colors"
           >
-            <X size={32} weight="bold" />
+            <X size={32} />
           </button>
           <img 
             src={productImages[selectedImage]} 

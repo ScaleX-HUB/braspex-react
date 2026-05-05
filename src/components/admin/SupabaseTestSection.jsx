@@ -2,7 +2,7 @@
 import { supabase } from '../../lib/supabaseClient';
 import { productsAPI } from '../../services/productsAPI';
 import { textsAPI } from '../../services/textsAPI';
-import { Database, CheckCircle, XCircle, Package, Article } from 'phosphor-react';
+import { Database, CheckCircle, XCircle, Package, Newspaper } from 'lucide-react';
 
 const SupabaseTestSection = () => {
   const [tests, setTests] = useState({ products: null, texts: null, connection: null });
@@ -81,7 +81,7 @@ const SupabaseTestSection = () => {
           </div>
           <div className={'rounded-xl p-6 border-2 ' + (tests.connection.status === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200')}>
             <div className="flex items-center gap-3">
-              {tests.connection.status === 'success' ? <CheckCircle className="w-8 h-8 text-green-600" weight="fill" /> : <XCircle className="w-8 h-8 text-red-600" weight="fill" />}
+              {tests.connection.status === 'success' ? <CheckCircle className="w-8 h-8 text-green-600" /> : <XCircle className="w-8 h-8 text-red-600" />}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">{tests.connection.status === 'success' ? ' Conexão OK' : ' Conexão com Problemas'}</h3>
                 <p className="text-sm text-gray-700">{tests.connection.message}</p>
@@ -94,7 +94,7 @@ const SupabaseTestSection = () => {
         {tests.products && (
           <div className={'rounded-lg p-6 border-2 ' + (tests.products.status === 'success' ? 'bg-green-50 border-green-300' : 'bg-red-50 border-red-300')}>
             <div className="flex items-center gap-2 mb-3">
-              {tests.products.status === 'success' ? <CheckCircle className="w-6 h-6 text-green-600" weight="fill" /> : <XCircle className="w-6 h-6 text-red-600" weight="fill" />}
+              {tests.products.status === 'success' ? <CheckCircle className="w-6 h-6 text-green-600" /> : <XCircle className="w-6 h-6 text-red-600" />}
               <h4 className="font-semibold text-gray-900 flex items-center gap-2"><Package className="w-5 h-5" />Produtos</h4>
             </div>
             <p className="text-sm text-gray-700 mb-1">{tests.products.message}</p>
@@ -117,8 +117,8 @@ const SupabaseTestSection = () => {
         {tests.texts && (
           <div className={'rounded-lg p-6 border-2 ' + (tests.texts.status === 'success' ? 'bg-green-50 border-green-300' : 'bg-red-50 border-red-300')}>
             <div className="flex items-center gap-2 mb-3">
-              {tests.texts.status === 'success' ? <CheckCircle className="w-6 h-6 text-green-600" weight="fill" /> : <XCircle className="w-6 h-6 text-red-600" weight="fill" />}
-              <h4 className="font-semibold text-gray-900 flex items-center gap-2"><Article className="w-5 h-5" />Textos do Site</h4>
+              {tests.texts.status === 'success' ? <CheckCircle className="w-6 h-6 text-green-600" /> : <XCircle className="w-6 h-6 text-red-600" />}
+              <h4 className="font-semibold text-gray-900 flex items-center gap-2"><Newspaper className="w-5 h-5" />Textos do Site</h4>
             </div>
             <p className="text-sm text-gray-700 mb-1">{tests.texts.message}</p>
             <p className="text-xs text-gray-500 mb-3">Tempo: {tests.texts.time}ms</p>

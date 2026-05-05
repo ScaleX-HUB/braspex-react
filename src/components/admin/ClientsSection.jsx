@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, MagnifyingGlass, Download, Envelope, Phone, MapPin, Package, Calendar } from 'phosphor-react';
+import { Users, Search, Download, Mail, Phone, MapPin, Package, Calendar } from 'lucide-react';
 
 const ClientsSection = () => {
   const [clients, setClients] = useState([]);
@@ -119,7 +119,7 @@ const ClientsSection = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-            <Users size={32} weight="bold" />
+            <Users size={32} />
             Clientes Cadastrados
           </h2>
           <p className="text-gray-600 mt-1">
@@ -130,7 +130,7 @@ const ClientsSection = () => {
           onClick={exportToCSV}
           className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
         >
-          <Download size={20} weight="bold" />
+          <Download size={20} />
           Exportar CSV
         </button>
       </div>
@@ -140,7 +140,7 @@ const ClientsSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Busca */}
           <div className="relative">
-            <MagnifyingGlass
+            <Search
               size={20}
               className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
             />
@@ -187,7 +187,7 @@ const ClientsSection = () => {
                   
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Envelope size={16} className="flex-shrink-0" />
+                      <Mail size={16} className="flex-shrink-0" />
                       <a href={`mailto:${client.email}`} className="hover:text-[#005563]">
                         {client.email}
                       </a>

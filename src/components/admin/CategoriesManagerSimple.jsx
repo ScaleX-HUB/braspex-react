@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, PencilSimple, Trash, X, Package, Fire, Lightning, Gear, Cube, Warning, Drop } from 'phosphor-react';
+﻿import React, { useState, useEffect } from 'react';
+import { Plus, Pencil, Trash2, X, Package, Flame, Zap, Settings, Box, AlertTriangle, Droplets } from 'lucide-react';
 import { categoriesAPI } from '../../services/categoriesAPI';
 
 // Ícones disponíveis
-const iconMap = { Package, Fire, Lightning, Gear, Cube, Drop };
+const iconMap = { Package, Flame, Zap, Settings, Box, Droplets };
 
 // Categorias padrão como fallback
 const DEFAULT_CATEGORIES = [
@@ -21,7 +21,7 @@ const DEFAULT_CATEGORIES = [
     id: 'gas',
     name: 'gas',
     display_name: 'Gás',
-    icon: 'Fire',
+    icon: 'Flame',
     color: '#FF6B00',
     subcategories: [],
     active: true,
@@ -31,7 +31,7 @@ const DEFAULT_CATEGORIES = [
     id: 'kit',
     name: 'kit',
     display_name: 'Kits',
-    icon: 'Cube',
+    icon: 'Box',
     color: '#FFD027',
     subcategories: [],
     active: true,
@@ -41,7 +41,7 @@ const DEFAULT_CATEGORIES = [
     id: 'polvo',
     name: 'polvo',
     display_name: 'Polvo',
-    icon: 'Lightning',
+    icon: 'Zap',
     color: '#00A86B',
     subcategories: [],
     active: true,
@@ -51,7 +51,7 @@ const DEFAULT_CATEGORIES = [
     id: 'outros',
     name: 'outros',
     display_name: 'Outros',
-    icon: 'Gear',
+    icon: 'Settings',
     color: '#6B7280',
     subcategories: [],
     active: true,
@@ -253,7 +253,7 @@ const CategoriesManager = () => {
         {/* Alert de erro */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-            <Warning size={24} className="text-red-600 flex-shrink-0 mt-0.5" />
+            <AlertTriangle size={24} className="text-red-600 flex-shrink-0 mt-0.5" />
             <div>
               <h3 className="font-semibold text-red-800 mb-1">Erro ao salvar</h3>
               <p className="text-sm text-red-700">{error}</p>
@@ -288,14 +288,14 @@ const CategoriesManager = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563]"
               >
                 <option value="Package">Package (Pacote)</option>
-                <option value="Fire">Fire (Fogo)</option>
-                <option value="Lightning">Lightning (Raio)</option>
-                <option value="Gear">Gear (Engrenagem)</option>
-                <option value="Cube">Cube (Cubo)</option>
-                <option value="Drop">Drop (Água)</option>
+                <option value="Flame">Flame (Fogo)</option>
+                <option value="Zap">Zap (Raio)</option>
+                <option value="Settings">Settings (Engrenagem)</option>
+                <option value="Box">Box (Cubo)</option>
+                <option value="Droplets">Droplets (Água)</option>
               </select>
               <div className="mt-2 flex items-center gap-2 text-sm text-gray-600">
-                <IconComponent size={24} weight="bold" />
+                <IconComponent size={24} />
                 Preview do ícone
               </div>
             </div>
@@ -323,7 +323,7 @@ const CategoriesManager = () => {
                 onClick={handleAddSubcategory}
                 className="text-sm text-[#005563] hover:underline flex items-center gap-1"
               >
-                <Plus size={16} weight="bold" />
+                <Plus size={16} />
                 Adicionar Subcategoria
               </button>
             </div>
@@ -341,7 +341,7 @@ const CategoriesManager = () => {
                   onClick={() => handleRemoveSubcategory(index)}
                   className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
                 >
-                  <Trash size={20} weight="bold" />
+                  <Trash2 size={20} />
                 </button>
               </div>
             ))}
@@ -408,7 +408,7 @@ const CategoriesManager = () => {
           className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           title={!isOnline ? 'Não disponível no modo offline' : ''}
         >
-          <Plus size={20} weight="bold" />
+          <Plus size={20} />
           Nova Categoria
         </button>
       </div>
@@ -438,7 +438,7 @@ const CategoriesManager = () => {
                           className="w-12 h-12 rounded-lg flex items-center justify-center text-white"
                           style={{ backgroundColor: category.color }}
                         >
-                          <Icon size={24} weight="bold" />
+                          <Icon size={24} />
                         </div>
                         <div>
                           <h3 className="font-bold text-gray-800">{category.display_name}</h3>
@@ -469,7 +469,7 @@ const CategoriesManager = () => {
                         className="flex-1 px-3 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         title={!isOnline ? 'Não disponível no modo offline' : ''}
                       >
-                        <PencilSimple size={18} weight="bold" />
+                        <Pencil size={18} />
                         Editar
                       </button>
                       <button
@@ -478,7 +478,7 @@ const CategoriesManager = () => {
                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
                         title={!isOnline ? 'Não disponível no modo offline' : ''}
                       >
-                        <Trash size={20} weight="bold" />
+                        <Trash2 size={20} />
                       </button>
                     </div>
                   </div>

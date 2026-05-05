@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Package, Plus, PencilSimple, Trash, Eye, Upload, Image as ImageIcon, CurrencyCircleDollar, ArrowsClockwise } from 'phosphor-react';
+import { Package, Plus, Pencil, Trash2, Eye, Upload, Image as ImageIcon, DollarSign, RefreshCw } from 'lucide-react';
 import { productsAPI } from '../../services/productsAPI';
 import { loadCategories, useCategoriesSync } from '../../data/productsUtils';
 
@@ -247,7 +247,7 @@ const ProductsManager = () => {
               onClick={handleSave}
               className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
             >
-              <Plus size={20} weight="bold" />
+              <Plus size={20} />
               {currentProduct ? 'Atualizar Produto' : 'Criar Produto'}
             </button>
           </div>
@@ -375,7 +375,7 @@ const ProductsManager = () => {
           {/* Preço (Opcional) */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-              <CurrencyCircleDollar size={20} />
+              <DollarSign size={20} />
               Preço (Opcional)
             </label>
             <input
@@ -522,7 +522,7 @@ const ProductsManager = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-            <Package size={32} weight="bold" />
+            <Package size={32} />
             Gerenciar Produtos
           </h2>
           <p className="text-gray-600 mt-1">
@@ -533,7 +533,7 @@ const ProductsManager = () => {
           onClick={handleNewProduct}
           className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
         >
-          <Plus size={20} weight="bold" />
+          <Plus size={20} />
           Novo Produto
         </button>
       </div>
@@ -648,14 +648,14 @@ const ProductsManager = () => {
                     onClick={() => handleEditProduct(product)}
                     className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
                   >
-                    <PencilSimple size={16} />
+                    <Pencil size={16} />
                     Editar
                   </button>
                   <button
                     onClick={() => handleDeleteProduct(product.id)}
                     className="px-3 py-2 bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors"
                   >
-                    <Trash size={16} />
+                    <Trash2 size={16} />
                   </button>
                 </div>
               </div>

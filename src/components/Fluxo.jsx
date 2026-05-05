@@ -4,12 +4,12 @@ import { useSiteContent } from '../contexts/SiteContentContext';
 import { safeJsonParse } from '../lib/safeJson';
 import { 
   FileText, 
-  Gear, 
+  Settings, 
   Factory, 
   CheckCircle, 
   Truck, 
   Wrench 
-} from 'phosphor-react';
+} from 'lucide-react';
 
 const Fluxo = () => {
   const { content } = useSiteContent();
@@ -109,7 +109,7 @@ const Fluxo = () => {
 
   const iconById = {
     1: <FileText className="w-7 h-7" />,
-    2: <Gear className="w-7 h-7" />,
+    2: <Settings className="w-7 h-7" />,
     3: <Factory className="w-7 h-7" />,
     4: <CheckCircle className="w-7 h-7" />,
     5: <Truck className="w-7 h-7" />,

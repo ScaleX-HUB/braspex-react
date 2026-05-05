@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Article, Plus, PencilSimple, Trash, Eye, CalendarBlank, User } from 'phosphor-react';
+import { Newspaper, Plus, Pencil, Trash2, Eye, Calendar, User } from 'lucide-react';
 import { blogPosts } from '../../data/blogData';
 
 const BlogManager = () => {
@@ -115,7 +115,7 @@ const BlogManager = () => {
               onClick={handleSave}
               className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
             >
-              <Plus size={20} weight="bold" />
+              <Plus size={20} />
               {currentPost ? 'Atualizar Post' : 'Criar Post'}
             </button>
           </div>
@@ -259,7 +259,7 @@ const BlogManager = () => {
           onClick={handleNewPost}
           className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
         >
-          <Plus size={20} weight="bold" />
+          <Plus size={20} />
           Novo Post
         </button>
       </div>
@@ -320,7 +320,7 @@ const BlogManager = () => {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <CalendarBlank size={16} />
+                      <Calendar size={16} />
                       {new Date(post.date).toLocaleDateString('pt-BR')}
                     </div>
                   </td>
@@ -340,14 +340,14 @@ const BlogManager = () => {
                         className="p-2 text-gray-600 hover:bg-gray-100 rounded transition-colors"
                         title="Editar"
                       >
-                        <PencilSimple size={20} />
+                        <Pencil size={20} />
                       </button>
                       <button
                         onClick={() => handleDeletePost(post.slug)}
                         className="p-2 text-red-600 hover:bg-red-50 rounded transition-colors"
                         title="Excluir"
                       >
-                        <Trash size={20} />
+                        <Trash2 size={20} />
                       </button>
                     </div>
                   </td>

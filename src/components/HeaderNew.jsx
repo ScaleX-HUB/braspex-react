@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { List, X, CaretDown, ShoppingCart, House, Info, Package, FlowArrow, AddressBook, Article } from 'phosphor-react';
+﻿import React, { useState, useEffect } from 'react';
+import { Menu, X, ChevronDown, ShoppingCart, Home, Info, Package, Workflow, BookUser, Newspaper } from 'lucide-react';
 import { useLocation, Link } from 'react-router-dom';
 import logoBraspex from '../assets/logo-braspex.png';
 import logoBraspexBranca from '../assets/logo-branca-braspex.png';
@@ -7,8 +7,8 @@ import { useCart } from '../contexts/CartContext';
 import { loadCategories, useCategoriesSync } from '../data/productsUtils';
 import CartDrawer from './CartDrawer';
 
-// Mapeamento de ícones disponíveis
-import * as PhosphorIcons from 'phosphor-react';
+// Mapeamento de ícones disponíveis (lucide-react)
+import * as LucideIcons from 'lucide-react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -97,14 +97,17 @@ const Header = () => {
   };
 
   // Função para renderizar ícone dinamicamente
-  const renderIcon = (iconName, size = 24, weight = "regular") => {
-    if (!iconName) return <Package size={size} weight={weight} />;
+  const renderIcon = (iconName, size = 24) => {
+    if (!iconName) return <Package size={size} />;
     
-    const IconComponent = PhosphorIcons[iconName];
+    // Mapear nomes do phosphor para lucide quando divergem
+    const nameMap = { Fire: 'Flame', Lightning: 'Zap', Drop: 'Droplets', Gear: 'Settings', Cube: 'Box' };
+    const lucideName = nameMap[iconName] || iconName;
+    const IconComponent = LucideIcons[lucideName];
     if (IconComponent) {
-      return <IconComponent size={size} weight={weight} />;
+      return <IconComponent size={size} />;
     }
-    return <Package size={size} weight={weight} />;
+    return <Package size={size} />;
   };
 
   const categoriesArray = Object.values(categories);
@@ -126,7 +129,7 @@ const Header = () => {
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-8">
               <a href="/" className={`font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}>
-                <House size={20} weight="bold" />
+                <Home size={20} />
                 Home
               </a>
 
@@ -134,7 +137,7 @@ const Header = () => {
                 onClick={() => window.location.href = '/#sobre'}
                 className={`font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
               >
-                <Info size={20} weight="bold" />
+                <Info size={20} />
                 Quem Somos
               </button>
 
@@ -147,9 +150,9 @@ const Header = () => {
                 <button 
                   className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
                 >
-                  <Package size={18} weight="bold" />
+                  <Package size={18} />
                   Produtos
-                  <CaretDown size={14} weight="bold" className={`transition-transform ${isProductsOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown size={14} className={`transition-transform ${isProductsOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {/* Mega Menu Dropdown */}
@@ -205,7 +208,7 @@ const Header = () => {
                           className="group p-4 rounded-lg bg-[#005563] hover:bg-[#004450] transition-all flex items-center justify-center"
                         >
                           <div className="text-center text-white">
-                            <Package size={32} weight="bold" className="mx-auto mb-2" />
+                            <Package size={32} className="mx-auto mb-2" />
                             <div className="font-bold">Ver Todos</div>
                             <div className="text-xs opacity-90">os Produtos</div>
                           </div>
@@ -220,7 +223,7 @@ const Header = () => {
                 onClick={() => window.location.href = '/#fluxo'}
                 className={`font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
               >
-                <FlowArrow size={20} weight="bold" />
+                <Workflow size={20} />
                 Como Funciona
               </button>
 
@@ -228,12 +231,12 @@ const Header = () => {
                 onClick={() => window.location.href = '/#contato'}
                 className={`font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
               >
-                <AddressBook size={20} weight="bold" />
+                <BookUser size={20} />
                 Contato
               </button>
 
               <a href="/blog" className={`font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}>
-                <Article size={20} weight="bold" />
+                <Newspaper size={20} />
                 Blog
               </a>
 
@@ -242,7 +245,7 @@ const Header = () => {
                 onClick={() => setIsCartOpen(true)}
                 className="relative p-2 rounded-full bg-[#FFD027] hover:bg-[#FFB800] transition-colors"
               >
-                <ShoppingCart size={24} weight="bold" className="text-[#005563]" />
+                <ShoppingCart size={24} className="text-[#005563]" />
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                     {cartCount}
@@ -257,7 +260,7 @@ const Header = () => {
                 onClick={() => setIsCartOpen(true)}
                 className="relative p-2 rounded-full bg-[#FFD027] hover:bg-[#FFB800] transition-colors"
               >
-                <ShoppingCart size={20} weight="bold" className="text-[#005563]" />
+                <ShoppingCart size={20} className="text-[#005563]" />
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[10px]">
                     {cartCount}
@@ -270,9 +273,9 @@ const Header = () => {
                 className={`p-2 rounded-lg transition-colors ${textColorClass}`}
               >
                 {isMenuOpen ? (
-                  <X size={28} weight="bold" />
+                  <X size={28} />
                 ) : (
-                  <List size={28} weight="bold" />
+                  <List size={28} />
                 )}
               </button>
             </div>
@@ -297,7 +300,7 @@ const Header = () => {
                   className="flex items-center justify-between w-full py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors"
                 >
                   Produtos
-                  <CaretDown size={16} weight="bold" className={`transition-transform ${isProductsOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown size={16} className={`transition-transform ${isProductsOpen ? 'rotate-180' : ''}`} />
                 </button>
                 
                 {isProductsOpen && (
@@ -320,7 +323,7 @@ const Header = () => {
                       onClick={closeMenu}
                       className="flex items-center gap-3 py-2 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors"
                     >
-                      <Package size={20} weight="bold" />
+                      <Package size={20} />
                       Ver Todos os Produtos
                     </Link>
                   </div>

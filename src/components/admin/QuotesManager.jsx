@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  EnvelopeSimple, 
+  Mail, 
   Phone, 
   User, 
   MapPin, 
@@ -8,14 +8,14 @@ import {
   Clock,
   ShoppingCart,
   Package,
-  Trash,
+  Trash2,
   CheckCircle,
   XCircle,
-  ChatCircle,
-  Funnel,
-  MagnifyingGlass,
+  MessageCircle,
+  Filter,
+  Search,
   Download
-} from 'phosphor-react';
+} from 'lucide-react';
 import { loadQuotes, updateQuoteStatus, deleteQuote, useQuotesSync, getQuotesStats } from '../../data/quotesUtils';
 import { addClient, findClientByEmail } from '../../data/clientsUtils';
 
@@ -186,7 +186,7 @@ const QuotesManager = () => {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <EnvelopeSimple size={28} weight="bold" className="text-[#005563]" />
+              <Mail size={28} className="text-[#005563]" />
               Cotações Recebidas
             </h2>
             <p className="text-gray-600 mt-1">
@@ -197,7 +197,7 @@ const QuotesManager = () => {
             onClick={exportToCSV}
             className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
           >
-            <Download size={20} weight="bold" />
+            <Download size={20} />
             Exportar CSV
           </button>
         </div>
@@ -241,7 +241,7 @@ const QuotesManager = () => {
           {/* Busca */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              <MagnifyingGlass size={16} weight="bold" className="inline mr-1" />
+              <Search size={16} className="inline mr-1" />
               Buscar
             </label>
             <input
@@ -256,7 +256,7 @@ const QuotesManager = () => {
           {/* Filtro de Status */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              <Funnel size={16} weight="bold" className="inline mr-1" />
+              <Filter size={16} className="inline mr-1" />
               Filtrar por Status
             </label>
             <select
@@ -278,7 +278,7 @@ const QuotesManager = () => {
       <div className="space-y-4">
         {filteredQuotes.length === 0 ? (
           <div className="bg-white rounded-xl shadow-md border border-gray-200 p-12 text-center">
-            <EnvelopeSimple size={48} weight="light" className="text-gray-300 mx-auto mb-4" />
+            <Mail size={48} className="text-gray-300 mx-auto mb-4" />
             <p className="text-gray-500 text-lg">
               {quotes.length === 0 ? 'Nenhuma cotação recebida ainda' : 'Nenhuma cotação encontrada com os filtros aplicados'}
             </p>
@@ -319,7 +319,7 @@ const QuotesManager = () => {
                     onClick={() => handleDelete(quote.id)}
                     className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                   >
-                    <Trash size={20} weight="bold" />
+                    <Trash2 size={20} />
                   </button>
                 </div>
               </div>
@@ -327,7 +327,7 @@ const QuotesManager = () => {
               {/* Informações do Cliente */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                 <div className="flex items-center gap-2">
-                  <EnvelopeSimple size={18} className="text-[#005563]" />
+                  <Mail size={18} className="text-[#005563]" />
                   <div>
                     <div className="text-xs text-gray-500">Email</div>
                     <a href={`mailto:${quote.customer?.email}`} className="text-sm font-medium text-[#005563] hover:underline">
@@ -373,7 +373,7 @@ const QuotesManager = () => {
               {quote.items && quote.items.length > 0 && (
                 <div className="mb-4">
                   <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                    <ShoppingCart size={16} weight="bold" />
+                    <ShoppingCart size={16} />
                     Produtos Solicitados ({quote.items.length})
                   </h4>
                   <div className="bg-gray-50 rounded-lg p-3">
@@ -393,7 +393,7 @@ const QuotesManager = () => {
               {quote.customer?.message && (
                 <div>
                   <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                    <ChatCircle size={16} weight="bold" />
+                    <MessageCircle size={16} />
                     Mensagem
                   </h4>
                   <div className="bg-gray-50 rounded-lg p-3">

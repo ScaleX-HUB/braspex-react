@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   User,
   Plus,
   X,
-  FloppyDisk,
-  Trash,
-  PencilSimple,
-  EnvelopeSimple,
+  Save,
+  Trash2,
+  Pencil,
+  Mail,
   Phone,
   MapPin,
-  Buildings,
+  Building2,
   Calendar,
-  ChartBar,
-  FunnelSimple,
-  Gear
-} from 'phosphor-react';
+  BarChart2,
+  Filter,
+  Settings
+} from 'lucide-react';
 import { 
   loadClients, 
   saveClients, 
@@ -34,8 +34,8 @@ const ClientsKanban = () => {
   const [isEditingKanban, setIsEditingKanban] = useState(false);
   const [kanbanStages, setKanbanStages] = useState([
     { id: 'new', name: 'Novos Clientes', color: '#3B82F6', icon: 'User' },
-    { id: 'contact', name: 'Em Contato', color: '#F59E0B', icon: 'FunnelSimple' },
-    { id: 'active', name: 'Clientes Ativos', color: '#10B981', icon: 'Buildings' },
+    { id: 'contact', name: 'Em Contato', color: '#F59E0B', icon: 'Filter' },
+    { id: 'active', name: 'Clientes Ativos', color: '#10B981', icon: 'Building2' },
     { id: 'inactive', name: 'Inativos', color: '#EF4444', icon: 'X' }
   ]);
   const [formData, setFormData] = useState({
@@ -66,8 +66,8 @@ const ClientsKanban = () => {
   const getIconComponent = (iconName) => {
     const icons = {
       'User': User,
-      'FunnelSimple': FunnelSimple,
-      'Buildings': Buildings,
+      'Filter': Filter,
+      'Building2': Building2,
       'X': X
     };
     return icons[iconName] || User;
@@ -197,7 +197,7 @@ const ClientsKanban = () => {
             onClick={() => setIsEditingKanban(false)}
             className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
           >
-            <X size={24} weight="bold" />
+            <X size={24} />
           </button>
         </div>
 
@@ -246,8 +246,8 @@ const ClientsKanban = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
                   >
                     <option value="User">👤 Usuário</option>
-                    <option value="FunnelSimple">🔀 Funil</option>
-                    <option value="Buildings">🏢 Empresa</option>
+                    <option value="Filter">🔀 Funil</option>
+                    <option value="Building2">🏢 Empresa</option>
                     <option value="X">❌ X</option>
                   </select>
                 </div>
@@ -262,7 +262,7 @@ const ClientsKanban = () => {
             onClick={handleSaveKanbanSettings}
             className="flex-1 px-6 py-3 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center justify-center gap-2 font-semibold"
           >
-            <FloppyDisk size={20} weight="bold" />
+            <Save size={20} />
             Salvar Configurações
           </button>
           <button
@@ -289,7 +289,7 @@ const ClientsKanban = () => {
             onClick={() => setIsEditing(false)}
             className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
           >
-            <X size={24} weight="bold" />
+            <X size={24} />
           </button>
         </div>
 
@@ -455,7 +455,7 @@ const ClientsKanban = () => {
               onClick={handleSaveClient}
               className="flex-1 px-6 py-3 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center justify-center gap-2 font-semibold"
             >
-              <FloppyDisk size={20} weight="bold" />
+              <Save size={20} />
               Salvar Cliente
             </button>
             <button
@@ -478,7 +478,7 @@ const ClientsKanban = () => {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <User size={28} weight="bold" className="text-[#005563]" />
+              <User size={28} className="text-[#005563]" />
               Gerenciar Clientes
             </h2>
             <p className="text-gray-600 mt-1">
@@ -491,7 +491,7 @@ const ClientsKanban = () => {
               onClick={() => setIsEditingKanban(true)}
               className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
             >
-              <Gear size={20} weight="bold" />
+              <Settings size={20} />
               Editar Kanban
             </button>
             <button
@@ -499,7 +499,7 @@ const ClientsKanban = () => {
               onClick={() => setViewMode(viewMode === 'kanban' ? 'list' : 'kanban')}
               className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2"
             >
-              <ChartBar size={20} weight="bold" />
+              <BarChart2 size={20} />
               {viewMode === 'kanban' ? 'Lista' : 'Kanban'}
             </button>
             <button
@@ -507,7 +507,7 @@ const ClientsKanban = () => {
               onClick={handleNewClient}
               className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
             >
-              <Plus size={20} weight="bold" />
+              <Plus size={20} />
               Novo Cliente
             </button>
           </div>
@@ -566,7 +566,7 @@ const ClientsKanban = () => {
                   className="flex items-center gap-2 mb-4 p-3 rounded-lg text-white font-bold"
                   style={{ backgroundColor: stage.color }}
                 >
-                  <StageIcon size={20} weight="bold" />
+                  <StageIcon size={20} />
                   <span>{stage.name}</span>
                   <span className="ml-auto bg-white/20 px-2 py-0.5 rounded-full text-sm">
                     {stageClients.length}
@@ -586,7 +586,7 @@ const ClientsKanban = () => {
                           </h3>
                           {client.company && (
                             <p className="text-xs text-gray-600 flex items-center gap-1">
-                              <Buildings size={12} weight="bold" />
+                              <Building2 size={12} />
                               {client.company}
                             </p>
                           )}
@@ -596,19 +596,19 @@ const ClientsKanban = () => {
                       <div className="space-y-1 text-xs text-gray-600 mb-3">
                         {client.email && (
                           <div className="flex items-center gap-1">
-                            <EnvelopeSimple size={12} weight="bold" />
+                            <Mail size={12} />
                             <span className="truncate">{client.email}</span>
                           </div>
                         )}
                         {client.phone && (
                           <div className="flex items-center gap-1">
-                            <Phone size={12} weight="bold" />
+                            <Phone size={12} />
                             {client.phone}
                           </div>
                         )}
                         {(client.city || client.state) && (
                           <div className="flex items-center gap-1">
-                            <MapPin size={12} weight="bold" />
+                            <MapPin size={12} />
                             {client.city}{client.city && client.state && ', '}{client.state}
                           </div>
                         )}
@@ -631,7 +631,7 @@ const ClientsKanban = () => {
                           onClick={() => handleEditClient(client)}
                           className="flex-1 px-2 py-1 bg-[#005563] text-white text-xs rounded hover:bg-[#004450] transition-colors flex items-center justify-center gap-1"
                         >
-                          <PencilSimple size={14} weight="bold" />
+                          <Pencil size={14} />
                           Editar
                         </button>
                         <button
@@ -639,7 +639,7 @@ const ClientsKanban = () => {
                           onClick={() => handleDeleteClient(client.id)}
                           className="px-2 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600 transition-colors"
                         >
-                          <Trash size={14} weight="bold" />
+                          <Trash2 size={14} />
                         </button>
                       </div>
                     </div>
@@ -702,14 +702,14 @@ const ClientsKanban = () => {
                           onClick={() => handleEditClient(client)}
                           className="text-[#005563] hover:text-[#004450] mr-3"
                         >
-                          <PencilSimple size={18} weight="bold" />
+                          <Pencil size={18} />
                         </button>
                         <button
                           type="button"
                           onClick={() => handleDeleteClient(client.id)}
                           className="text-red-600 hover:text-red-700"
                         >
-                          <Trash size={18} weight="bold" />
+                          <Trash2 size={18} />
                         </button>
                       </td>
                     </tr>
@@ -729,7 +729,7 @@ const ClientsKanban = () => {
                 onClick={handleNewClient}
                 className="px-6 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors inline-flex items-center gap-2"
               >
-                <Plus size={20} weight="bold" />
+              <Plus size={20} />
                 Criar Primeiro Cliente
               </button>
             </div>

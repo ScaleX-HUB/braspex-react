@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { House, ShoppingCart, Drop, Fire, Wind, Gear, Eye } from 'phosphor-react';
+import { Home, ShoppingCart, Droplets, Flame, Wind, Settings, Eye } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useCart } from '../contexts/CartContext';
@@ -18,6 +18,7 @@ const ProductsPage = () => {
 
   // Carregar produtos e categorias
   useEffect(() => {
+    document.title = 'Produtos | Braspex Sistemas Hidráulicos';
     console.log('🔄 ProductsPage: Carregando produtos e categorias...');
     
     // Carregar produtos
@@ -70,7 +71,7 @@ const ProductsPage = () => {
     ...categoriesArray.map(cat => ({
       id: cat.id,
       name: cat.displayName,
-      icon: <Gear className="w-5 h-5" />,
+      icon: <Settings className="w-5 h-5" />,
       subcategories: cat.subcategories || []
     }))
   ];
@@ -86,7 +87,7 @@ const ProductsPage = () => {
 
   const getCategoryIcon = (categoryId) => {
     const cat = categories.find(c => c.id === categoryId || c.name === categoryId);
-    return cat?.icon || <Gear className="w-5 h-5" />;
+    return cat?.icon || <Settings className="w-5 h-5" />;
   };
 
   return (
@@ -98,7 +99,7 @@ const ProductsPage = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
           <div className="flex items-center gap-2 text-sm">
             <button onClick={() => navigate('/')} className="flex items-center gap-1 text-[#005563] hover:text-[#FFD027] transition-colors">
-              <House className="w-4 h-4" />
+              <Home className="w-4 h-4" />
               {productsPageContent?.breadcrumbHome || 'Home'}
             </button>
             <span className="text-gray-400">/</span>

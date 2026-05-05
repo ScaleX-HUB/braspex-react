@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FloppyDisk, CheckCircle, WhatsappLogo } from 'phosphor-react';
+import { Save, CheckCircle, MessageCircle } from 'lucide-react';
 
 const TextsEditorSection = () => {
   const [texts, setTexts] = useState(() => {
@@ -383,7 +383,7 @@ const TextsEditorSection = () => {
           <div className="space-y-6">
             <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
               <div className="flex items-start gap-3">
-                <WhatsappLogo size={24} className="text-green-600 flex-shrink-0 mt-1" weight="fill" />
+                <MessageCircle size={24} className="text-green-600 flex-shrink-0 mt-1" />
                 <div>
                   <h4 className="font-semibold text-green-900 mb-1">Configuração do WhatsApp</h4>
                   <p className="text-sm text-green-700">
@@ -440,7 +440,7 @@ const TextsEditorSection = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
               >
-                <WhatsappLogo size={20} weight="fill" />
+                <MessageCircle size={20} />
                 Testar Link
               </a>
             </div>
@@ -475,12 +475,12 @@ const TextsEditorSection = () => {
         >
           {saved ? (
             <>
-              <CheckCircle size={20} weight="fill" />
+              <CheckCircle size={20} />
               Salvo!
             </>
           ) : (
             <>
-              <FloppyDisk size={20} weight="bold" />
+              <Save size={20} />
               {saving ? 'Salvando...' : 'Salvar Alterações'}
             </>
           )}

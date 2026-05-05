@@ -1,6 +1,6 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ShoppingCart, Trash, Plus, Minus } from 'phosphor-react';
+import { X, ShoppingCart, Trash2, Plus, Minus } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import { useSiteContent } from '../contexts/SiteContentContext';
@@ -16,7 +16,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
     ? (cartContent?.itemSingular || 'item')
     : (cartContent?.itemPlural || 'itens');
 
-  const requestQuoteText = (cartContent?.requestQuoteTemplate || 'Solicitar Orçamento ({count} {items})')
+  const requestQuoteText = (cartContent?.requestQuoteTemplate || 'Enviar Orçamento ({count} {items})')
     .replace('{count}', String(cartCount))
     .replace('{items}', itemsLabel);
 
@@ -60,7 +60,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
             {/* Header */}
             <div className="bg-[#005563] text-white p-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <ShoppingCart size={28} weight="bold" />
+                <ShoppingCart size={28} />
                 <div>
                   <h2 className="text-xl font-bold">{cartContent?.title || 'Carrinho de Orçamento'}</h2>
                   <p className="text-sm text-white/80">{cartCount} {itemsLabel}</p>
@@ -70,7 +70,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                 onClick={onClose}
                 className="text-white hover:text-[#FFD027] transition-colors"
               >
-                <X size={28} weight="bold" />
+                <X size={28} />
               </button>
             </div>
 
@@ -135,7 +135,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                                 onClick={() => handleQuantityChange(item.id, item.quantity, -1)}
                                 className="px-3 py-1 bg-slate-100 hover:bg-slate-200 transition-colors"
                               >
-                                <Minus size={14} weight="bold" />
+                                <Minus size={14} />
                               </button>
                               <span className="px-4 py-1 bg-white text-sm font-semibold">
                                 {item.quantity}
@@ -144,7 +144,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                                 onClick={() => handleQuantityChange(item.id, item.quantity, 1)}
                                 className="px-3 py-1 bg-slate-100 hover:bg-slate-200 transition-colors"
                               >
-                                <Plus size={14} weight="bold" />
+                                <Plus size={14} />
                               </button>
                             </div>
 
@@ -153,7 +153,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                               className="ml-auto text-red-500 hover:text-red-700 transition-colors"
                               title={cartContent?.removeTitle || 'Remover'}
                             >
-                              <Trash size={20} weight="bold" />
+                              <Trash2 size={20} />
                             </button>
                           </div>
                         </div>

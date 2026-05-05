@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowUp, ArrowDown, Eye, EyeSlash, FloppyDisk } from 'phosphor-react';
+import { ArrowUp, ArrowDown, Eye, EyeOff, Save } from 'lucide-react';
 import { useSectionOrder } from '../../contexts/SectionOrderContext';
 
 const SectionOrderManager = () => {
@@ -50,7 +50,7 @@ const SectionOrderManager = () => {
             disabled={saving}
             className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <FloppyDisk size={20} weight="fill" />
+            <Save size={20} />
             {saving ? 'Salvando...' : 'Salvar Ordem'}
           </button>
         </div>
@@ -103,12 +103,12 @@ const SectionOrderManager = () => {
                 >
                   {section.enabled ? (
                     <>
-                      <Eye size={14} weight="fill" />
+                      <Eye size={14} />
                       Ativa
                     </>
                   ) : (
                     <>
-                      <EyeSlash size={14} weight="fill" />
+                      <EyeOff size={14} />
                       Inativa
                     </>
                   )}
@@ -127,7 +127,7 @@ const SectionOrderManager = () => {
                   }`}
                   title="Mover para cima"
                 >
-                  <ArrowUp size={20} weight="bold" />
+                  <ArrowUp size={20} />
                 </button>
                 <button
                   onClick={() => moveSectionDown(index)}
@@ -139,7 +139,7 @@ const SectionOrderManager = () => {
                   }`}
                   title="Mover para baixo"
                 >
-                  <ArrowDown size={20} weight="bold" />
+                  <ArrowDown size={20} />
                 </button>
               </div>
             </div>

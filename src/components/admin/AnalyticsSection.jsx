@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSiteContent } from '../../contexts/SiteContentContext';
-import { Eye, Users, Calendar, ChartBar } from 'phosphor-react';
+import { Eye, Users, Calendar, BarChart2 } from 'lucide-react';
 
 const AnalyticsSection = () => {
   const { analytics, loading } = useSiteContent();
@@ -35,7 +35,7 @@ const AnalyticsSection = () => {
     {
       title: 'Taxa de Conversão',
       value: `${analytics?.conversionRate || 0}%`,
-      icon: <ChartBar className="w-8 h-8" />,
+      icon: <BarChart2 className="w-8 h-8" />,
       color: 'bg-orange-500'
     }
   ];

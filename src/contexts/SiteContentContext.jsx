@@ -16,13 +16,13 @@ const DEFAULT_CONTENT = {
   header: {
     logoAlt: "BRASPEX",
     navHome: "Home",
-    navAbout: "Quem Somos",
+    navAbout: "Sobre",
     navProducts: "Produtos",
-    navHowItWorks: "Como Funciona",
+    navHowItWorks: "Fluxo",
     navContact: "Contato",
     navBlog: "Blog",
     navCatalogs: "Catálogos",
-    navRequestQuote: "Solicitar Orçamento",
+    navRequestQuote: "Enviar Orçamento",
     megaMenuViewAllTitle: "Ver Todos",
     megaMenuViewAllSubtitle: "os Produtos",
     megaMenuMoreLabelTemplate: "+{count} mais",
@@ -375,7 +375,7 @@ const DEFAULT_CONTENT = {
     emptyDescription: "Adicione produtos para solicitar um orçamento",
     emptyButtonText: "Ver Produtos",
     removeTitle: "Remover",
-    requestQuoteTemplate: "Solicitar Orçamento ({count} {items})",
+    requestQuoteTemplate: "Enviar Orçamento ({count} {items})",
     clearCart: "Limpar Carrinho"
   },
   footer: {

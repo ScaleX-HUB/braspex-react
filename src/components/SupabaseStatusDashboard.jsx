@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, XCircle, Warning, ArrowClockwise, Database, Table } from 'phosphor-react';
+import { CheckCircle, XCircle, AlertTriangle, RotateCcw, Database, Table } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { textsAPI } from '../services/textsAPI';
 import { productsAPI } from '../services/productsAPI';
@@ -88,11 +88,11 @@ const SupabaseStatusDashboard = () => {
 
   const StatusIcon = ({ connected, loading }) => {
     if (loading) {
-      return <ArrowClockwise className="w-6 h-6 text-blue-500 animate-spin" />;
+      return <RotateCcw className="w-6 h-6 text-blue-500 animate-spin" />;
     }
     return connected 
-      ? <CheckCircle className="w-6 h-6 text-green-500" weight="fill" />
-      : <XCircle className="w-6 h-6 text-red-500" weight="fill" />;
+      ? <CheckCircle className="w-6 h-6 text-green-500" />
+      : <XCircle className="w-6 h-6 text-red-500" />;
   };
 
   const TableStatus = ({ name, data }) => {
@@ -103,9 +103,9 @@ const SupabaseStatusDashboard = () => {
     };
 
     const getStatusIcon = () => {
-      if (data.error) return <XCircle className="w-5 h-5 text-red-500" weight="fill" />;
-      if (data.count === 0) return <Warning className="w-5 h-5 text-yellow-500" weight="fill" />;
-      return <CheckCircle className="w-5 h-5 text-green-500" weight="fill" />;
+      if (data.error) return <XCircle className="w-5 h-5 text-red-500" />;
+      if (data.count === 0) return <AlertTriangle className="w-5 h-5 text-yellow-500" />;
+      return <CheckCircle className="w-5 h-5 text-green-500" />;
     };
 
     return (
@@ -163,7 +163,7 @@ const SupabaseStatusDashboard = () => {
           disabled={status.loading}
           className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
         >
-          <ArrowClockwise className={`w-5 h-5 ${status.loading ? 'animate-spin' : ''}`} />
+          <RotateCcw className={`w-5 h-5 ${status.loading ? 'animate-spin' : ''}`} />
           Atualizar
         </button>
       </div>
@@ -203,7 +203,7 @@ const SupabaseStatusDashboard = () => {
       {!status.loading && !status.connected && (
         <div className="mt-6 bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4">
           <div className="flex items-start gap-3">
-            <Warning className="w-6 h-6 text-yellow-600 flex-shrink-0 mt-1" />
+            <AlertTriangle className="w-6 h-6 text-yellow-600 flex-shrink-0 mt-1" />
             <div>
               <h4 className="font-semibold text-gray-900 mb-2">Ações Recomendadas:</h4>
               <ol className="list-decimal list-inside space-y-1 text-sm text-gray-700">

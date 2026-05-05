@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, Eye, EyeSlash } from 'phosphor-react';
+import { Lock, Eye, EyeOff } from 'lucide-react';
 import { usersAPI } from '../services/usersAPI';
 import AdminPanel from './AdminPanel';
 
@@ -126,7 +126,7 @@ const AdminLogin = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
-                {showPassword ? <EyeSlash className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
           </div>

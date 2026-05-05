@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://braspex.com.br/sitemap.xml

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSiteContent } from '../contexts/SiteContentContext';
-import { Envelope, Phone, Globe, MapPin, PaperPlaneTilt, User, Buildings, ChatCircle, CheckCircle } from 'phosphor-react';
+import { Mail, Phone, Globe, MapPin, Send, User, Building2, MessageCircle, CheckCircle } from 'lucide-react';
 import { saveQuote } from '../data/quotesUtils';
 
 const Contato = () => {
@@ -86,7 +86,7 @@ const Contato = () => {
 
   const contactInfo = [
     {
-      icon: <Envelope className="w-6 h-6" />,
+      icon: <Mail className="w-6 h-6" />,
       label: "E-mail",
       value: "braspexne@gmail.com ",
       href: "mailto:braspexne@gmail.com "
@@ -194,7 +194,7 @@ const Contato = () => {
                 {contatoContent.companyLabel}
               </label>
               <div className="relative">
-                <Buildings className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-5 h-5" />
+                <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-5 h-5" />
                 <input
                   type="text"
                   id="empresa"
@@ -213,7 +213,7 @@ const Contato = () => {
                 {contatoContent.emailLabel} {contatoContent.requiredMark}
               </label>
               <div className="relative">
-                <Envelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-5 h-5" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-5 h-5" />
                 <input
                   type="email"
                   id="email"
@@ -249,7 +249,7 @@ const Contato = () => {
               {contatoContent.messageLabel} {contatoContent.requiredMark}
             </label>
             <div className="relative">
-              <ChatCircle className="absolute left-3 top-4 text-gray-600 w-5 h-5" />
+              <MessageCircle className="absolute left-3 top-4 text-gray-600 w-5 h-5" />
               <textarea
                 id="mensagem"
                 name="mensagem"
@@ -278,7 +278,7 @@ const Contato = () => {
                   exit={{ scale: 0 }}
                   className="flex items-center gap-3"
                 >
-                  <CheckCircle className="w-6 h-6 text-green-400" weight="fill" />
+                  <CheckCircle className="w-6 h-6 text-green-400" />
                   <span className="text-white">{contatoContent.successTitle}</span>
                 </motion.div>
               ) : (
@@ -289,7 +289,7 @@ const Contato = () => {
                   exit={{ opacity: 0 }}
                   className="flex items-center gap-3"
                 >
-                  <PaperPlaneTilt className="w-5 h-5" />
+                  <Send className="w-5 h-5" />
                   {isSubmitting ? contatoContent.submittingText : contatoContent.submitButtonText}
                 </motion.div>
               )}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
 import Sobre from '../components/Sobre';
@@ -16,6 +16,10 @@ import { useSectionOrder } from '../contexts/SectionOrderContext';
 const HomePage = () => {
   const { getEnabledSections } = useSectionOrder();
   const enabledSections = getEnabledSections();
+
+  useEffect(() => {
+    document.title = 'Braspex | Sistemas Hidráulicos Industrializados para Obras';
+  }, []);
 
   // Mapa de componentes
   const componentMap = {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useSiteContent } from '../contexts/SiteContentContext';
-import { X, CheckCircle, Drop, Wind, Gear } from 'phosphor-react';
+import { X, CheckCircle, Droplets, Wind, Settings } from 'lucide-react';
 import { safeJsonParse } from '../lib/safeJson';
 // Imagens agora estão na pasta public
 const imagemppr = "/imagemppr.png";
@@ -27,7 +27,7 @@ const Kits = () => {
   const defaultProducts = [
     {
       id: "sistema-ppr",
-      icon: <Drop className="w-8 h-8 text-blue-500" />,
+      icon: <Droplets className="w-8 h-8 text-blue-500" />,
       image: imagemppr,
       title: "Sistema PPR",
       category: "Kits de Água Fria e Quente",
@@ -49,7 +49,7 @@ const Kits = () => {
     },
     {
       id: "chassis",
-      icon: <Gear className="w-8 h-8 text-gray-600" />,
+      icon: <Settings className="w-8 h-8 text-gray-600" />,
       image: chassismetalicos,
       title: "Chassis Metálicos",
       category: "Chassis Metálicos Industriais",

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, User, Tag, ArrowRight, MagnifyingGlass } from 'phosphor-react';
+import { Calendar, User, Tag, ArrowRight, Search } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { blogPosts } from '../data/blogData';
@@ -11,6 +11,12 @@ const BlogPage = () => {
   const { content } = useSiteContent();
   const blogContent = content.blogPage;
   const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    document.title = 'Blog Braspex | Artigos sobre Hidráulica Industrial';
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute('content', 'Artigos técnicos sobre sistemas hidráulicos industrializados, manutenção, eficiência e instalações prediais. Blog da Braspex.');
+  }, []);
   const categories = useMemo(() => {
     const parsed = safeJsonParse(blogContent?.categoriesJson, null);
     return Array.isArray(parsed) && parsed.length
@@ -61,7 +67,7 @@ const BlogPage = () => {
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             {/* Search Bar */}
             <div className="relative w-full md:w-96">
-              <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
                 placeholder={blogContent?.searchPlaceholder || 'Buscar artigos...'}

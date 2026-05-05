@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import { useSiteContent } from '../contexts/SiteContentContext';
-import { Envelope, Phone, MapPin, InstagramLogo, FacebookLogo, YoutubeLogo, LinkedinLogo } from 'phosphor-react';
+import { Mail, Phone, MapPin, Instagram, Facebook, Youtube, Linkedin } from 'lucide-react';
 import logoBraspexBranca from '../assets/logo-braspex.png';
 
 const Footer = () => {
@@ -34,7 +34,7 @@ const Footer = () => {
           <ul className="space-y-3 text-gray-300 text-sm">
             {footerContent.email && (
               <li className="flex items-center">
-                <Envelope className="w-4 h-4 mr-2 text-gray-400" />
+                <Mail className="w-4 h-4 mr-2 text-gray-400" />
                 <a href={'mailto:' + footerContent.email} className="hover:text-white transition-colors">
                   {footerContent.email}
                 </a>
@@ -64,22 +64,22 @@ const Footer = () => {
           <div className="flex space-x-4">
             {footerContent.facebook && (
               <a href={footerContent.facebook} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#FFD027] transition-colors">
-                <FacebookLogo className="w-6 h-6" />
+                <Facebook className="w-6 h-6" />
               </a>
             )}
             {footerContent.instagram && (
               <a href={footerContent.instagram} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#FFD027] transition-colors">
-                <InstagramLogo className="w-6 h-6" />
+                <Instagram className="w-6 h-6" />
               </a>
             )}
             {footerContent.linkedin && (
               <a href={footerContent.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#FFD027] transition-colors">
-                <LinkedinLogo className="w-6 h-6" />
+                <Linkedin className="w-6 h-6" />
               </a>
             )}
             {footerContent.youtube && (
               <a href={footerContent.youtube} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#FFD027] transition-colors">
-                <YoutubeLogo className="w-6 h-6" />
+                <Youtube className="w-6 h-6" />
               </a>
             )}
           </div>

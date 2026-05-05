@@ -3,9 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "start": "node server.js",
+    "heroku-postbuild": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -44,6 +49,7 @@
     "cmdk": "^1.1.1",
     "date-fns": "^3.0.0",
     "embla-carousel-react": "^8.6.0",
+    "express": "^5.2.1",
     "framer-motion": "^12.23.22",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.510.0",

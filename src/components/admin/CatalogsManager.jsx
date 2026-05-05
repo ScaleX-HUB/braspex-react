@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { FileText, Plus, PencilSimple, Trash, Eye, Upload, Image as ImageIcon, CheckCircle, XCircle } from 'phosphor-react';
+﻿import React, { useEffect, useMemo, useState } from 'react';
+import { FileText, Plus, Pencil, Trash2, Eye, Upload, Image as ImageIcon, CheckCircle, XCircle } from 'lucide-react';
 import { catalogsAPI } from '../../services/catalogsAPI';
 import { generateUUID } from '../../lib/uuid';
 
@@ -209,7 +209,7 @@ const CatalogsManager = () => {
               onClick={handleSave}
               className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
             >
-              <Plus size={20} weight="bold" />
+              <Plus size={20} />
               {currentCatalog ? 'Atualizar' : 'Criar'}
             </button>
           </div>
@@ -308,7 +308,7 @@ const CatalogsManager = () => {
 
               <div className="mt-4 bg-gray-50 border border-gray-200 rounded-xl p-4">
                 <div className="flex items-center gap-3">
-                  <FileText size={28} className="text-[#005563]" weight="bold" />
+                  <FileText size={28} className="text-[#005563]" />
                   <div className="flex-1">
                     <div className="font-semibold text-gray-900">
                       {pdfFile ? pdfFile.name : (formData.pdf_url ? 'PDF atual configurado' : 'Nenhum PDF selecionado')}
@@ -346,12 +346,12 @@ const CatalogsManager = () => {
               >
                 {formData.active ? (
                   <>
-                    <CheckCircle size={20} weight="fill" />
+                    <CheckCircle size={20} />
                     Ativo
                   </>
                 ) : (
                   <>
-                    <XCircle size={20} weight="fill" />
+                    <XCircle size={20} />
                     Inativo
                   </>
                 )}
@@ -377,7 +377,7 @@ const CatalogsManager = () => {
           onClick={handleNew}
           className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
         >
-          <Plus size={20} weight="bold" />
+          <Plus size={20} />
           Novo Catálogo
         </button>
       </div>
@@ -423,14 +423,14 @@ const CatalogsManager = () => {
                   className="p-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                   title="Editar"
                 >
-                  <PencilSimple size={20} />
+                  <Pencil size={20} />
                 </button>
                 <button
                   onClick={() => handleDelete(cat.id)}
                   className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                   title="Excluir"
                 >
-                  <Trash size={20} />
+                  <Trash2 size={20} />
                 </button>
               </div>
             </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Database, CheckCircle, XCircle, AlertCircle } from 'phosphor-react';
+import { Database, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { quickTest } from '../services/testConnection';
 
 /**
