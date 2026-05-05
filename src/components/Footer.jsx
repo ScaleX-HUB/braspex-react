@@ -87,6 +87,9 @@ const Footer = () => {
       </div>
 
       <div className="border-t border-gray-700 mt-12 pt-6 text-center">
+        <p className="text-xs font-light font-montserrat text-gray-400 mb-2">
+          BRASPEX COMÉRCIO E DISTRIBUIÇÃO LTDA &mdash; CNPJ 55.199.862/0001-87
+        </p>
         <p className="text-sm font-light font-montserrat text-white mb-1">
           {footerContent.copyright || ' 2025 Braspex. Todos os direitos reservados.'}
         </p>
