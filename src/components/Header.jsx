@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown, ShoppingCart, Home, Info, Package, Workflow, BookUser, Newspaper, Mail, FileText } from 'lucide-react';
+import { Menu, X, ChevronDown, ShoppingCart, Home, Info, Package, BookUser, Newspaper, Mail, FileText } from 'lucide-react';
 import { useLocation, Link } from 'react-router-dom';
 import logoBraspex from '../assets/logo-braspex.png';
 import logoBraspexBranca from '../assets/logo-branca-braspex.png';
@@ -153,11 +153,11 @@ const Header = () => {
               </a>
 
               <button 
-                onClick={() => window.location.href = '/#sobre'}
+                onClick={() => scrollToSection('sobre')}
                 className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
               >
                 <Info size={18} />
-                {headerContent?.navAbout || 'Quem Somos'}
+                {headerContent?.navAbout || 'Sobre'}
               </button>
 
               {/* Mega Menu Produtos */}
@@ -167,10 +167,11 @@ const Header = () => {
                 onMouseLeave={() => setIsProductsOpen(false)}
               >
                 <button 
+                  onClick={() => { scrollToSection('vantagens'); setIsProductsOpen(!isProductsOpen); }}
                   className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
                 >
                   <Package size={18} />
-                  {headerContent?.navProducts || 'Produtos'}
+                  {headerContent?.navProducts || 'KITS'}
                   <ChevronDown size={14} className={`transition-transform ${isProductsOpen ? 'rotate-180' : ''}`} />
                 </button>
 
@@ -246,15 +247,7 @@ const Header = () => {
               </div>
 
               <button 
-                onClick={() => window.location.href = '/#fluxo'}
-                className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
-              >
-                <Workflow size={18} />
-                {headerContent?.navHowItWorks || 'Como Funciona'}
-              </button>
-
-              <button 
-                onClick={() => window.location.href = '/#contato'}
+                onClick={() => scrollToSection('contato')}
                 className={`text-sm font-semibold transition-colors flex items-center gap-2 ${textColorClass}`}
               >
                 <BookUser size={18} />
@@ -294,7 +287,7 @@ const Header = () => {
               </button>
             </nav>
 
-            {/* Mobile Menu Button */}}
+            {/* Mobile Menu Button */}
             <div className="flex items-center gap-4 lg:hidden">
               <button 
                 onClick={() => setIsCartOpen(true)}
@@ -330,16 +323,16 @@ const Header = () => {
                 {headerContent?.navHome || 'Home'}
               </a>
               <button onClick={() => { scrollToSection('sobre'); }} className="block w-full text-left py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors">
-                {headerContent?.navAbout || 'Quem Somos'}
+                {headerContent?.navAbout || 'Sobre'}
               </button>
               
               {/* Mobile Products Dropdown */}
               <div>
                 <button 
-                  onClick={() => setIsProductsOpen(!isProductsOpen)}
+                  onClick={() => { scrollToSection('vantagens'); setIsProductsOpen(!isProductsOpen); }}
                   className="flex items-center justify-between w-full py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors"
                 >
-                  {headerContent?.navProducts || 'Produtos'}
+                  {headerContent?.navProducts || 'KITS'}
                   <ChevronDown size={16} className={`transition-transform ${isProductsOpen ? 'rotate-180' : ''}`} />
                 </button>
                 
@@ -370,9 +363,6 @@ const Header = () => {
                 )}
               </div>
 
-              <button onClick={() => { scrollToSection('fluxo'); }} className="block w-full text-left py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors">
-                {headerContent?.navHowItWorks || 'Como Funciona'}
-              </button>
               <button onClick={() => { scrollToSection('contato'); }} className="block w-full text-left py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors">
                 {headerContent?.navContact || 'Contato'}
               </button>
