@@ -143,7 +143,25 @@ Em produção, as URLs públicas de capa/PDF são geradas via proxy HTTPS:
 
 Isso evita Mixed Content quando o Supabase é HTTP.
 
-## 4) Policies de Storage (para upload funcionar)
+## 4) Limite de upload no Dokku/nginx (erro 413)
+
+Se o painel mostrar **413 Request Entity Too Large**, a requisição foi recusada pelo nginx antes de chegar no Express/proxy. O padrão do Dokku é `client-max-body-size` de `1m`, pequeno demais para PDFs de catálogo.
+
+O workflow de deploy já configura:
+
+```bash
+dokku nginx:set braspex client-max-body-size 50m
+```
+
+Se precisar aplicar manualmente no VPS, rode:
+
+```bash
+dokku nginx:set braspex client-max-body-size 50m
+dokku proxy:build-config braspex
+dokku nginx:reload
+```
+
+## 5) Policies de Storage (para upload funcionar)
 
 Se o Supabase Storage estiver com RLS ativo (padrão), o upload com anon key pode falhar com 401/403.
 

@@ -3,6 +3,29 @@ import { FileText, Plus, Pencil, Trash2, Eye, Upload, Image as ImageIcon, CheckC
 import { catalogsAPI } from '../../services/catalogsAPI';
 import { generateUUID } from '../../lib/uuid';
 
+const DEFAULT_PDF_MAX_SIZE_MB = 45;
+const DEFAULT_COVER_MAX_SIZE_MB = 10;
+const PDF_MAX_SIZE_MB = Number(import.meta.env.VITE_CATALOGS_MAX_PDF_MB || DEFAULT_PDF_MAX_SIZE_MB);
+const COVER_MAX_SIZE_MB = Number(import.meta.env.VITE_CATALOGS_MAX_COVER_MB || DEFAULT_COVER_MAX_SIZE_MB);
+const PDF_MAX_SIZE_BYTES = (Number.isFinite(PDF_MAX_SIZE_MB) ? PDF_MAX_SIZE_MB : DEFAULT_PDF_MAX_SIZE_MB) * 1024 * 1024;
+const COVER_MAX_SIZE_BYTES = (Number.isFinite(COVER_MAX_SIZE_MB) ? COVER_MAX_SIZE_MB : DEFAULT_COVER_MAX_SIZE_MB) * 1024 * 1024;
+
+const formatFileSize = (bytes) => {
+  if (!Number.isFinite(bytes) || bytes <= 0) return '0 KB';
+
+  const units = ['bytes', 'KB', 'MB', 'GB'];
+  let value = bytes;
+  let unitIndex = 0;
+
+  while (value >= 1024 && unitIndex < units.length - 1) {
+    value /= 1024;
+    unitIndex += 1;
+  }
+
+  const precision = value >= 10 || unitIndex === 0 ? 0 : 1;
+  return `${value.toFixed(precision)} ${units[unitIndex]}`;
+};
+
 const CatalogsManager = () => {
   const [catalogs, setCatalogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -101,6 +124,60 @@ const CatalogsManager = () => {
     }
   };
 
+  const validateFileSize = (file, label, maxBytes) => {
+    if (file.size <= maxBytes) return true;
+
+    alert(
+      `${label} muito grande para upload.\n\n` +
+        `Limite: ${formatFileSize(maxBytes)}\n` +
+        `Arquivo: ${formatFileSize(file.size)}`
+    );
+    return false;
+  };
+
+  const handleCoverFileChange = (e) => {
+    const file = e.target.files?.[0] || null;
+    if (!file) {
+      setCoverFile(null);
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      alert('Selecione uma imagem válida para a capa.');
+      e.target.value = '';
+      return;
+    }
+
+    if (!validateFileSize(file, 'Imagem de capa', COVER_MAX_SIZE_BYTES)) {
+      e.target.value = '';
+      return;
+    }
+
+    setCoverFile(file);
+  };
+
+  const handlePdfFileChange = (e) => {
+    const file = e.target.files?.[0] || null;
+    if (!file) {
+      setPdfFile(null);
+      return;
+    }
+
+    const looksLikePdf = file.type === 'application/pdf' || file.name?.toLowerCase().endsWith('.pdf');
+    if (!looksLikePdf) {
+      alert('Selecione um arquivo PDF válido.');
+      e.target.value = '';
+      return;
+    }
+
+    if (!validateFileSize(file, 'PDF do catálogo', PDF_MAX_SIZE_BYTES)) {
+      e.target.value = '';
+      return;
+    }
+
+    setPdfFile(file);
+  };
+
   const handleSave = async () => {
     if (!formData.title) {
       alert('Informe o título do catálogo');
@@ -112,6 +189,8 @@ const CatalogsManager = () => {
       alert('Selecione o PDF do catálogo');
       return;
     }
+
+    let createdCatalogId = null;
 
     try {
       const isNew = !currentCatalog;
@@ -132,6 +211,7 @@ const CatalogsManager = () => {
       // Depois faz upload e atualiza com pdf_url/cover_url.
       if (isNew) {
         await catalogsAPI.create(nextData);
+        createdCatalogId = id;
       }
 
       // Upload de arquivos (opcional em edição)
@@ -163,18 +243,39 @@ const CatalogsManager = () => {
     } catch (e) {
       console.error('❌ Erro ao salvar catálogo:', e);
 
+      if (createdCatalogId) {
+        try {
+          await catalogsAPI.delete(createdCatalogId);
+        } catch (cleanupError) {
+          console.warn('Erro ao remover catálogo incompleto após falha no upload:', cleanupError);
+        }
+      }
+
       const msg = String(e?.message || e || 'Erro desconhecido');
+      const normalizedMsg = msg.toLowerCase();
+      const looksLikePayloadTooLarge =
+        msg.includes('413') ||
+        normalizedMsg.includes('request entity too large') ||
+        normalizedMsg.includes('payload too large') ||
+        normalizedMsg.includes('limite de upload');
       const looksLikePermission =
         msg.includes('permission denied') ||
         msg.includes('42501') ||
         msg.includes('401 Unauthorized') ||
         msg.includes('403 Forbidden');
 
-      if (looksLikePermission) {
+      if (looksLikePayloadTooLarge) {
+        alert(
+          'Erro ao salvar catálogo: arquivo recusado pelo servidor por limite de upload.\n\n' +
+            'O deploy agora configura o nginx/Dokku para aceitar uploads de até 50 MB. Depois de publicar esta alteração, tente novamente.\n\n' +
+            'Detalhes técnicos:\n' +
+            msg
+        );
+      } else if (looksLikePermission) {
         alert(
           'Erro ao salvar catálogo: permissão negada no Supabase.\n\n' +
             'Isso acontece quando a role anon/authenticated não tem GRANT e/ou a tabela está com RLS sem policy para INSERT/UPDATE.\n\n' +
-            'Veja o passo a passo em docs/catalogs-setup.md (seção de GRANT/RLS) ou use o proxy com SERVICE_ROLE na Vercel.\n\n' +
+            'Veja o passo a passo em docs/catalogs-setup.md (seção de GRANT/RLS) ou use o proxy com SERVICE_ROLE no servidor.\n\n' +
             'Detalhes técnicos:\n' +
             msg
         );
@@ -242,7 +343,7 @@ const CatalogsManager = () => {
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={(e) => setCoverFile(e.target.files?.[0] || null)}
+                    onChange={handleCoverFileChange}
                   />
                 </label>
                 {formData.cover_url && !coverFile && (
@@ -282,7 +383,7 @@ const CatalogsManager = () => {
                     type="file"
                     accept="application/pdf"
                     className="hidden"
-                    onChange={(e) => setPdfFile(e.target.files?.[0] || null)}
+                    onChange={handlePdfFileChange}
                   />
                 </label>
 
@@ -314,7 +415,7 @@ const CatalogsManager = () => {
                       {pdfFile ? pdfFile.name : (formData.pdf_url ? 'PDF atual configurado' : 'Nenhum PDF selecionado')}
                     </div>
                     <div className="text-sm text-gray-600">
-                      {pdfFile ? `${Math.round(pdfFile.size / 1024)} KB` : (formData.pdf_url ? 'Clique em ver PDF atual' : 'Selecione um arquivo .pdf')}
+                      {pdfFile ? formatFileSize(pdfFile.size) : (formData.pdf_url ? 'Clique em ver PDF atual' : 'Selecione um arquivo .pdf')}
                     </div>
                   </div>
                 </div>

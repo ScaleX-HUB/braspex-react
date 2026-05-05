@@ -25,6 +25,7 @@ jobs:
             if [ -z "$COMMIT_NAME" ]; then COMMIT_NAME="${{ github.sha }}"; fi
             if [ -z "$COMMIT_DATE" ]; then COMMIT_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ); fi
             echo ${{ secrets.VPS_OS_PASSWORD }} | sudo -S dokku config:set --no-restart braspex DEPLOYED_BRANCH=main DEPLOYED_REPO_URL=https://github.com/${{ github.repository }}.git DEPLOYED_COMMIT_SHA=${{ github.sha }} DEPLOYED_COMMIT_NAME="$COMMIT_NAME" DEPLOYED_COMMIT_URL=https://github.com/${{ github.repository }}/commit/${{ github.sha }} DEPLOYED_COMMIT_DATE="$COMMIT_DATE"
+            echo ${{ secrets.VPS_OS_PASSWORD }} | sudo -S dokku nginx:set braspex client-max-body-size 50m
             AUTH_REPO="https://x-access-token:${{ secrets.GITHUB_DOKKU_TOKEN }}@github.com/${{ github.repository }}.git"
             detect_lock() {
                 printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | grep -Eq "deploy lock in place|app is currently locked|deploy lock"

@@ -63,6 +63,13 @@ export const storageAPI = {
     });
 
     if (!response.ok) {
+      if (response.status === 413) {
+        throw new Error(
+          'Arquivo recusado pelo servidor: limite de upload excedido (413). ' +
+            'Ajuste o client-max-body-size do nginx/Dokku ou envie um arquivo menor.'
+        );
+      }
+
       const text = await response.text();
       throw new Error(`Erro no upload (${response.status}): ${text}`);
     }
