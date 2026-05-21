@@ -180,12 +180,16 @@ app.use(
 // Other static files (favicon, robots.txt, sitemap.xml …) → no cache
 app.use(
   express.static(path.join(__dirname, 'dist'), {
-    index: false,
+    index: 'index.html',
     maxAge: '0',
   }),
 );
 
 // ─── SPA fallback ─────────────────────────────────────────────────────────────
+app.get('/', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
 app.get('/*path', (_req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
