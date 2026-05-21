@@ -1,0 +1,16 @@
+{
+  "healthchecks": {
+    "web": [
+      {
+        "type": "startup",
+        "name": "root serves Braspex SPA",
+        "description": "Ensures the public root path serves the built SPA before traffic is switched.",
+        "path": "/",
+        "content": "Braspex",
+        "attempts": 5,
+        "timeout": 5,
+        "wait": 5
+      }
+    ]
+  }
+}
