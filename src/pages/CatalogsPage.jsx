@@ -32,7 +32,7 @@ const CatalogsPage = () => {
     <div className="min-h-screen bg-gray-50">
       <Header />
 
-      <div className="bg-white border-b pt-20 md:pt-24">
+      <div className="bg-white border-b pt-20 lg:pt-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-10">
           <h1 className="text-4xl font-bold text-gray-900">{catalogsContent?.title || 'Catálogo Virtual'}</h1>
           <p className="text-lg text-gray-600 mt-2">

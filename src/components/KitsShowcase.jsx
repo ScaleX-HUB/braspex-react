@@ -1,123 +1,195 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowRight, Droplets, Factory, Flame, Lock, PackageCheck, Snowflake, Target, Zap } from 'lucide-react';
 import { useSiteContent } from '../contexts/SiteContentContext';
 import { safeJsonParse } from '../lib/safeJson';
+
+const defaultImages = [
+  {
+    id: 'kit-hidraulico',
+    src: '/BRASPEX_kit_hidraulico_industrial.jpg',
+    alt: 'Kit Hidráulico Industrial Braspex',
+    title: 'Aplicação dos kits',
+    description: 'Sistema industrializado aplicado em ambiente real de obra',
+    badge: 'Aplicação'
+  },
+  {
+    id: 'tipos-kits',
+    src: '/BRASPEX_kit_tipos.png',
+    alt: 'Tipos de Kits Braspex',
+    title: 'Sistemas integrados',
+    description: 'Água fria, água quente e ar-condicionado identificados por cor para leitura rápida',
+    badge: 'Sistemas'
+  }
+];
+
+const defaultFeatures = [
+  { title: 'Água fria', description: 'Pontos hidráulicos com leitura rápida na obra', Icon: Droplets, color: 'text-blue-600' },
+  { title: 'Água quente', description: 'Montagens preparadas para desempenho e segurança', Icon: Flame, color: 'text-red-600' },
+  { title: 'Ar-condicionado', description: 'Soluções para instalação de climatização', Icon: Snowflake, color: 'text-sky-700' }
+];
+
+const defaultBenefits = [
+  { title: 'Qualidade em fábrica', description: 'Montagem controlada, testada e padronizada antes da entrega.', Icon: Factory },
+  { title: 'Rastreabilidade', description: 'Componentes identificados para leitura rápida e controle em obra.', Icon: Lock },
+  { title: 'Agilidade', description: 'Instalação mais rápida e com menos retrabalho no cronograma.', Icon: Zap },
+  { title: 'Suporte técnico', description: 'Acompanhamento do projeto à entrega com equipe especializada.', Icon: Target }
+];
+
+const legacySubtitle = 'Soluções completas e integradas para sistemas de água fria, água quente e ar-condicionado';
 
 const KitsShowcase = () => {
   const { content } = useSiteContent();
   const kitsShowcaseContent = content.kitsShowcase;
+  const vantagensContent = content.vantagens || {};
 
-  const images = (() => {
-    const parsed = safeJsonParse(kitsShowcaseContent?.imagesJson, null);
-    return Array.isArray(parsed) && parsed.length
-      ? parsed
-      : [
-          {
-            id: 'kit-hidraulico',
-            src: '/BRASPEX_kit_hidraulico_industrial.jpg',
-            alt: 'Kit Hidráulico Industrial Braspex',
-            title: 'Kit Hidráulico Industrial',
-            description: 'Soluções robustas e eficientes para aplicações industriais de grande porte',
-            badge: 'Em Destaque'
-          },
-          {
-            id: 'tipos-kits',
-            src: '/BRASPEX_kit_tipos.png',
-            alt: 'Tipos de Kits Braspex',
-            title: 'Variedade de Soluções',
-            description: 'Diferentes tipos de kits para atender todas as necessidades da sua empresa',
-            badge: 'Versátil'
-          }
-        ];
-  })();
+  const parsedImages = safeJsonParse(kitsShowcaseContent?.imagesJson, null);
+  const images = Array.isArray(parsedImages) && parsedImages.length ? parsedImages : defaultImages;
+  const applicationImage = images.find((image) => image.id === 'kit-hidraulico') || images[0] || defaultImages[0];
+  const typesImage = images.find((image) => image.id === 'tipos-kits') || images[1] || defaultImages[1];
 
-  const features = (() => {
-    const parsed = safeJsonParse(kitsShowcaseContent?.featuresJson, null);
-    return Array.isArray(parsed) && parsed.length
-      ? parsed
-      : [
-          { emoji: '💧', title: 'Água Fria', description: 'Sistemas eficientes de distribuição e climatização' },
-          { emoji: '🔥', title: 'Água Quente', description: 'Aquecimento de alta performance e economia' },
-          { emoji: '❄️', title: 'Ar-Condicionado', description: 'Climatização inteligente e sustentável' }
-        ];
-  })();
+  const parsedFeatures = safeJsonParse(kitsShowcaseContent?.featuresJson, null);
+  const features = Array.isArray(parsedFeatures) && parsedFeatures.length
+    ? parsedFeatures.slice(0, 3).map((feature, index) => ({
+        ...defaultFeatures[index],
+        ...feature,
+        Icon: defaultFeatures[index]?.Icon || PackageCheck,
+        color: defaultFeatures[index]?.color || 'text-[#007A86]'
+      }))
+    : defaultFeatures;
+  const parsedBenefits = safeJsonParse(vantagensContent?.stepsJson, null);
+  const benefits = Array.isArray(parsedBenefits) && parsedBenefits.length
+    ? parsedBenefits.slice(0, 4).map((benefit, index) => ({
+        ...defaultBenefits[index],
+        title: benefit?.title || defaultBenefits[index]?.title,
+        description: benefit?.description || defaultBenefits[index]?.description,
+        Icon: defaultBenefits[index]?.Icon || PackageCheck,
+      }))
+    : defaultBenefits;
+  const showcaseSubtitle =
+    !kitsShowcaseContent?.subtitle || kitsShowcaseContent.subtitle === legacySubtitle
+      ? 'Veja como a solução aplicada na obra se conecta às linhas de água fria, água quente e ar-condicionado apresentadas na página de produtos.'
+      : kitsShowcaseContent.subtitle;
+  const unifiedTitle = vantagensContent?.title || 'Por que escolher os Kits BRASPEX?';
+  const unifiedSubtitle = vantagensContent?.subtitle || showcaseSubtitle;
+  const applicationTitle =
+    applicationImage.title === 'Kit Hidráulico Industrial' ? 'Aplicação dos kits' : applicationImage.title;
+  const applicationDescription =
+    applicationImage.description === 'Soluções robustas e eficientes para aplicações industriais de grande porte'
+      ? 'Sistema industrializado aplicado em ambiente real de obra'
+      : applicationImage.description;
+  const applicationBadge = applicationImage.badge === 'Em Destaque' ? 'Aplicação' : applicationImage.badge;
+  const typesTitle = typesImage.title === 'Variedade de Soluções' ? 'Sistemas integrados' : typesImage.title;
+  const typesDescription =
+    typesImage.description === 'Diferentes tipos de kits para atender todas as necessidades da sua empresa'
+      ? 'Água fria, água quente e ar-condicionado identificados por cor para leitura rápida'
+      : typesImage.description;
+  const typesBadge = typesImage.badge === 'Versátil' ? 'Sistemas' : typesImage.badge;
 
   return (
-    <section className="py-16 bg-gradient-to-b from-white via-gray-50 to-white">
-      <div className="container mx-auto px-4">
-        {/* Título da Seção */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-            {kitsShowcaseContent?.title || 'Conheça Nossos Kits Industriais'}
+    <section id="kits-showcase" className="bg-[#f6f8f8] py-20">
+      <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8">
+        <div>
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-[#007A86]">
+            Nossos Kits
+          </p>
+          <h2 className="text-3xl font-bold leading-tight text-[#001f26] md:text-5xl">
+            {unifiedTitle}
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            {kitsShowcaseContent?.subtitle || 'Soluções completas e integradas para sistemas de água fria, água quente e ar-condicionado'}
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-slate-600 md:text-lg">
+            {unifiedSubtitle}
           </p>
-        </div>
 
-        {/* Grid de Imagens */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto mb-12">
-          {images.slice(0, 2).map((img) => (
-            <div key={img.id || img.src} className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 bg-white">
-              <div className="aspect-w-16 aspect-h-10">
-                <img
-                  src={img.src}
-                  alt={img.alt}
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="p-6 bg-gradient-to-t from-gray-50 to-white">
-                <h3 className="text-xl font-bold text-gray-800 mb-2">{img.title}</h3>
-                <p className="text-gray-600 text-sm">{img.description}</p>
-              </div>
-              {!!img.badge && (
-                <div className="absolute top-4 right-4 bg-[#005563] text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                  {img.badge}
+          <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            {benefits.map(({ title, description, Icon }) => (
+              <div key={title} className="border border-[#007A86]/15 bg-white p-4 shadow-sm">
+                <div className="mb-3 flex h-10 w-10 items-center justify-center bg-[#007A86]/8">
+                  {React.createElement(Icon, {
+                    className: 'h-5 w-5 text-[#005563]',
+                    strokeWidth: 2.3,
+                    'aria-hidden': 'true'
+                  })}
                 </div>
-              )}
-            </div>
-          ))}
-        </div>
+                <h3 className="text-sm font-bold uppercase text-[#001f26]">{title}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-slate-600">{description}</p>
+              </div>
+            ))}
+          </div>
 
-        {/* Cards de Características */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
-          {features.slice(0, 3).map((f, idx) => (
-            <div key={f.title || idx} className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-              <div className="text-4xl mb-4 text-center">{f.emoji}</div>
-              <h3 className="text-lg font-bold text-gray-800 mb-2 text-center">{f.title}</h3>
-              <p className="text-gray-600 text-sm text-center">{f.description}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Botão de CTA em Destaque */}
-        <div className="text-center">
-          <Link 
-            to="/produtos" 
-            className="inline-flex items-center gap-3 px-10 py-5 bg-[#005563] hover:bg-[#003d47] text-white text-xl font-bold rounded-full shadow-2xl hover:shadow-[#005563]/50 transform hover:scale-105 transition-all duration-300 group"
-          >
-            <svg 
-              className="w-7 h-7 group-hover:rotate-12 transition-transform duration-300" 
-              fill="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
-            </svg>
-            {kitsShowcaseContent?.ctaButtonText || 'Ver Todos os Kits Industriais'}
-            <svg 
-              className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </Link>
-          
-          {/* Texto adicional abaixo do botão */}
-          <p className="mt-6 text-gray-500 text-sm">
-            {kitsShowcaseContent?.ctaSubtext || 'Explore nossa linha completa de produtos e encontre a solução ideal para sua empresa'}
+          <p className="mt-8 text-xs font-bold uppercase tracking-[0.16em] text-[#007A86]">
+            Linhas de aplicação
           </p>
+          <div className="mt-3 grid gap-3">
+            {features.map(({ title, description, Icon, color }) => (
+              <div key={title} className="flex gap-4 border border-slate-200 bg-white p-4 shadow-sm">
+                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center bg-slate-50">
+                  {React.createElement(Icon, {
+                    className: `h-5 w-5 ${color}`,
+                    strokeWidth: 2.3,
+                    'aria-hidden': 'true'
+                  })}
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold uppercase text-slate-900">{title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-slate-600">{description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <Link
+              to="/produtos#aplicacao-kits"
+              className="inline-flex items-center justify-center gap-3 bg-[#005563] px-8 py-4 text-sm font-bold uppercase text-white shadow-lg transition-colors hover:bg-[#003d47]"
+            >
+              Entender aplicação dos kits
+              <ArrowRight className="h-5 w-5" aria-hidden="true" />
+            </Link>
+            <Link
+              to="/produtos"
+              className="inline-flex items-center justify-center gap-3 border border-[#005563]/20 bg-white px-8 py-4 text-sm font-bold uppercase text-[#005563] transition-colors hover:bg-[#005563]/5"
+            >
+              Ver página de produtos
+            </Link>
+          </div>
+        </div>
+
+        <div className="grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
+          <div className="relative min-h-[380px] overflow-hidden border border-slate-200 bg-white shadow-xl md:min-h-[500px] xl:min-h-[560px]">
+            <img
+              src={applicationImage.src}
+              alt={applicationImage.alt}
+              className="absolute inset-0 h-full w-full object-cover object-[45%_42%]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#001f26]/46" />
+            <div className="absolute left-5 top-5 flex items-center gap-2 bg-white/92 px-4 py-3 shadow-lg backdrop-blur">
+              <PackageCheck className="h-5 w-5 text-[#007A86]" aria-hidden="true" />
+              <span className="text-xs font-bold uppercase tracking-[0.14em] text-[#001f26]">
+                {applicationBadge || 'Aplicação'}
+              </span>
+            </div>
+            <div className="absolute bottom-5 left-5 right-5 text-white">
+              <h3 className="text-xl font-bold leading-tight">{applicationTitle}</h3>
+              <p className="mt-2 max-w-md text-sm leading-relaxed text-white/76">
+                {applicationDescription}
+              </p>
+            </div>
+          </div>
+
+          <div className="border border-slate-200 bg-white p-4 shadow-lg xl:self-end">
+            <img
+              src={typesImage.src}
+              alt={typesImage.alt}
+              className="aspect-[4/3] w-full bg-slate-50 object-cover object-center"
+            />
+            <div className="pt-5">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#007A86]">
+                {typesBadge || 'Sistemas'}
+              </p>
+              <h3 className="mt-1 text-lg font-bold leading-tight text-[#001f26]">{typesTitle}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">{typesDescription}</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

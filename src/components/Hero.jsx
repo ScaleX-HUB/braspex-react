@@ -1,112 +1,102 @@
-﻿import React from 'react';
-import { motion } from 'framer-motion';
+import React from 'react';
+import { motion as Motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { useSiteContent } from '../contexts/SiteContentContext';
 import heroImage from '../assets/hero-bg.jpg';
 
 const Hero = () => {
-  const { content } = useSiteContent();
-  const heroContent = content.hero;
-
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      const offsetTop = element.offsetTop - 96;
+      const offsetTop = element.offsetTop - 84;
       window.scrollTo({ top: offsetTop, behavior: 'smooth' });
     }
   };
 
+  const heroCards = [
+    {
+      title: 'Sobre',
+      description: 'Industrialização, engenharia e controle técnico para acelerar obras com padrão Braspex.',
+      action: 'Conhecer a história',
+      target: 'sobre'
+    },
+    {
+      title: 'Nossos Kits',
+      description: 'Kits produzidos em ambiente controlado, com rastreabilidade e montagem precisa.',
+      action: 'Ver kits',
+      target: 'kits-showcase'
+    },
+    {
+      title: 'Como Trabalhamos',
+      description: 'Processo técnico do projeto à entrega para manter qualidade, prazo e previsibilidade.',
+      action: 'Ver processo',
+      target: 'fluxo'
+    }
+  ];
+
   return (
-    <section
-      id="home"
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden"
-    >
-      {/* Background */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${heroImage})` }}
+    <section id="home" className="relative min-h-screen overflow-hidden bg-[#001f26]">
+      <Motion.div
+        className="absolute inset-0 bg-cover"
+        style={{ backgroundImage: `url(${heroImage})`, backgroundPosition: 'center 44%' }}
+        initial={{ opacity: 0.92, scale: 1.06 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 5.6, ease: [0.22, 1, 0.36, 1] }}
       />
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#001f26]/95 via-[#001f26]/85 to-[#001f26]/60" />
-      {/* Accent line */}
-      <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#FFD027]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/34 via-[#001f26]/18 to-black/72" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/58 via-black/16 to-transparent" />
 
-      {/* Content */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-16 pt-28 pb-20">
-        <div className="max-w-2xl">
-
-          {/* Eyebrow */}
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col justify-center px-6 pb-12 pt-28 md:px-12 lg:px-16 lg:pb-44 lg:pt-32">
+        <div className="max-w-4xl">
+          <Motion.h1
+            initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-[#FFD027] text-sm font-bold tracking-[0.18em] uppercase mb-5"
+            transition={{ duration: 0.65, delay: 0.08 }}
+            className="font-display font-bold text-white"
           >
-            {heroContent.eyebrow || 'Sistemas Hidráulicos Industrializados'}
-          </motion.p>
+            <span className="block max-w-3xl text-xl leading-tight sm:text-2xl md:text-[1.9rem] lg:text-[2.2rem]">
+              Os melhores sistemas industrializados para obras de construção civil do
+            </span>
+            <span className="mt-2 block text-[3.65rem] leading-[0.9] text-[#FFD027] sm:text-[4.8rem] md:text-[5.7rem] lg:text-[6.65rem]">
+              NORDESTE
+            </span>
+          </Motion.h1>
 
-          {/* Main headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+          <Motion.p
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-white leading-[1.08] mb-5"
+            transition={{ duration: 0.6, delay: 0.18 }}
+            className="mt-5 max-w-xl text-sm leading-relaxed text-white/72 md:text-base"
           >
-            {heroContent.title}
-          </motion.h1>
-
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg md:text-xl text-white/70 leading-relaxed mb-10"
-          >
-            {heroContent.description}
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="flex flex-col sm:flex-row gap-4"
-          >
-            <motion.button
-              onClick={() => scrollToSection('contato')}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="group inline-flex items-center justify-center gap-2 bg-[#FFD027] text-[#001f26] font-bold text-base px-8 py-4 rounded-lg shadow-lg hover:shadow-[#FFD027]/30 hover:shadow-xl transition-all duration-300"
-            >
-              {heroContent.buttonText || 'Solicitar Orçamento'}
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-            </motion.button>
-
-            <motion.button
-              onClick={() => scrollToSection('sobre')}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="inline-flex items-center justify-center gap-2 bg-transparent text-white font-semibold text-base px-8 py-4 rounded-lg border border-white/30 hover:border-white hover:bg-white/10 transition-all duration-300"
-            >
-              {heroContent.secondaryButtonText || 'Conheça a Braspex'}
-            </motion.button>
-          </motion.div>
+            Especialistas em sistemas de tubulação PPR, multicamada e chassis metálicos.
+          </Motion.p>
         </div>
-      </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 0.8 }}
-      >
-        <motion.div
-          className="w-px h-10 bg-gradient-to-b from-white/40 to-transparent"
-          animate={{ scaleY: [1, 0.4, 1] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        />
-      </motion.div>
+        <Motion.div
+          initial={{ opacity: 0, y: 26 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.75, delay: 0.38 }}
+          className="mt-14 grid gap-4 md:grid-cols-3 lg:absolute lg:bottom-9 lg:left-16 lg:right-16 lg:mt-0"
+        >
+          {heroCards.map((card) => (
+            <button
+              key={card.title}
+              onClick={() => scrollToSection(card.target)}
+              className="border border-white/14 bg-black/48 p-5 text-left text-white shadow-2xl backdrop-blur-sm transition-colors hover:border-[#FFD027]/70 hover:bg-black/60"
+            >
+              <span className="block text-xs font-bold uppercase tracking-[0.2em] text-white">
+                {card.title}
+              </span>
+              <span className="mt-3 block text-sm leading-relaxed text-white/76">
+                {card.description}
+              </span>
+              <span className="mt-5 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#FFD027]">
+                {card.action}
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            </button>
+          ))}
+        </Motion.div>
+      </div>
     </section>
   );
 };

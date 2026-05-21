@@ -16,34 +16,6 @@ const Parceiros = () => {
   
   // Estado para controlar o efeito de toque nas imagens no mobile
   const [activeImg, setActiveImg] = React.useState(null);
-  
-  // Carrossel infinito: quando chega ao fim, volta ao início
-  React.useEffect(() => {
-    const carousel = carouselRef.current;
-    if (!carousel) return;
-    // Espera o layout para garantir scrollWidth correto
-    const setInitialScroll = () => {
-      // scrollWidth pode ser zero se o layout não estiver pronto
-      const scrollWidth = carousel.scrollWidth / 2;
-      if (scrollWidth > 0) {
-        carousel.scrollLeft = scrollWidth;
-      } else {
-        // Tenta novamente após um pequeno delay
-        setTimeout(setInitialScroll, 50);
-      }
-    };
-    setInitialScroll();
-    const handleScroll = () => {
-      const scrollWidth = carousel.scrollWidth / 2;
-      if (carousel.scrollLeft >= scrollWidth) {
-        carousel.scrollLeft = carousel.scrollLeft - scrollWidth;
-      } else if (carousel.scrollLeft <= 0) {
-        carousel.scrollLeft = carousel.scrollLeft + scrollWidth;
-      }
-    };
-    carousel.addEventListener('scroll', handleScroll);
-    return () => carousel.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Framer Motion variants
   const containerVariants = {
@@ -90,72 +62,6 @@ const Parceiros = () => {
     { src: parceria5, alt: partnerAlts[4] || "Parceiro 5" }
   ];
 
-  // Duplicar os parceiros para criar o efeito de loop infinito
-  const duplicatedParceiros = [...parceiros, ...parceiros];
-
-  // Drag-to-scroll logic
-  const carouselRef = React.useRef(null);
-  const isDragging = React.useRef(false);
-  const startX = React.useRef(0);
-  const scrollLeft = React.useRef(0);
-
-  // Mouse events
-  const handleMouseDown = (e) => {
-    isDragging.current = true;
-    startX.current = e.pageX - carouselRef.current.offsetLeft;
-    scrollLeft.current = carouselRef.current.scrollLeft;
-    carouselRef.current.classList.add('dragging');
-    // Pausa animação
-    const scrollEl = document.querySelector('.animate-scroll');
-    if (scrollEl) scrollEl.style.animationPlayState = 'paused';
-  };
-  const handleMouseLeave = () => {
-    isDragging.current = false;
-    if (carouselRef.current) carouselRef.current.classList.remove('dragging');
-    // Retoma animação
-    const scrollEl = document.querySelector('.animate-scroll');
-    if (scrollEl) scrollEl.style.animationPlayState = 'running';
-  };
-  const handleMouseUp = () => {
-    isDragging.current = false;
-    if (carouselRef.current) carouselRef.current.classList.remove('dragging');
-    // Retoma animação
-    const scrollEl = document.querySelector('.animate-scroll');
-    if (scrollEl) scrollEl.style.animationPlayState = 'running';
-  };
-  const handleMouseMove = (e) => {
-    if (!isDragging.current || !carouselRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - carouselRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1.2; // scroll speed
-    carouselRef.current.scrollLeft = scrollLeft.current - walk;
-  };
-
-  // Touch events
-  const handleTouchStart = (e) => {
-    if (!carouselRef.current) return;
-    isDragging.current = true;
-    startX.current = e.touches[0].pageX - carouselRef.current.offsetLeft;
-    scrollLeft.current = carouselRef.current.scrollLeft;
-    carouselRef.current.classList.add('dragging');
-    // Pausa animação
-    const scrollEl = document.querySelector('.animate-scroll');
-    if (scrollEl) scrollEl.style.animationPlayState = 'paused';
-  };
-  const handleTouchEnd = () => {
-    isDragging.current = false;
-    if (carouselRef.current) carouselRef.current.classList.remove('dragging');
-    // Retoma animação
-    const scrollEl = document.querySelector('.animate-scroll');
-    if (scrollEl) scrollEl.style.animationPlayState = 'running';
-  };
-  const handleTouchMove = (e) => {
-    if (!isDragging.current || !carouselRef.current) return;
-    const x = e.touches[0].pageX - carouselRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1.2;
-    carouselRef.current.scrollLeft = scrollLeft.current - walk;
-  };
-
   return (
     <motion.section
       className="py-20 bg-white"
@@ -177,34 +83,36 @@ const Parceiros = () => {
           </p>
           <div className="w-24 h-1 bg-[#FFD027] mx-auto rounded-full"></div>
         </motion.div>
-        {/* Carousel Container com scroll manual, drag e animação */}
+        {/* Carousel Container com loop infinito contínuo */}
         <motion.div
-          className="relative overflow-x-auto scrollbar-hide"
-          style={{WebkitOverflowScrolling:'touch'}}
-          ref={carouselRef}
+          className="relative overflow-hidden"
           variants={carouselVariants}
-          onMouseDown={handleMouseDown}
-          onMouseLeave={handleMouseLeave}
-          onMouseUp={handleMouseUp}
-          onMouseMove={handleMouseMove}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-          onTouchMove={handleTouchMove}
         >
-          <div className="flex animate-scroll space-x-12 min-w-max" style={{gap:'3rem'}}>
-            {duplicatedParceiros.map((parceiro, index) => (
-              <div 
-                key={index}
-                className="flex-shrink-0 w-56 h-40 flex items-center justify-center p-4 bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300"
-                onTouchStart={() => setActiveImg(index)}
-                onTouchEnd={() => setTimeout(() => setActiveImg(null), 200)}
+          <div className="partner-marquee flex w-max">
+            {[0, 1].map((setIndex) => (
+              <div
+                key={setIndex}
+                className="flex shrink-0 gap-12 pr-12"
+                aria-hidden={setIndex > 0}
               >
-                <img
-                  src={parceiro.src}
-                  alt={parceiro.alt}
-                  draggable={false}
-                  className={`max-w-full max-h-full object-contain transition-all duration-300 hover:scale-110 ${activeImg === index ? 'scale-110' : ''}`}
-                />
+                {parceiros.map((parceiro, index) => {
+                  const activeKey = `${setIndex}-${index}`;
+                  return (
+                    <div
+                      key={activeKey}
+                      className="flex h-40 w-56 flex-shrink-0 items-center justify-center rounded-xl bg-white p-4 shadow-md transition-all duration-300 hover:shadow-xl"
+                      onTouchStart={() => setActiveImg(activeKey)}
+                      onTouchEnd={() => setTimeout(() => setActiveImg(null), 200)}
+                    >
+                      <img
+                        src={parceiro.src}
+                        alt={parceiro.alt}
+                        draggable={false}
+                        className={`max-h-full max-w-full object-contain transition-all duration-300 hover:scale-110 ${activeImg === activeKey ? 'scale-110' : ''}`}
+                      />
+                    </div>
+                  );
+                })}
               </div>
             ))}
           </div>
@@ -215,31 +123,23 @@ const Parceiros = () => {
           </p>
         </motion.div>
       </div>
-      <style jsx>{`
-        @keyframes scroll {
+      <style>{`
+        @keyframes partner-marquee {
           0% {
-            transform: translateX(0);
+            transform: translate3d(0, 0, 0);
           }
           100% {
-            transform: translateX(-50%);
+            transform: translate3d(-50%, 0, 0);
           }
         }
-        .animate-scroll {
-          animation: scroll 30s linear infinite;
+        .partner-marquee {
+          animation: partner-marquee 28s linear infinite;
+          will-change: transform;
         }
-        .animate-scroll:hover {
-          animation-play-state: paused;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .dragging {
-          cursor: grabbing !important;
-          user-select: none;
+        @media (prefers-reduced-motion: reduce) {
+          .partner-marquee {
+            animation-duration: 80s;
+          }
         }
       `}</style>
     </motion.section>

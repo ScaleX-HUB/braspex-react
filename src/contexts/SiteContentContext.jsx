@@ -17,21 +17,22 @@ const DEFAULT_CONTENT = {
     logoAlt: "BRASPEX",
     navHome: "Home",
     navAbout: "Sobre",
-    navProducts: "Produtos",
-    navHowItWorks: "Fluxo",
-    navContact: "Contato",
+    navProducts: "Nossos Kits",
+    navKits: "Nossos Kits",
+    navHowItWorks: "Como Trabalhamos",
+    navContact: "Fale Conosco",
     navBlog: "Blog",
     navCatalogs: "Catálogos",
-    navRequestQuote: "Enviar Orçamento",
+    navRequestQuote: "Orçamento",
     megaMenuViewAllTitle: "Ver Todos",
-    megaMenuViewAllSubtitle: "os Produtos",
+    megaMenuViewAllSubtitle: "os Kits",
     megaMenuMoreLabelTemplate: "+{count} mais",
-    mobileViewAllProducts: "Ver Todos os Produtos"
+    mobileViewAllProducts: "Ver Todos os Kits"
   },
   hero: {
-    title: "Soluções Industrializadas",
-    subtitle: "para Construção Civil",
-    description: "Da engenharia ao resultado final: kits prontos para instalação, qualidade garantida e agilidade para sua obra.",
+    title: "Os melhores sistemas industrializados para obras de construção civil do Nordeste",
+    subtitle: "Especialistas em sistemas de tubulação PPR, multicamada e chassis metálicos",
+    description: "Especialistas em sistemas de tubulação PPR, multicamada e chassis metálicos.",
     buttonText: "Solicitar Cotação",
     videoButtonText: "Ver Vídeo",
     videoUrl: "https://www.youtube.com/watch?v=SEU_VIDEO_ID",
@@ -79,25 +80,25 @@ const DEFAULT_CONTENT = {
   kitsShowcase: {
     title: "Conheça Nossos Kits Industriais",
     subtitle:
-      "Soluções completas e integradas para sistemas de água fria, água quente e ar-condicionado",
+      "Veja como a solução aplicada na obra se conecta às linhas de água fria, água quente e ar-condicionado apresentadas na página de produtos.",
     imagesJson: JSON.stringify([
       {
         id: "kit-hidraulico",
         src: "/BRASPEX_kit_hidraulico_industrial.jpg",
         alt: "Kit Hidráulico Industrial Braspex",
-        title: "Kit Hidráulico Industrial",
+        title: "Aplicação dos kits",
         description:
-          "Soluções robustas e eficientes para aplicações industriais de grande porte",
-        badge: "Em Destaque"
+          "Sistema industrializado aplicado em ambiente real de obra",
+        badge: "Aplicação"
       },
       {
         id: "tipos-kits",
         src: "/BRASPEX_kit_tipos.png",
         alt: "Tipos de Kits Braspex",
-        title: "Variedade de Soluções",
+        title: "Sistemas integrados",
         description:
-          "Diferentes tipos de kits para atender todas as necessidades da sua empresa",
-        badge: "Versátil"
+          "Água fria, água quente e ar-condicionado identificados por cor para leitura rápida",
+        badge: "Sistemas"
       }
     ]),
     featuresJson: JSON.stringify([
@@ -121,10 +122,48 @@ const DEFAULT_CONTENT = {
     ctaSubtext:
       "Explore nossa linha completa de produtos e encontre a solução ideal para sua empresa"
   },
+  kitApplicationGuide: {
+    kicker: "Aplicacao dos kits",
+    title: "Kits prontos para acelerar a instalacao hidraulica da obra",
+    description:
+      "A BRASPEX transforma o projeto em conjuntos pre-montados para pontos de banheiro, cozinha, areas tecnicas e climatizacao. A obra recebe cada kit identificado, testado e pronto para encaixar no cronograma de instalacao.",
+    kitTypesJson: JSON.stringify([
+      {
+        label: "Agua fria",
+        tone: "blue"
+      },
+      {
+        label: "Agua quente",
+        tone: "red"
+      },
+      {
+        label: "Ar-condicionado",
+        tone: "sky"
+      }
+    ]),
+    guideStepsJson: JSON.stringify([
+      "Leitura do projeto executivo e separacao dos pontos de consumo.",
+      "Montagem industrializada dos conjuntos em ambiente controlado.",
+      "Entrega identificada para instalacao mais rapida e com menos retrabalho."
+    ]),
+    imageAlt: "Aplicacao do kit hidraulico industrial em ambiente de banheiro",
+    imageBadge: "Kit por ambiente",
+    visualTourKicker: "Tour visual",
+    zoomGeneralLabel: "Geral",
+    zoomPipesLabel: "Tubulacoes",
+    zoomPointsLabel: "Pontos",
+    resetZoomLabel: "Redefinir zoom",
+    zoomOutLabel: "Diminuir zoom",
+    zoomInLabel: "Aumentar zoom",
+    ctaButtonText: "Ver produtos disponiveis",
+    secondaryImageAlt: "Tipos de tubos Braspex para agua fria, agua quente e ar-condicionado",
+    secondaryKicker: "Sistemas integrados",
+    secondaryDescription: "Linhas separadas por uso e cor para leitura rapida na obra."
+  },
   sobre: {
-    title: "Sobre a Braspex",
+    title: "Braspex no Nordeste",
     content:
-      "A Braspex é uma empresa inovadora no setor de soluções industrializadas para instalações prediais. Nascida da sólida experiência do Grupo Protogás, atua com excelência na fabricação de kits hidráulicos, de gás e frigorígenos, oferecendo produtos que unem qualidade, padronização e eficiência.\n\nCom um modelo produtivo moderno e altamente controlado, a Braspex garante que suas soluções cheguem prontas para a obra, simplificando as etapas de instalação e reduzindo significativamente prazos, custos e retrabalhos. Cada kit é desenvolvido com tecnologia de ponta e rigor técnico, assegurando desempenho superior e confiabilidade em todas as aplicações.\n\nMais do que fornecer produtos, a Braspex entrega praticidade, segurança e inovação, contribuindo para a evolução do setor e para o sucesso de cada projeto executado.",
+      "A Braspex industrializa kits hidráulicos para obras de construção civil, com base em Pernambuco e atuação regional no Nordeste.",
     differentialsJson: JSON.stringify([
       {
         title: "Qualidade Certificada",
@@ -409,6 +448,7 @@ const DEFAULT_CONTENT = {
     productsFoundPlural: "produtos encontrados",
     addToCart: "Adicionar",
     inCart: "No Carrinho",
+    kitGuideButtonText: "Entenda a aplicacao dos kits",
     emptyTitle: "Nenhum produto encontrado",
     emptyDescription: "Não há produtos nesta categoria no momento.",
     emptyButtonText: "Ver todos os produtos"
@@ -535,6 +575,23 @@ const DEFAULT_CONTENT = {
   }
 };
 
+const mergeContentWithDefaults = (source = {}) => {
+  const mergedContent = { ...DEFAULT_CONTENT };
+
+  Object.keys(source || {}).forEach((section) => {
+    if (mergedContent[section]) {
+      mergedContent[section] = {
+        ...mergedContent[section],
+        ...source[section],
+      };
+    } else {
+      mergedContent[section] = source[section];
+    }
+  });
+
+  return mergedContent;
+};
+
 export const SiteContentProvider = ({ children }) => {
   const [content, setContent] = useState(DEFAULT_CONTENT);
   const [analytics, setAnalytics] = useState({
@@ -571,7 +628,7 @@ export const SiteContentProvider = ({ children }) => {
           console.log('⚠️ Usando conteúdo DEFAULT - Supabase vazio ou não configurado');
           const saved = localStorage.getItem('siteContent');
           if (saved) {
-            setContent(JSON.parse(saved));
+            setContent(mergeContentWithDefaults(JSON.parse(saved)));
           } else {
             setContent(DEFAULT_CONTENT);
           }
@@ -583,7 +640,7 @@ export const SiteContentProvider = ({ children }) => {
         const saved = localStorage.getItem('siteContent');
         if (saved) {
           console.log('📦 Usando conteúdo do localStorage');
-          setContent(JSON.parse(saved));
+          setContent(mergeContentWithDefaults(JSON.parse(saved)));
         } else {
           console.log('📦 Usando conteúdo DEFAULT');
           setContent(DEFAULT_CONTENT);
@@ -659,13 +716,21 @@ export const SiteContentProvider = ({ children }) => {
   const updateContent = async (section, field, value) => {
     try {
       // ATUALIZAR ESTADO IMEDIATAMENTE para responsividade
-      setContent(prev => ({
-        ...prev,
-        [section]: {
-          ...prev[section],
-          [field]: value
+      setContent(prev => {
+        const nextContent = {
+          ...prev,
+          [section]: {
+            ...prev[section],
+            [field]: value
+          }
+        };
+
+        if (!isSupabaseConnected) {
+          localStorage.setItem('siteContent', JSON.stringify(nextContent));
         }
-      }));
+
+        return nextContent;
+      });
 
       // SALVAR EM BACKGROUND (não bloqueia o input)
       if (isSupabaseConnected) {
@@ -673,16 +738,6 @@ export const SiteContentProvider = ({ children }) => {
         textsAPI.updateByField(section, field, value).catch(error => {
           console.error('❌ Erro ao salvar no Supabase:', error);
         });
-      } else {
-        // Salvar no localStorage
-        const newContent = {
-          ...content,
-          [section]: {
-            ...content[section],
-            [field]: value
-          }
-        };
-        localStorage.setItem('siteContent', JSON.stringify(newContent));
       }
       
       return true;
@@ -715,11 +770,36 @@ export const SiteContentProvider = ({ children }) => {
     }
   };
 
+  const refreshContent = async () => {
+    setLoading(true);
+    try {
+      const supabaseContent = await textsAPI.getAllFormatted();
+      if (supabaseContent && Object.keys(supabaseContent).length > 0) {
+        setContent(mergeContentWithDefaults(supabaseContent));
+        setIsSupabaseConnected(true);
+      } else {
+        const saved = localStorage.getItem('siteContent');
+        setContent(saved ? mergeContentWithDefaults(JSON.parse(saved)) : DEFAULT_CONTENT);
+        setIsSupabaseConnected(false);
+      }
+      return true;
+    } catch (error) {
+      console.error('Erro ao recarregar conteudo:', error);
+      const saved = localStorage.getItem('siteContent');
+      setContent(saved ? mergeContentWithDefaults(JSON.parse(saved)) : DEFAULT_CONTENT);
+      setIsSupabaseConnected(false);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const value = {
     content,
     analytics,
     updateContent,
     resetContent,
+    refreshContent,
     loading,
     isSupabaseConnected
   };

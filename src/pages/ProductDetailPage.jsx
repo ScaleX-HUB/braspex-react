@@ -57,7 +57,7 @@ const ProductDetailPage = () => {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
         <Header />
-        <div className="pt-32 pb-20 px-4">
+        <div className="pt-28 pb-20 px-4">
           <div className="max-w-7xl mx-auto text-center">
             <h1 className="text-4xl font-bold text-slate-900 mb-4">{productDetailContent?.notFoundTitle || 'Produto não encontrado'}</h1>
             <Link 
@@ -116,7 +116,7 @@ const ProductDetailPage = () => {
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       <Header />
       
-      <div className="pt-32 pb-20 px-4">
+      <div className="pt-28 pb-20 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Breadcrumb */}
           <div className="mb-8">

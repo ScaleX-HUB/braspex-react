@@ -30,7 +30,7 @@ const BlogPostPage = () => {
     return (
       <div className="min-h-screen bg-gray-50">
         <Header />
-        <div className="max-w-4xl mx-auto px-6 py-32 text-center">
+        <div className="max-w-4xl mx-auto px-6 pt-28 pb-32 text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">{blogPostContent?.notFoundTitle || 'Artigo não encontrado'}</h1>
           <button
             onClick={() => navigate('/blog')}
@@ -65,7 +65,7 @@ const BlogPostPage = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#005563] to-[#003840] text-white pt-32 pb-16">
+      <section className="bg-gradient-to-br from-[#005563] to-[#003840] text-white pt-28 pb-16">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <button
             onClick={() => navigate('/blog')}

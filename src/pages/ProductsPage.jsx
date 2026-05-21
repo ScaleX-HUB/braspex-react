@@ -1,20 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Home, ShoppingCart, Droplets, Flame, Wind, Settings, Eye } from 'lucide-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { ArrowRight, Home, ShoppingCart, Settings, Eye, Info } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import KitApplicationGuide from '../components/KitApplicationGuide';
 import { useCart } from '../contexts/CartContext';
 import { useSiteContent } from '../contexts/SiteContentContext';
 import { loadProducts, useProductsSync, loadCategories, useCategoriesSync } from '../data/productsUtils';
 
 const ProductsPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [selectedCategory, setSelectedCategory] = useState('todos');
   const [products, setProducts] = useState([]);
   const [categoriesData, setCategoriesData] = useState({});
   const { addToCart, isInCart } = useCart();
   const { content } = useSiteContent();
   const productsPageContent = content.productsPage;
+
+  const scrollToKitApplication = useCallback((behavior = 'smooth') => {
+    const element = document.getElementById('aplicacao-kits');
+    if (!element) return;
+
+    const offsetPosition = element.getBoundingClientRect().top + window.pageYOffset - 96;
+    window.scrollTo({ top: offsetPosition, behavior });
+  }, []);
+
+  const openKitApplication = useCallback(() => {
+    setSelectedCategory('kit');
+    window.setTimeout(() => scrollToKitApplication(), 80);
+  }, [scrollToKitApplication]);
 
   // Carregar produtos e categorias
   useEffect(() => {
@@ -51,13 +66,33 @@ const ProductsPage = () => {
       const categoryId = event.detail;
       console.log('📂 Selecionando categoria:', categoryId);
       setSelectedCategory(categoryId);
+      if (categoryId === 'kit') {
+        window.setTimeout(() => scrollToKitApplication(), 120);
+      }
     };
 
     window.addEventListener('selectCategory', handleSelectCategory);
     return () => window.removeEventListener('selectCategory', handleSelectCategory);
-  }, []);
+  }, [scrollToKitApplication]);
 
   // Estrutura de categorias dinâmica
+  useEffect(() => {
+    const handleOpenKitGuide = () => {
+      openKitApplication();
+    };
+
+    window.addEventListener('openKitGuide', handleOpenKitGuide);
+    return () => window.removeEventListener('openKitGuide', handleOpenKitGuide);
+  }, [openKitApplication]);
+
+  useEffect(() => {
+    if (location.hash === '#aplicacao-kits') {
+      window.setTimeout(() => {
+        openKitApplication();
+      }, 350);
+    }
+  }, [location.hash, openKitApplication]);
+
   const categoriesArray = Object.values(categoriesData);
   
   // Adicionar categoria "todos"
@@ -90,12 +125,19 @@ const ProductsPage = () => {
     return cat?.icon || <Settings className="w-5 h-5" />;
   };
 
+  const handleCategoryClick = (categoryId) => {
+    setSelectedCategory(categoryId);
+    if (categoryId === 'kit') {
+      openKitApplication();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
       
       {/* Breadcrumb */}
-      <div className="bg-white border-b pt-20 md:pt-24">
+      <div className="bg-white border-b pt-20 lg:pt-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
           <div className="flex items-center gap-2 text-sm">
             <button onClick={() => navigate('/')} className="flex items-center gap-1 text-[#005563] hover:text-[#FFD027] transition-colors">
@@ -119,6 +161,10 @@ const ProductsPage = () => {
           </p>
         </div>
 
+        <div className="mb-12 overflow-hidden border border-gray-200 bg-white shadow-md">
+          <KitApplicationGuide compact />
+        </div>
+
         <div className="flex flex-col lg:flex-row gap-8">
           
           {/* Sidebar - Categorias */}
@@ -131,7 +177,7 @@ const ProductsPage = () => {
                 {categories.map((category) => (
                   <div key={category.id} className="mb-2">
                     <button
-                      onClick={() => setSelectedCategory(category.id)}
+                      onClick={() => handleCategoryClick(category.id)}
                       className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${
                         selectedCategory === category.id
                           ? 'bg-[#005563] text-white font-semibold shadow-md'
@@ -162,6 +208,18 @@ const ProductsPage = () => {
                     )}
                   </div>
                 ))}
+                <button
+                  onClick={openKitApplication}
+                  className="mt-4 flex w-full items-center justify-between gap-3 border border-[#005563]/20 bg-[#005563]/5 px-4 py-4 text-left text-[#005563] transition-colors hover:bg-[#005563]/10"
+                >
+                  <span className="flex items-center gap-3">
+                    <Info className="h-5 w-5" aria-hidden="true" />
+                    <span className="text-sm font-bold uppercase leading-tight">
+                      {productsPageContent?.kitGuideButtonText || 'Entenda a aplicacao dos kits'}
+                    </span>
+                  </span>
+                  <ArrowRight className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+                </button>
               </div>
             </div>
           </aside>

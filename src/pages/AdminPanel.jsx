@@ -41,7 +41,7 @@ const AdminPanel = () => {
       icon: <AlignLeft size={24} />,
       subsections: [
         { id: 'section-order', name: 'Ordem das Seções', icon: <ArrowUpDown size={20} /> },
-        { id: 'hero-edit', name: 'Editar Textos', icon: <AlignLeft size={20} /> }
+        { id: 'hero-edit', name: 'Editar Conteudo', icon: <AlignLeft size={20} /> }
       ]
     },
     {
@@ -158,11 +158,11 @@ const AdminPanel = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
-        <div className="px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6">
+        <div className="px-4 py-4 sm:px-6">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
               <img src={logoBraspex} alt="BRASPEX" className="h-12" />
-              <div className="h-8 w-px bg-gray-300"></div>
+              <div className="hidden h-8 w-px bg-gray-300 sm:block"></div>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">Painel Administrativo</h1>
                 <p className="text-sm text-gray-600">Gerencie todo o conteúdo do site</p>
@@ -170,7 +170,7 @@ const AdminPanel = () => {
             </div>
             <button
               onClick={() => navigate('/')}
-              className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              className="flex w-fit items-center gap-2 rounded-lg px-4 py-2 text-gray-700 transition-colors hover:bg-gray-100"
             >
               <ArrowLeft size={20} />
               Voltar ao Site
@@ -179,15 +179,15 @@ const AdminPanel = () => {
         </div>
       </header>
 
-      <div className="flex">
+      <div className="flex flex-col lg:flex-row">
         {/* Sidebar - Menu Principal */}
-        <aside className="w-64 bg-white border-r border-gray-200 min-h-[calc(100vh-73px)] sticky top-[73px]">
-          <nav className="p-4 space-y-2">
+        <aside className="w-full border-b border-gray-200 bg-white lg:sticky lg:top-[73px] lg:min-h-[calc(100vh-73px)] lg:w-64 lg:border-b-0 lg:border-r">
+          <nav className="flex gap-2 overflow-x-auto p-4 lg:block lg:space-y-2 lg:overflow-visible">
             {menuStructure.map((menu) => (
-              <div key={menu.id}>
+              <div key={menu.id} className="min-w-[190px] lg:min-w-0">
                 <button
                   onClick={() => handleMenuClick(menu.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-semibold transition-all ${
+                  className={`flex w-full items-center gap-3 rounded-lg px-4 py-3 font-semibold transition-all ${
                     activeMenu === menu.id
                       ? 'bg-[#005563] text-white shadow-lg'
                       : 'text-gray-700 hover:bg-gray-100'
@@ -222,7 +222,7 @@ const AdminPanel = () => {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-8">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto">
             {renderContent()}
           </div>

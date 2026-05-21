@@ -6,8 +6,6 @@ import ProductsShowcase from '../components/ProductsShowcase';
 import Vantagens from '../components/Vantagens';
 import KitsShowcase from '../components/KitsShowcase';
 import Parceiros from '../components/Parceiros';
-import Comparacao from '../components/Comparacao';
-import Fluxo from '../components/Fluxo';
 import Contato from '../components/Contato';
 import Footer from '../components/Footer';
 import WhatsAppButton from '../components/WhatsAppButton';
@@ -29,8 +27,6 @@ const HomePage = () => {
     'Vantagens': Vantagens,
     'KitsShowcase': KitsShowcase,
     'Parceiros': Parceiros,
-    'Comparacao': Comparacao,
-    'Fluxo': Fluxo,
     'Contato': Contato
   };
 

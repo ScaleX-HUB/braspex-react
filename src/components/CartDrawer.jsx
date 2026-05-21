@@ -169,8 +169,9 @@ const CartDrawer = ({ isOpen, onClose }) => {
               <div className="border-t border-slate-200 p-6 space-y-3">
                 <button
                   onClick={handleRequestQuote}
-                  className="w-full bg-[#005563] text-white px-6 py-4 rounded-xl font-bold text-lg hover:bg-[#003d47] transition-all shadow-lg hover:shadow-xl"
+                  className="flex w-full items-center justify-center gap-3 bg-[#005563] px-6 py-4 text-lg font-bold text-white shadow-lg transition-all hover:bg-[#003d47] hover:shadow-xl"
                 >
+                  <ShoppingCart size={22} aria-hidden="true" />
                   {requestQuoteText}
                 </button>
                 <button

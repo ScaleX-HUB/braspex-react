@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   FileText, Settings, Factory, CheckCircle, Truck, Wrench,
-  ShieldCheck, Zap, BarChart2, Lightbulb, ArrowRight,
+  ShieldCheck, Lightbulb, ArrowRight,
 } from 'lucide-react';
 import { useSiteContent } from '../contexts/SiteContentContext';
+import { NORTHEAST_STATES } from '../data/northeastMapPaths';
 import { safeJsonParse } from '../lib/safeJson';
 
 /* ─── Animation variants ────────────────────────────────────────────────────── */
@@ -18,11 +19,17 @@ const stagger = {
 };
 
 /* ─── Default data ──────────────────────────────────────────────────────────── */
-const DEFAULT_DIFFS = [
-  { Icon: ShieldCheck, title: 'Qualidade Certificada',  description: 'Produtos desenvolvidos com rigor técnico, garantindo desempenho superior em campo.' },
-  { Icon: Zap,         title: 'Agilidade na Entrega',   description: 'Kits prontos para obra que reduzem prazos em até 3× frente ao método convencional.' },
-  { Icon: BarChart2,   title: 'Rastreabilidade Total',  description: 'Cada componente é identificado e rastreável do início ao fim da obra.' },
-  { Icon: Lightbulb,   title: 'Expertise do Grupo',    description: 'Respaldados pela experiência do Grupo Protogás, referência em instalações de gás.' },
+const DEFAULT_ABOUT_CARDS = [
+  {
+    Icon: Lightbulb,
+    title: 'Experiência Sólida',
+    description: 'Nascida da experiência do Grupo Protogás, a Braspex une rotina de obra, engenharia e produção industrial.'
+  },
+  {
+    Icon: ShieldCheck,
+    title: 'Qualidade Certificada',
+    description: 'Produtos desenvolvidos com rigor técnico, padronização e controle para entregar desempenho superior em campo.'
+  },
 ];
 
 const DEFAULT_STEPS = [
@@ -34,6 +41,125 @@ const DEFAULT_STEPS = [
   { id: 6, Icon: Wrench,      label: 'Suporte',          title: 'Suporte Técnico na Obra',                timeframe: 'Sob demanda',         description: 'Acompanhamento especializado durante a instalação, garantindo a correta implementação dos kits.' },
 ];
 
+const normalizeText = (value = '') =>
+  String(value).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+const pickDifferential = (items, fallback) => {
+  if (!Array.isArray(items)) return fallback;
+
+  const titleKey = normalizeText(fallback.title);
+  const match = items.find((item) => {
+    const searchable = normalizeText(`${item?.title || ''} ${item?.description || ''}`);
+    if (titleKey.includes('experiencia')) return searchable.includes('experiencia') || searchable.includes('protogas');
+    if (titleKey.includes('qualidade')) return searchable.includes('qualidade');
+    return false;
+  });
+
+  return {
+    ...fallback,
+    title: match?.title || fallback.title,
+    description: match?.description || fallback.description,
+  };
+};
+
+const RegionalMap = () => (
+  <div className="relative overflow-hidden border border-[#007A86]/20 bg-[#f4fbfc] p-4 shadow-xl md:p-6">
+    <svg
+      viewBox="0 0 620 560"
+      role="img"
+      aria-labelledby="regional-map-title regional-map-description"
+      className="h-full min-h-[360px] w-full"
+    >
+      <title id="regional-map-title">Mapa de atuação regional da Braspex no Nordeste</title>
+      <desc id="regional-map-description">
+        Mapa estilizado do Nordeste com sede destacada em Pernambuco e atuação nos estados da região.
+      </desc>
+      <defs>
+        <linearGradient id="regionalFill" x1="130" y1="70" x2="470" y2="500" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#008896" stopOpacity="0.98" />
+          <stop offset="1" stopColor="#004a54" stopOpacity="0.98" />
+        </linearGradient>
+        <pattern id="regionalGrid" width="34" height="34" patternUnits="userSpaceOnUse">
+          <path d="M34 0H0V34" fill="none" stroke="#005563" strokeOpacity="0.05" strokeWidth="1" />
+        </pattern>
+        <filter id="regionalGlow" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      <rect width="620" height="560" fill="#f4fbfc" />
+      <rect width="620" height="560" fill="url(#regionalGrid)" />
+      <path
+        d="M60 473 C125 445 182 459 250 446 C329 431 375 387 444 371 C516 354 555 375 590 410 L590 560 L60 560 Z"
+        fill="#d7edf0"
+        opacity="0.45"
+      />
+      <circle cx="417.9" cy="240.7" r="48" fill="none" stroke="#FFD027" strokeOpacity="0.5" strokeWidth="2" />
+      <circle cx="417.9" cy="240.7" r="104" fill="none" stroke="#FFD027" strokeOpacity="0.18" strokeWidth="1.5" />
+
+      <g filter="url(#regionalGlow)">
+        {NORTHEAST_STATES.map((state) => (
+          <path
+            key={state.code}
+            d={state.path}
+            fill={state.active ? '#FFD027' : 'url(#regionalFill)'}
+            fillOpacity={state.active ? '1' : '0.98'}
+            stroke={state.active ? '#001f26' : '#ffffff'}
+            strokeOpacity="1"
+            strokeLinejoin="round"
+            strokeWidth={state.active ? '2.8' : '1.35'}
+            vectorEffect="non-scaling-stroke"
+          />
+        ))}
+      </g>
+
+      {NORTHEAST_STATES.map((state) => {
+        const active = state.active;
+        return (
+          <g key={state.code}>
+            <circle
+              cx={state.label[0]}
+              cy={state.label[1]}
+              r={active ? '10' : '7.5'}
+              fill={active ? '#FFD027' : '#005563'}
+              stroke={active ? '#FFF6C7' : '#BFECEF'}
+              strokeWidth={active ? '3' : '2'}
+            />
+            <text
+              x={state.label[0] + 14}
+              y={state.label[1] + 5}
+              fill={active ? '#001f26' : '#E7FBFD'}
+              fontSize={active ? '17' : '13'}
+              fontWeight="700"
+            >
+              {state.code}
+            </text>
+          </g>
+        );
+      })}
+
+      <g>
+        <path d="M428 239 C468 229 491 222 518 208" fill="none" stroke="#001f26" strokeWidth="1.4" strokeDasharray="4 4" />
+        <rect x="515" y="174" width="78" height="48" fill="#001f26" />
+        <text x="529" y="193" fill="#FFD027" fontSize="11" fontWeight="900" letterSpacing="1.4">MATRIZ</text>
+        <text x="529" y="210" fill="#ffffff" fontSize="12" fontWeight="800">PE</text>
+      </g>
+
+      <g transform="translate(70 468)">
+        <rect width="236" height="62" fill="#ffffff" stroke="#d6e7ea" />
+        <circle cx="22" cy="22" r="7" fill="#FFD027" stroke="#001f26" strokeWidth="1.2" />
+        <text x="42" y="27" fill="#001f26" fontSize="13" fontWeight="800">Sede - Pernambuco</text>
+        <circle cx="22" cy="44" r="7" fill="#007A86" />
+        <text x="42" y="49" fill="#4f6870" fontSize="13" fontWeight="700">Atuacao regional</text>
+      </g>
+    </svg>
+  </div>
+);
+
 const Sobre = () => {
   const { content } = useSiteContent();
   const sobreContent = content?.sobre || {};
@@ -42,13 +168,16 @@ const Sobre = () => {
 
   /* Differentials */
   const parsedDiff = safeJsonParse(sobreContent.differentialsJson, null);
-  const differentials = Array.isArray(parsedDiff)
-    ? parsedDiff.map((d, i) => ({
-        ...DEFAULT_DIFFS[i],
-        title: d?.title ?? DEFAULT_DIFFS[i]?.title,
-        description: d?.description ?? DEFAULT_DIFFS[i]?.description,
-      }))
-    : DEFAULT_DIFFS;
+  const aboutCards = DEFAULT_ABOUT_CARDS.map((fallback) => pickDifferential(parsedDiff, fallback));
+  const conciseAbout =
+    'A Braspex industrializa kits hidráulicos para obras de construção civil, com base em Pernambuco e atuação regional no Nordeste.';
+  const firstContentParagraph = String(sobreContent.content || '').split('\n\n').find(Boolean);
+  const aboutSummary =
+    firstContentParagraph && firstContentParagraph.length <= 210 ? firstContentParagraph : conciseAbout;
+  const aboutTitle =
+    !sobreContent.title || sobreContent.title === 'Sobre a Braspex'
+      ? 'Braspex no Nordeste'
+      : sobreContent.title;
 
   /* Steps */
   const parsedSteps = safeJsonParse(fluxoContent?.stepsJson, null);
@@ -73,44 +202,43 @@ const Sobre = () => {
     <section id="sobre" className="bg-white">
 
       {/* ── Part 1: Who we are ─────────────────────────────────────────── */}
-      <div className="py-20 md:py-24 bg-[#f8f9fb]">
+      <div className="py-20 bg-[#f8f9fb] md:py-24">
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="mb-12">
-            <p className="text-[#FFD027] text-xs font-bold tracking-[0.2em] uppercase mb-3">Quem Somos</p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#001f26] leading-tight max-w-2xl">
-              {sobreContent.title || 'Braspex: Hidráulica Industrial que funciona'}
-            </h2>
-            <div className="w-16 h-1 bg-[#FFD027] rounded-full mt-5" />
-          </motion.div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-start">
-            {/* Text */}
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="space-y-5">
-              {(sobreContent.content || 'A Braspex fornece kits hidráulicos industrializados prontos para obra — combinando qualidade de fábrica, rastreabilidade total e agilidade de entrega.\n\nRespaldados pelo Grupo Protogás, atuamos com modelo produtivo moderno que reduz prazos, custos e retrabalhos em obras de qualquer porte.')
-                .split('\n\n').filter(Boolean)
-                .map((p, i) => (
-                  <motion.p key={i} variants={fadeUp} className="text-base md:text-lg text-gray-600 leading-relaxed">{p}</motion.p>
-                ))}
-              <motion.button variants={fadeUp} onClick={() => scrollTo('contato')}
-                className="group inline-flex items-center gap-2 mt-4 text-[#005563] font-bold text-sm hover:text-[#FFD027] transition-colors">
-                Fale com a nossa equipe
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:gap-16">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
+              <RegionalMap />
             </motion.div>
 
-            {/* Differentials */}
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {differentials.map((item, i) => (
-                <motion.div key={i} variants={fadeUp}
-                  className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
-                  <div className="w-10 h-10 bg-[#005563]/10 rounded-lg flex items-center justify-center mb-3">
-                    <item.Icon className="w-5 h-5 text-[#005563]" strokeWidth={2} />
-                  </div>
-                  <h3 className="text-sm font-bold text-[#001f26] mb-1">{item.title}</h3>
-                  <p className="text-xs text-gray-500 leading-relaxed">{item.description}</p>
-                </motion.div>
-              ))}
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
+              <motion.p variants={fadeUp} className="text-[#007A86] text-xs font-bold tracking-[0.2em] uppercase mb-3">
+                Quem Somos
+              </motion.p>
+              <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-bold text-[#001f26] leading-tight max-w-xl">
+                {aboutTitle}
+              </motion.h2>
+              <motion.div variants={fadeUp} className="w-16 h-1 bg-[#FFD027] rounded-full mt-5" />
+              <motion.p variants={fadeUp} className="mt-6 max-w-xl text-base leading-relaxed text-gray-600 md:text-lg">
+                {aboutSummary}
+              </motion.p>
+
+              <motion.div variants={stagger} className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {aboutCards.map((item) => (
+                  <motion.div key={item.title} variants={fadeUp}
+                    className="bg-white rounded-lg p-5 border border-gray-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+                    <div className="w-10 h-10 bg-[#005563]/10 rounded-lg flex items-center justify-center mb-3">
+                      <item.Icon className="w-5 h-5 text-[#005563]" strokeWidth={2} />
+                    </div>
+                    <h3 className="text-sm font-bold text-[#001f26] mb-1">{item.title}</h3>
+                    <p className="text-xs text-gray-500 leading-relaxed">{item.description}</p>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              <motion.button variants={fadeUp} onClick={() => scrollTo('contato')}
+                className="group mt-8 inline-flex items-center gap-2 text-[#005563] font-bold text-sm transition-colors hover:text-[#007A86]">
+                Fale com a nossa equipe
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </motion.button>
             </motion.div>
           </div>
         </div>
