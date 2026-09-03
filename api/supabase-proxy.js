@@ -1,14 +1,16 @@
 /**
- * Proxy API para Supabase Self-Hosted
+ * Proxy API para Supabase Self-Hosted (Vercel Serverless Function)
  * 
  * Resolve o problema de Mixed Content (HTTPS → HTTP)
  * Vercel (HTTPS) → Esta função → Supabase (HTTP)
  * 
- * Rota: https://www.braspexne.com.br/api/supabase-proxy
+ * Suporta:
+ *  - PostgREST (/rest/v1/...) via rewrite /api/supabase-proxy/:path+
+ *  - Storage (/storage/v1/...) via /api/supabase-proxy?path=...
+ *  - RPC functions
+ *  - Uploads e downloads binários (PDFs, imagens)
  */
 
-// Necessário para suportar upload binário (PDF/imagens) via proxy.
-// Mantém o corpo da requisição como stream/Buffer.
 export const config = {
   api: {
     bodyParser: false,
@@ -16,16 +18,22 @@ export const config = {
 };
 
 const readRawBody = async (req) => {
+  if (req.body) {
+    if (Buffer.isBuffer(req.body)) return req.body;
+    if (typeof req.body === 'string') return Buffer.from(req.body);
+    if (typeof req.body === 'object') return Buffer.from(JSON.stringify(req.body));
+  }
   const chunks = [];
   for await (const chunk of req) {
     chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
   }
-  return Buffer.concat(chunks);
+  return chunks.length > 0 ? Buffer.concat(chunks) : undefined;
 };
 
+const DEFAULT_ANON_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzYwMDE1NTc0LCJleHAiOjIwNzUzNzU1NzR9.zOkNw3Bh2qhDjrOYK8Gptx7Kv_ADs-9x0732M9pLYoQ';
+
 export default async function handler(req, res) {
-  // Preferir variáveis server-side na Vercel (SUPABASE_*), mantendo fallback para VITE_*.
-  // Observação: VITE_* é pensado para o frontend (build-time) e não é ideal para functions.
   const SUPABASE_URL =
     process.env.SUPABASE_URL ||
     process.env.VITE_SUPABASE_URL ||
@@ -39,41 +47,37 @@ export default async function handler(req, res) {
   const SUPABASE_ANON_KEY =
     process.env.SUPABASE_ANON_KEY ||
     process.env.VITE_SUPABASE_ANON_KEY ||
-    '';
+    DEFAULT_ANON_KEY;
 
-  // Opcional: chave service-role (server-side) para permitir escrita em rotas específicas
-  // mesmo quando o banco está com GRANT/RLS bloqueando o anon.
   const SUPABASE_SERVICE_ROLE_KEY =
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
     process.env.SUPABASE_SERVICE_KEY ||
     '';
   
-  // CORS headers essenciais
+  // CORS headers
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT,HEAD');
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization, apikey, Prefer, Accept-Profile, Content-Profile'
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization, apikey, Prefer, Accept-Profile, Content-Profile, x-upsert'
   );
 
-  // Responder OPTIONS para preflight
+  // Responder preflight OPTIONS
   if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
   }
   
-  // CRÍTICO: Capturar path do query param (vem do vercel.json)
+  // Capturar path do query param
   const { path: capturedPath, ...queryParams } = req.query || {};
   
-  // Reconstruir URL completa (path já vem com barra inicial do vercel.json)
   let finalPath = capturedPath || '/';
   const queryString = new URLSearchParams(queryParams).toString();
   if (queryString) {
-    finalPath += `?${queryString}`;
+    finalPath += (finalPath.includes('?') ? '&' : '?') + queryString;
   }
 
-  // Determinar rota alvo (sem query) para aplicar regras de auth
   let pathname = '/';
   try {
     pathname = new URL(finalPath, 'http://local').pathname || '/';
@@ -82,17 +86,11 @@ export default async function handler(req, res) {
   }
   
   const targetUrl = `${SUPABASE_URL}${finalPath}`;
-  console.log('🎯 Proxy request:', req.method, targetUrl);
-  console.log('📂 Schema:', SUPABASE_SCHEMA);
 
-  // Headers PostgREST obrigatórios
-  // IMPORTANTE: em produção, não dependa do client enviar apikey/Authorization.
-  // Se não vierem, injeta anon key configurada na Vercel.
   const method = (req.method || 'GET').toUpperCase();
   const isWrite = !['GET', 'HEAD', 'OPTIONS'].includes(method);
 
-  // Regra: usar service role para QUALQUER escrita REST ou storage quando a chave estiver disponível.
-  // Isso destrava o admin sem precisar mexer em GRANT/RLS via Studio.
+  // Usar service role para escritas se a chave estiver configurada
   const allowServiceRole = Boolean(SUPABASE_SERVICE_ROLE_KEY);
   const isRestWrite = isWrite && pathname.startsWith('/rest/v1/');
   const isStorageWrite = isWrite && pathname.startsWith('/storage/v1/object/');
@@ -111,62 +109,50 @@ export default async function handler(req, res) {
     'Authorization': authToUse,
     'apikey': apiKeyToUse,
     'Prefer': req.headers['prefer'] || '',
-    // FORÇAR schema do .env (não confiar no cliente)
     'Accept-Profile': SUPABASE_SCHEMA,
     'Content-Profile': SUPABASE_SCHEMA,
   };
-
-  if (!allowServiceRole && isWrite) {
-    console.warn('⚠️ Proxy: SUPABASE_SERVICE_ROLE_KEY não configurada. Escrita vai usar anon key (pode falhar com 401 se GRANT/RLS bloquearem).');
-  }
-  if (useServiceRole) {
-    console.log('🔐 Proxy auth: using service role for', method, pathname);
-  }
 
   // Remover headers vazios
   Object.keys(headers).forEach(key => {
     if (!headers[key]) delete headers[key];
   });
 
-  // Preparar body (raw) para POST/PATCH/PUT/etc
   let body = undefined;
-  if (req.method !== 'GET' && req.method !== 'HEAD') {
-    const raw = await readRawBody(req);
-    if (raw && raw.length > 0) {
-      body = raw;
+  if (!['GET', 'HEAD'].includes(method)) {
+    try {
+      body = await readRawBody(req);
+    } catch (readErr) {
+      console.warn('⚠️ Erro ao ler body da requisição:', readErr.message);
     }
   }
 
   try {
-    // Fazer requisição para Supabase HTTP
     const response = await fetch(targetUrl, {
-      method: req.method,
-      headers: headers,
-      body: body,
+      method,
+      headers,
+      body,
     });
 
-    console.log('📡 Response status:', response.status);
+    // Copiar headers relevantes da resposta
+    const responseHeaders = [
+      'content-type',
+      'content-disposition',
+      'cache-control',
+      'etag',
+      'content-range',
+      'content-location',
+      'location',
+      'preference-applied',
+    ];
 
-    // Copiar headers importantes da resposta
-    const responseHeaders = {
-      'content-type': response.headers.get('content-type'),
-      'content-disposition': response.headers.get('content-disposition'),
-      'cache-control': response.headers.get('cache-control'),
-      'etag': response.headers.get('etag'),
-      'content-range': response.headers.get('content-range'),
-      'content-location': response.headers.get('content-location'),
-      'location': response.headers.get('location'),
-      'preference-applied': response.headers.get('preference-applied'),
-    };
-
-    // Adicionar headers à resposta
-    Object.keys(responseHeaders).forEach(key => {
-      if (responseHeaders[key]) {
-        res.setHeader(key, responseHeaders[key]);
+    responseHeaders.forEach(header => {
+      const val = response.headers.get(header);
+      if (val) {
+        res.setHeader(header, val);
       }
     });
 
-    // Processar resposta
     if (response.status === 204) {
       res.status(204).end();
       return;
@@ -179,16 +165,14 @@ export default async function handler(req, res) {
       return;
     }
 
-    // Para PDFs/imagens/arquivos, precisamos manter o conteúdo binário.
     const buf = Buffer.from(await response.arrayBuffer());
     res.status(response.status).send(buf);
-    
   } catch (error) {
     console.error('❌ Proxy error:', error);
     res.status(500).json({ 
       error: 'Proxy error', 
       message: error.message,
-      targetUrl: targetUrl 
+      targetUrl 
     });
   }
 }

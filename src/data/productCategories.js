@@ -4,7 +4,7 @@ export const productCategories = {
     id: 'pex',
     name: 'PEX',
     displayName: 'Linha Pex ',
-    logo: '/public/imagempert.png', // Logo vermelho
+    logo: '/imagempert.png', // Logo vermelho
     color: '#E31E24', // Vermelho
     subcategories: [
       {
@@ -33,7 +33,7 @@ export const productCategories = {
     id: 'gas',
     name: 'GAS',
     displayName: 'Linha Pex Gás',
-    logo: '/public/imagemppr.png', // Logo amarelo  AS
+    logo: '/imagemppr.png', // Logo amarelo  AS
     color: '#FFD027', // Amarelo
     subcategories: [
       {
@@ -57,7 +57,7 @@ export const productCategories = {
     id: 'kit',
     name: 'KIT',
     displayName: 'Sistema Kit',
-    logo: '/public/kitsbraspex.png', // Logo cinza KIT
+    logo: '/kitsbraspex.png', // Logo cinza KIT
     color: '#6B7280', // Cinza
     subcategories: [
       {
@@ -91,7 +91,7 @@ export const productCategories = {
     id: 'polvo',
     name: 'POLVO',
     displayName: 'Sistema Polvo',
-    logo: '/public/multicamadaairtecno.png', // Logo verde POLVO
+    logo: '/multicamadaairtecno.png', // Logo verde POLVO
     color: '#10B981', // Verde
     subcategories: []
   },
