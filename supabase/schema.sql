@@ -134,3 +134,69 @@ $$;
 
 revoke all on function public.admin_login(text, text) from public;
 grant execute on function public.admin_login(text, text) to anon, authenticated;
+
+create table if not exists public.catalogs (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  pdf_url text,
+  pdf_path text,
+  cover_url text,
+  cover_path text,
+  active boolean not null default true,
+  order_index integer not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+grant select, insert, update, delete on public.catalogs to anon, authenticated;
+grant all on public.catalogs to service_role;
+
+alter table public.catalogs enable row level security;
+
+drop policy if exists catalogs_public_read on public.catalogs;
+create policy catalogs_public_read on public.catalogs
+  for select to anon, authenticated
+  using (true);
+
+drop policy if exists catalogs_anon_insert on public.catalogs;
+create policy catalogs_anon_insert on public.catalogs
+  for insert to anon, authenticated
+  with check (true);
+
+drop policy if exists catalogs_anon_update on public.catalogs;
+create policy catalogs_anon_update on public.catalogs
+  for update to anon, authenticated
+  using (true)
+  with check (true);
+
+drop policy if exists catalogs_anon_delete on public.catalogs;
+create policy catalogs_anon_delete on public.catalogs
+  for delete to anon, authenticated
+  using (true);
+
+insert into storage.buckets (id, name, public)
+values ('catalogs', 'catalogs', true)
+on conflict (id) do update set public = true;
+
+drop policy if exists catalogs_objects_read on storage.objects;
+create policy catalogs_objects_read on storage.objects
+  for select to anon, authenticated
+  using (bucket_id = 'catalogs');
+
+drop policy if exists catalogs_objects_insert on storage.objects;
+create policy catalogs_objects_insert on storage.objects
+  for insert to anon, authenticated
+  with check (bucket_id = 'catalogs');
+
+drop policy if exists catalogs_objects_update on storage.objects;
+create policy catalogs_objects_update on storage.objects
+  for update to anon, authenticated
+  using (bucket_id = 'catalogs')
+  with check (bucket_id = 'catalogs');
+
+drop policy if exists catalogs_objects_delete on storage.objects;
+create policy catalogs_objects_delete on storage.objects
+  for delete to anon, authenticated
+  using (bucket_id = 'catalogs');
+
+notify pgrst, 'reload schema';
