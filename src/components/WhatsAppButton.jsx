@@ -14,7 +14,7 @@ const WhatsAppButton = () => {
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-white/30 bg-[#25D366] text-white shadow-[0_16px_36px_rgba(0,85,99,0.35)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#1FB957]"
+      className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-white/30 bg-[#25D366] text-white shadow-[0_16px_36px_rgba(18,26,40,0.35)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#1FB957]"
       title={title}
       aria-label={title}
     >
