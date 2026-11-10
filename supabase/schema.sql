@@ -55,8 +55,8 @@ create table if not exists public.users (
 
 grant usage on schema public to anon, authenticated, service_role;
 
-grant select on public.products to anon, authenticated;
-grant select on public.categories to anon, authenticated;
+grant select, insert, update, delete on public.products to anon, authenticated;
+grant select, insert, update, delete on public.categories to anon, authenticated;
 grant all on public.products to service_role;
 grant all on public.categories to service_role;
 grant all on public.users to service_role;
@@ -75,3 +75,62 @@ drop policy if exists categories_public_read on public.categories;
 create policy categories_public_read on public.categories
   for select to anon, authenticated
   using (true);
+
+drop policy if exists products_anon_insert on public.products;
+create policy products_anon_insert on public.products
+  for insert to anon, authenticated
+  with check (true);
+
+drop policy if exists products_anon_update on public.products;
+create policy products_anon_update on public.products
+  for update to anon, authenticated
+  using (true)
+  with check (true);
+
+drop policy if exists products_anon_delete on public.products;
+create policy products_anon_delete on public.products
+  for delete to anon, authenticated
+  using (true);
+
+drop policy if exists categories_anon_insert on public.categories;
+create policy categories_anon_insert on public.categories
+  for insert to anon, authenticated
+  with check (true);
+
+drop policy if exists categories_anon_update on public.categories;
+create policy categories_anon_update on public.categories
+  for update to anon, authenticated
+  using (true)
+  with check (true);
+
+drop policy if exists categories_anon_delete on public.categories;
+create policy categories_anon_delete on public.categories
+  for delete to anon, authenticated
+  using (true);
+
+create extension if not exists pgcrypto with schema extensions;
+
+create or replace function public.admin_login(p_username text, p_password text)
+returns table (id bigint, username text, role text)
+language plpgsql
+security definer
+set search_path = public, extensions
+as $$
+declare
+  found public.users%rowtype;
+begin
+  select * into found
+  from public.users
+  where users.username = p_username
+    and users.active = true
+  limit 1;
+
+  if found.id is not null and found.password = extensions.crypt(p_password, found.password) then
+    update public.users set last_login = now() where users.id = found.id;
+    return query select found.id, found.username, found.role;
+  end if;
+end;
+$$;
+
+revoke all on function public.admin_login(text, text) from public;
+grant execute on function public.admin_login(text, text) to anon, authenticated;

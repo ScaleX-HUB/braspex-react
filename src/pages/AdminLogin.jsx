@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Lock, Eye, EyeOff } from 'lucide-react';
+import { supabase } from '../lib/supabaseClient';
 import AdminPanel from './AdminPanel';
 
 const AdminLogin = () => {
@@ -17,19 +18,22 @@ const AdminLogin = () => {
     setError('');
 
     try {
-      const response = await fetch('/api/admin-login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials)
+      const rows = await supabase.rpc('admin_login', {
+        p_username: credentials.username.trim(),
+        p_password: credentials.password
       });
-      const result = await response.json().catch(() => ({}));
+      const user = Array.isArray(rows) ? rows[0] : null;
 
-      if (response.ok && result.success) {
+      if (user?.id) {
         setIsAuthenticated(true);
         localStorage.setItem('adminAuth', 'true');
-        localStorage.setItem('adminUser', JSON.stringify(result.user));
+        localStorage.setItem('adminUser', JSON.stringify({
+          id: user.id,
+          username: user.username,
+          role: user.role
+        }));
       } else {
-        setError(result.message || 'Credenciais inválidas. Por favor, tente novamente.');
+        setError('Credenciais inválidas. Por favor, tente novamente.');
       }
     } catch (loginError) {
       console.error('Erro na autenticação:', loginError);

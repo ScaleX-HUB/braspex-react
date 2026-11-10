@@ -9,22 +9,15 @@
  * - NÃO usar JOINs (fazer queries separadas)
  */
 
-// O navegador fala com /api/supabase-proxy. A URL e as chaves ficam no servidor.
-// VITE_SUPABASE_DIRECT=true só para apontar o Vite direto ao PostgREST.
-const direct = String(import.meta.env.VITE_SUPABASE_DIRECT || '').toLowerCase() === 'true';
+import { SUPABASE_ANON_KEY, SUPABASE_PROJECT_URL, SUPABASE_SCHEMA } from './supabasePublic';
+
+// O projeto na nuvem é HTTPS, então o navegador fala direto com o Supabase.
+// O proxy só entra se VITE_SUPABASE_USE_PROXY=true.
+const useProxy = String(import.meta.env.VITE_SUPABASE_USE_PROXY || '').toLowerCase() === 'true';
 const customProxyUrl = import.meta.env.VITE_SUPABASE_PROXY_URL || '/api/supabase-proxy';
-const useProxy = !direct;
+const projectUrl = String(SUPABASE_PROJECT_URL || '').replace(/\/$/, '');
 
-const SUPABASE_BASE_URL = useProxy
-  ? customProxyUrl
-  : (import.meta.env.VITE_SUPABASE_URL || '');
-
-const SUPABASE_URL = useProxy
-  ? SUPABASE_BASE_URL
-  : (SUPABASE_BASE_URL ? `${SUPABASE_BASE_URL.replace(/\/$/, '')}/rest/v1` : '');
-
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
-const SUPABASE_SCHEMA = import.meta.env.VITE_SUPABASE_SCHEMA || 'public';
+const SUPABASE_URL = useProxy ? customProxyUrl : (projectUrl ? `${projectUrl}/rest/v1` : '');
 
 const isDevelopment = Boolean(import.meta.env.DEV);
 
