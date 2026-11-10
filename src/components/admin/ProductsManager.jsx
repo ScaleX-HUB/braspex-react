@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Package, Plus, Pencil, Trash2, Eye, Upload, Image as ImageIcon, DollarSign, RefreshCw } from 'lucide-react';
 import { productsAPI } from '../../services/productsAPI';
 import { loadCategories, publishProducts, useCategoriesSync } from '../../data/productsUtils';
@@ -48,6 +48,8 @@ const ProductsManager = () => {
     }
   }, [formData]);
   const [imagePreview, setImagePreview] = useState('');
+  const [saving, setSaving] = useState(false);
+  const savingRef = useRef(false);
 
   useEffect(() => {
     const loadCats = async () => {
@@ -167,11 +169,14 @@ const ProductsManager = () => {
   };
 
   const handleSave = async () => {
+    if (savingRef.current) return;
     if (!formData.name || !formData.categoryId) {
       alert('Por favor, preencha pelo menos o nome e a categoria');
       return;
     }
 
+    savingRef.current = true;
+    setSaving(true);
     try {
       const category = categoriesArray.find((item) => item.id === formData.categoryId);
       const subcategory = category?.subcategories?.find((item) => item.id === formData.subcategoryId);
@@ -208,7 +213,15 @@ const ProductsManager = () => {
       setIsEditing(false);
     } catch (error) {
       console.error('❌ Erro ao salvar produto:', error);
-      alert('Erro ao salvar produto: ' + error.message);
+      const message = String(error?.message || '');
+      if (message.includes('products_slug_key') || message.includes('23505')) {
+        alert('Já existe um produto com esse nome. Altere o nome e tente novamente.');
+      } else {
+        alert('Erro ao salvar produto: ' + message);
+      }
+    } finally {
+      savingRef.current = false;
+      setSaving(false);
     }
   };
 
@@ -248,10 +261,11 @@ const ProductsManager = () => {
             </button>
             <button
               onClick={handleSave}
-              className="px-4 py-2 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740] transition-colors flex items-center gap-2"
+              disabled={saving}
+              className="px-4 py-2 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740] transition-colors flex items-center gap-2 disabled:cursor-not-allowed disabled:opacity-60"
             >
               <Plus size={20} />
-              {currentProduct ? 'Atualizar Produto' : 'Criar Produto'}
+              {saving ? 'Salvando...' : (currentProduct ? 'Atualizar Produto' : 'Criar Produto')}
             </button>
           </div>
         </div>

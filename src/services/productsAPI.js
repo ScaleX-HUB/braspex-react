@@ -188,8 +188,19 @@ export const productsAPI = {
       }
 
       console.log('📦 Dados preparados para INSERT:', data);
-      
-      const result = await supabase.insert(TABLE_NAME, data);
+
+      let result;
+      try {
+        result = await supabase.insert(TABLE_NAME, data);
+      } catch (error) {
+        const message = String(error?.message || '');
+        const slugTaken = message.includes('products_slug_key') || message.includes('23505');
+        if (!slugTaken || !data.slug) throw error;
+        result = await supabase.insert(TABLE_NAME, {
+          ...data,
+          slug: `${data.slug}-${Date.now().toString(36)}`
+        });
+      }
       
       console.log('✅ Produto criado no Supabase:', result);
       return result && result.length > 0 ? result[0] : result;

@@ -63,100 +63,81 @@ const pickDifferential = (items, fallback) => {
 };
 
 const RegionalMap = () => (
-  <div className="relative overflow-hidden border border-[#26344D]/20 bg-[#F3F5F8] p-4 shadow-xl md:p-6">
+  <div className="overflow-hidden rounded-3xl border border-[#26344D]/10 bg-white shadow-[0_24px_60px_rgba(18,26,40,0.08)]">
+    <div className="flex items-end justify-between gap-4 px-6 pt-6">
+      <div>
+        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#26344D]">Nordeste</p>
+        <p className="mt-1 text-sm text-slate-500">Matriz em Pernambuco e atuação em toda a região</p>
+      </div>
+    </div>
     <svg
-      viewBox="0 0 620 560"
+      viewBox="70 30 470 500"
       role="img"
       aria-labelledby="regional-map-title regional-map-description"
-      className="h-full min-h-[360px] w-full"
+      className="h-full min-h-[340px] w-full"
     >
       <title id="regional-map-title">Mapa de atuação regional da Braspex no Nordeste</title>
       <desc id="regional-map-description">
         Mapa estilizado do Nordeste com sede destacada em Pernambuco e atuação nos estados da região.
       </desc>
       <defs>
-        <linearGradient id="regionalFill" x1="130" y1="70" x2="470" y2="500" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#3D4E6E" stopOpacity="0.98" />
-          <stop offset="1" stopColor="#1B2740" stopOpacity="0.98" />
+        <linearGradient id="regionalFill" x1="140" y1="40" x2="460" y2="520" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#3D4E6E" />
+          <stop offset="1" stopColor="#26344D" />
         </linearGradient>
-        <pattern id="regionalGrid" width="34" height="34" patternUnits="userSpaceOnUse">
-          <path d="M34 0H0V34" fill="none" stroke="#26344D" strokeOpacity="0.05" strokeWidth="1" />
-        </pattern>
-        <filter id="regionalGlow" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur stdDeviation="4" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
+        <radialGradient id="peGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#FFD027" stopOpacity="0.45" />
+          <stop offset="70%" stopColor="#FFD027" stopOpacity="0" />
+        </radialGradient>
       </defs>
 
-      <rect width="620" height="560" fill="#F3F5F8" />
-      <rect width="620" height="560" fill="url(#regionalGrid)" />
-      <path
-        d="M60 473 C125 445 182 459 250 446 C329 431 375 387 444 371 C516 354 555 375 590 410 L590 560 L60 560 Z"
-        fill="#D5DCE6"
-        opacity="0.45"
-      />
-      <circle cx="417.9" cy="240.7" r="48" fill="none" stroke="#FFD027" strokeOpacity="0.5" strokeWidth="2" />
-      <circle cx="417.9" cy="240.7" r="104" fill="none" stroke="#FFD027" strokeOpacity="0.18" strokeWidth="1.5" />
+      <rect x="70" y="30" width="470" height="500" fill="#F7F8FB" />
+      <ellipse cx="300" cy="470" rx="210" ry="46" fill="#E6EAF1" />
+      <circle cx="418" cy="241" r="78" fill="url(#peGlow)" />
 
-      <g filter="url(#regionalGlow)">
-        {NORTHEAST_STATES.map((state) => (
-          <path
-            key={state.code}
-            d={state.path}
-            fill={state.active ? '#FFD027' : 'url(#regionalFill)'}
-            fillOpacity={state.active ? '1' : '0.98'}
-            stroke={state.active ? '#121A28' : '#ffffff'}
-            strokeOpacity="1"
-            strokeLinejoin="round"
-            strokeWidth={state.active ? '2.8' : '1.35'}
-            vectorEffect="non-scaling-stroke"
-          />
-        ))}
-      </g>
+      {NORTHEAST_STATES.map((state) => (
+        <path
+          key={state.code}
+          d={state.path}
+          fill={state.active ? '#FFD027' : 'url(#regionalFill)'}
+          stroke="#F7F8FB"
+          strokeLinejoin="round"
+          strokeWidth={state.active ? 2.4 : 1.6}
+        />
+      ))}
 
       {NORTHEAST_STATES.map((state) => {
         const active = state.active;
         return (
-          <g key={state.code}>
-            <circle
-              cx={state.label[0]}
-              cy={state.label[1]}
-              r={active ? '10' : '7.5'}
-              fill={active ? '#FFD027' : '#26344D'}
-              stroke={active ? '#FFF6C7' : '#C5CEDB'}
-              strokeWidth={active ? '3' : '2'}
-            />
-            <text
-              x={state.label[0] + 14}
-              y={state.label[1] + 5}
-              fill={active ? '#121A28' : '#E6EAF1'}
-              fontSize={active ? '17' : '13'}
-              fontWeight="700"
-            >
-              {state.code}
-            </text>
-          </g>
+          <text
+            key={state.code}
+            x={state.label[0]}
+            y={state.label[1]}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fill={active ? '#121A28' : '#F8F9FB'}
+            stroke={active ? '#FFD027' : '#26344D'}
+            strokeWidth="4"
+            paintOrder="stroke"
+            fontSize={active ? '15' : '12'}
+            fontWeight="700"
+            style={{ letterSpacing: '0.04em' }}
+          >
+            {state.code}
+          </text>
         );
       })}
-
-      <g>
-        <path d="M428 239 C468 229 491 222 518 208" fill="none" stroke="#121A28" strokeWidth="1.4" strokeDasharray="4 4" />
-        <rect x="515" y="174" width="78" height="48" fill="#121A28" />
-        <text x="529" y="193" fill="#FFD027" fontSize="11" fontWeight="900" letterSpacing="1.4">MATRIZ</text>
-        <text x="529" y="210" fill="#ffffff" fontSize="12" fontWeight="800">PE</text>
-      </g>
-
-      <g transform="translate(70 468)">
-        <rect width="236" height="62" fill="#ffffff" stroke="#d6e7ea" />
-        <circle cx="22" cy="22" r="7" fill="#FFD027" stroke="#121A28" strokeWidth="1.2" />
-        <text x="42" y="27" fill="#121A28" fontSize="13" fontWeight="800">Sede - Pernambuco</text>
-        <circle cx="22" cy="44" r="7" fill="#26344D" />
-        <text x="42" y="49" fill="#4f6870" fontSize="13" fontWeight="700">Atuacao regional</text>
-      </g>
     </svg>
+    <div className="flex flex-wrap gap-x-6 gap-y-2 border-t border-slate-100 px-6 py-4 text-sm">
+      <span className="inline-flex items-center gap-2 font-semibold text-[#121A28]">
+        <span className="h-2.5 w-2.5 rounded-full bg-[#FFD027] ring-2 ring-[#121A28]" />
+        Sede em Pernambuco
+      </span>
+      <span className="inline-flex items-center gap-2 text-slate-500">
+        <span className="h-2.5 w-2.5 rounded-full bg-[#26344D]" />
+        Atuação regional
+      </span>
+    </div>
   </div>
 );
 
