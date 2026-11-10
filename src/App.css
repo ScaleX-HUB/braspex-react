@@ -219,12 +219,12 @@ section {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #005563;
+  background: #26344D;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #007A8A;
+  background: #3D4E6E;
 }
 
 /* Aspect ratio utilities for images */
@@ -245,7 +245,7 @@ section {
 
 /* Custom gradient backgrounds */
 .gradient-braspex {
-  background: linear-gradient(135deg, #005563 0%, #007A8A 100%);
+  background: linear-gradient(135deg, #26344D 0%, #3D4E6E 100%);
 }
 
 .gradient-yellow {

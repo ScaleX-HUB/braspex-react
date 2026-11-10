@@ -6,15 +6,13 @@
  * - Em produção precisamos passar por /api/supabase-proxy para evitar Mixed Content.
  */
 
-const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost';
-
-const forceProxy = String(import.meta.env.VITE_SUPABASE_FORCE_PROXY || '').toLowerCase() === 'true';
+const direct = String(import.meta.env.VITE_SUPABASE_DIRECT || '').toLowerCase() === 'true';
 const customProxyUrl = import.meta.env.VITE_SUPABASE_PROXY_URL || '/api/supabase-proxy';
 
-const SUPABASE_HTTP_URL = import.meta.env.VITE_SUPABASE_URL || 'http://173.249.32.99:54321';
+const SUPABASE_HTTP_URL = import.meta.env.VITE_SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-const useProxy = !isDevelopment || forceProxy;
+const useProxy = !direct;
 
 const buildProxyUrl = (path) => {
   if (!useProxy) {

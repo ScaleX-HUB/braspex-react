@@ -108,7 +108,7 @@ const ClientsSection = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#005563]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#26344D]"></div>
       </div>
     );
   }
@@ -149,7 +149,7 @@ const ClientsSection = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Buscar por nome, email ou empresa..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
             />
           </div>
 
@@ -157,7 +157,7 @@ const ClientsSection = () => {
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
           >
             <option value="all">Todos os Interesses</option>
             <option value="Kit PPR Água Quente/Fria">Kit PPR Água Quente/Fria</option>
@@ -188,14 +188,14 @@ const ClientsSection = () => {
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Mail size={16} className="flex-shrink-0" />
-                      <a href={`mailto:${client.email}`} className="hover:text-[#005563]">
+                      <a href={`mailto:${client.email}`} className="hover:text-[#26344D]">
                         {client.email}
                       </a>
                     </div>
 
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Phone size={16} className="flex-shrink-0" />
-                      <a href={`tel:${client.phone.replace(/\D/g, '')}`} className="hover:text-[#005563]">
+                      <a href={`tel:${client.phone.replace(/\D/g, '')}`} className="hover:text-[#26344D]">
                         {client.phone}
                       </a>
                     </div>
@@ -235,7 +235,7 @@ const ClientsSection = () => {
                     {client.interests?.map((interest, idx) => (
                       <span
                         key={idx}
-                        className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#005563] text-white"
+                        className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#26344D] text-white"
                       >
                         {interest}
                       </span>
@@ -256,7 +256,7 @@ const ClientsSection = () => {
               <div className="flex gap-3 mt-4 pt-4 border-t border-gray-200">
                 <a
                   href={`mailto:${client.email}`}
-                  className="flex-1 px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors text-center text-sm font-medium"
+                  className="flex-1 px-4 py-2 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740] transition-colors text-center text-sm font-medium"
                 >
                   Enviar Email
                 </a>

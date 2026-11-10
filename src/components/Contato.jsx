@@ -184,7 +184,7 @@ const Contato = () => {
                   value={formData.nome}
                   onChange={handleInputChange}
                   required
-                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300 bg-white text-gray-900"
+                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent transition-all duration-300 bg-white text-gray-900"
                   placeholder={contatoContent.namePlaceholder}
                 />
               </div>
@@ -201,7 +201,7 @@ const Contato = () => {
                   name="empresa"
                   value={formData.empresa}
                   onChange={handleInputChange}
-                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300 bg-white text-gray-900"
+                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent transition-all duration-300 bg-white text-gray-900"
                   placeholder={contatoContent.companyPlaceholder}
                 />
               </div>
@@ -221,7 +221,7 @@ const Contato = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
-                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300 bg-white text-gray-900"
+                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent transition-all duration-300 bg-white text-gray-900"
                   placeholder={contatoContent.emailPlaceholder}
                 />
               </div>
@@ -238,7 +238,7 @@ const Contato = () => {
                   name="telefone"
                   value={formData.telefone}
                   onChange={handleInputChange}
-                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300 bg-white text-gray-900"
+                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent transition-all duration-300 bg-white text-gray-900"
                   placeholder={contatoContent.phonePlaceholder}
                 />
               </div>
@@ -257,7 +257,7 @@ const Contato = () => {
                 onChange={handleInputChange}
                 required
                 rows={5}
-                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent transition-all duration-300 resize-none bg-white text-gray-900"
+                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent transition-all duration-300 resize-none bg-white text-gray-900"
                 placeholder={contatoContent.messagePlaceholder}
               />
             </div>
@@ -267,7 +267,7 @@ const Contato = () => {
             disabled={isSubmitting}
             whileHover={!isSubmitting ? { scale: 1.02, boxShadow: '0 10px 25px -5px rgba(0,0,0,0.3)' } : {}}
             whileTap={!isSubmitting ? { scale: 0.98 } : {}}
-            className="w-full py-4 px-6 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-3 bg-[#005563] text-white hover:bg-[#007A8A]"
+            className="w-full py-4 px-6 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-3 bg-[#26344D] text-white hover:bg-[#3D4E6E]"
           >
             <AnimatePresence mode="wait">
               {isSuccess ? (

@@ -231,7 +231,7 @@ export default function TextsManager() {
                   }}
                   className={`w-full rounded-lg px-3 py-3 text-left transition-colors ${
                     isActive
-                      ? 'bg-[#005563] text-white shadow-sm'
+                      ? 'bg-[#26344D] text-white shadow-sm'
                       : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
                   }`}
                 >
@@ -288,7 +288,7 @@ export default function TextsManager() {
                       </div>
                       <div className="flex items-center gap-2">
                         {field.toLowerCase().includes('json') && (
-                          <span className="rounded-full bg-[#005563]/10 px-2 py-1 text-xs font-bold text-[#005563]">
+                          <span className="rounded-full bg-[#26344D]/10 px-2 py-1 text-xs font-bold text-[#26344D]">
                             JSON
                           </span>
                         )}

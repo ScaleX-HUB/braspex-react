@@ -22,10 +22,10 @@ const DEFAULT_CHART = [
 ];
 
 const barGradients = [
-  ['#007A86', '#005563'],
+  ['#26344D', '#26344D'],
   ['#FFD027', '#D8AA00'],
-  ['#00A3AD', '#007A86'],
-  ['#005563', '#001f26'],
+  ['#5C6E8C', '#26344D'],
+  ['#26344D', '#121A28'],
 ];
 
 const Vantagens = () => {
@@ -56,8 +56,8 @@ const Vantagens = () => {
     <section id="vantagens" className="bg-[#f8f9fb] py-20 md:py-24" ref={chartRef}>
       <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="mb-14">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#007A86]">Comparação de Prazo</p>
-          <h2 className="max-w-3xl text-3xl font-bold leading-tight text-[#001f26] md:text-4xl">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#26344D]">Comparação de Prazo</p>
+          <h2 className="max-w-3xl text-3xl font-bold leading-tight text-[#121A28] md:text-4xl">
             {comparacaoContent.title || 'TRADICIONAL VS KITS BRASPEX'}
           </h2>
           {comparacaoContent.subtitle && (
@@ -73,7 +73,7 @@ const Vantagens = () => {
               return (
                 <motion.div key={`${item.label}-${i}`} variants={fadeUp}>
                   <div className="mb-2 flex items-baseline justify-between gap-4">
-                    <span className="text-2xl font-bold text-[#005563]">{item.value}%</span>
+                    <span className="text-2xl font-bold text-[#26344D]">{item.value}%</span>
                     <span className="text-right text-sm font-medium text-gray-700">{item.label}</span>
                   </div>
                   <div className="relative h-3 w-full overflow-hidden bg-slate-200">

@@ -64,7 +64,7 @@ const SupabaseTestSection = () => {
           <h2 className="text-2xl font-bold text-gray-900">Teste de Conexão Supabase</h2>
           <p className="text-gray-600 mt-1">Verifique a conectividade e os dados no banco</p>
         </div>
-        <button onClick={runAllTests} disabled={testing} className="bg-[#005563] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#004550] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+        <button onClick={runAllTests} disabled={testing} className="bg-[#26344D] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#1B2740] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
           <Database className="w-5 h-5" />
           {testing ? 'Testando...' : 'Executar Testes'}
         </button>

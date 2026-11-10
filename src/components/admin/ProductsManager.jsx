@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Package, Plus, Pencil, Trash2, Eye, Upload, Image as ImageIcon, DollarSign, RefreshCw } from 'lucide-react';
 import { productsAPI } from '../../services/productsAPI';
-import { loadCategories, useCategoriesSync } from '../../data/productsUtils';
+import { loadCategories, publishProducts, useCategoriesSync } from '../../data/productsUtils';
 
 const ProductsManager = () => {
   const [categories, setCategories] = useState({});
@@ -73,13 +73,16 @@ const ProductsManager = () => {
 
   const loadProducts = async () => {
     try {
-      const productsData = await productsAPI.getAll(true); // true = incluir inativos no admin
+      const productsData = await productsAPI.getAll(true);
       console.log('✅ Produtos carregados do Supabase:', productsData.length);
       setProducts(productsData);
       setFilteredProducts(productsData);
+      publishProducts(productsData);
+      return productsData;
     } catch (error) {
       console.error('❌ Erro ao carregar produtos:', error);
       alert('Erro ao carregar produtos do Supabase: ' + error.message);
+      return [];
     }
   };
 
@@ -150,7 +153,10 @@ const ProductsManager = () => {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Simular upload - na prática você faria upload para Supabase Storage
+      if (file.size > 2 * 1024 * 1024) {
+        alert('A imagem passa de 2MB. Use um arquivo menor ou cole a URL da imagem.');
+        return;
+      }
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -167,12 +173,15 @@ const ProductsManager = () => {
     }
 
     try {
-      // Preparar dados para enviar ao Supabase (converter camelCase para snake_case)
+      const category = categoriesArray.find((item) => item.id === formData.categoryId);
+      const subcategory = category?.subcategories?.find((item) => item.id === formData.subcategoryId);
       const dataToSend = {
         name: formData.name,
         description: formData.description,
-        category_id: formData.categoryId, // Converter categoryId para category_id
+        category_id: formData.categoryId,
+        category_name: category?.displayName || category?.display_name || category?.name || null,
         subcategory_id: formData.subcategoryId || null,
+        subcategory_name: subcategory?.name || null,
         image_url: formData.image || null,
         price: formData.price || null,
         specifications: formData.specifications || {},
@@ -195,13 +204,7 @@ const ProductsManager = () => {
         alert('Produto criado com sucesso!');
       }
 
-      // Recarregar produtos do Supabase
       await loadProducts();
-      
-      // Disparar evento para atualizar o site
-      window.dispatchEvent(new CustomEvent('productsUpdated'));
-      console.log('📡 Evento productsUpdated disparado');
-      
       setIsEditing(false);
     } catch (error) {
       console.error('❌ Erro ao salvar produto:', error);
@@ -245,7 +248,7 @@ const ProductsManager = () => {
             </button>
             <button
               onClick={handleSave}
-              className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740] transition-colors flex items-center gap-2"
             >
               <Plus size={20} />
               {currentProduct ? 'Atualizar Produto' : 'Criar Produto'}
@@ -295,7 +298,7 @@ const ProductsManager = () => {
                     setImagePreview(e.target.value);
                   }}
                   placeholder="Ou cole a URL da imagem"
-                  className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent text-sm"
+                  className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent text-sm"
                 />
               </div>
             </div>
@@ -311,7 +314,7 @@ const ProductsManager = () => {
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                 placeholder="Ex: Kit PPR Completo - Água Quente"
               />
             </div>
@@ -324,7 +327,7 @@ const ProductsManager = () => {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={3}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                 placeholder="Descrição detalhada do produto"
               />
             </div>
@@ -343,7 +346,7 @@ const ProductsManager = () => {
                   categoryId: e.target.value,
                   subcategoryId: '' 
                 })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               >
                 <option value="">Selecione uma categoria</option>
                 {categoriesArray.map(cat => (
@@ -361,7 +364,7 @@ const ProductsManager = () => {
               <select
                 value={formData.subcategoryId}
                 onChange={(e) => setFormData({ ...formData, subcategoryId: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                 disabled={!formData.categoryId}
               >
                 <option value="">Selecione uma subcategoria</option>
@@ -382,7 +385,7 @@ const ProductsManager = () => {
               type="text"
               value={formData.price}
               onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               placeholder="Ex: R$ 1.250,00"
             />
             <p className="text-sm text-gray-500 mt-1">
@@ -405,7 +408,7 @@ const ProductsManager = () => {
                     ...formData,
                     specifications: { ...(formData.specifications || {}), material: e.target.value }
                   })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   placeholder="Ex: PPR, PEX, Latão"
                 />
               </div>
@@ -421,7 +424,7 @@ const ProductsManager = () => {
                     ...formData,
                     specifications: { ...(formData.specifications || {}), capacity: e.target.value }
                   })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   placeholder="Ex: Até 90°C, 10 bar"
                 />
               </div>
@@ -437,7 +440,7 @@ const ProductsManager = () => {
                     ...formData,
                     specifications: { ...(formData.specifications || {}), dimensions: e.target.value }
                   })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   placeholder="Ex: 20mm, 25mm, 32mm"
                 />
               </div>
@@ -453,7 +456,7 @@ const ProductsManager = () => {
                     ...formData,
                     specifications: { ...(formData.specifications || {}), acabamento: e.target.value }
                   })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   placeholder="Ex: Natural, Cromado"
                 />
               </div>
@@ -472,7 +475,7 @@ const ProductsManager = () => {
                       diametros: e.target.value.split(',').map(n => n.trim()).filter(n => n)
                     }
                   })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   placeholder='Ex: 1/2", 3/4", 1"'
                 />
               </div>
@@ -491,7 +494,7 @@ const ProductsManager = () => {
                       normas: e.target.value.split(',').map(n => n.trim()).filter(n => n)
                     }
                   })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   placeholder="Ex: NBR 15884, ISO 21003"
                 />
               </div>
@@ -505,7 +508,7 @@ const ProductsManager = () => {
               id="active"
               checked={formData.active}
               onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
-              className="w-4 h-4 text-[#005563] focus:ring-[#005563] border-gray-300 rounded"
+              className="w-4 h-4 text-[#26344D] focus:ring-[#26344D] border-gray-300 rounded"
             />
             <label htmlFor="active" className="text-sm font-medium text-gray-700">
               Produto ativo (visível no site)
@@ -531,7 +534,7 @@ const ProductsManager = () => {
         </div>
         <button
           onClick={handleNewProduct}
-          className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
+          className="px-4 py-2 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740] transition-colors flex items-center gap-2"
         >
           <Plus size={20} />
           Novo Produto
@@ -551,7 +554,7 @@ const ProductsManager = () => {
                 setSelectedCategory(e.target.value);
                 setSelectedSubcategory('all');
               }}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
             >
               <option value="all">Todas as Categorias</option>
               {categoriesArray.map(cat => (
@@ -567,7 +570,7 @@ const ProductsManager = () => {
             <select
               value={selectedSubcategory}
               onChange={(e) => setSelectedSubcategory(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               disabled={selectedCategory === 'all'}
             >
               <option value="all">Todas as Subcategorias</option>
@@ -637,7 +640,7 @@ const ProductsManager = () => {
                 </div>
 
                 {product.price && (
-                  <div className="text-lg font-bold text-[#005563]">
+                  <div className="text-lg font-bold text-[#26344D]">
                     {product.price}
                   </div>
                 )}

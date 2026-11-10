@@ -77,6 +77,33 @@ export const useCategoriesSync = (callback) => {
   }, [callback]);
 };
 
+export const toSiteProduct = (product) => ({
+  id: product.id,
+  name: product.name,
+  description: product.description,
+  categoryId: product.category_id ?? product.categoryId,
+  categoryName: product.category_name ?? product.categoryName,
+  subcategoryId: product.subcategory_id ?? product.subcategoryId,
+  subcategoryName: product.subcategory_name ?? product.subcategoryName,
+  image: product.image_url || product.image_path || product.image,
+  price: product.price_label || product.price || 'Sob Consulta',
+  specifications: product.specifications || {},
+  active: product.active !== false,
+  featured: product.featured || false,
+  slug: product.slug
+});
+
+/**
+ * Publica a lista visível no site e avisa as páginas já abertas.
+ */
+export const publishProducts = (rows) => {
+  const products = (rows || [])
+    .filter((product) => product.active !== false)
+    .map(toSiteProduct);
+  saveProducts(products);
+  return products;
+};
+
 /**
  * Carrega produtos: PRIORIDADE Supabase → localStorage → Array vazio
  */
@@ -86,32 +113,13 @@ export const loadProducts = async () => {
     console.log('🔍 Buscando produtos do Supabase...');
     const supabaseProducts = await productsAPI.getAll();
 
-    if (supabaseProducts && supabaseProducts.length > 0) {
+    if (Array.isArray(supabaseProducts)) {
       console.log('✅ Produtos carregados do Supabase:', supabaseProducts.length);
-
-      // Converter formato do Supabase para formato do site
-      const products = supabaseProducts.map(p => ({
-        id: p.id,
-        name: p.name,
-        description: p.description,
-        categoryId: p.category_id,
-        categoryName: p.category_name,
-        subcategoryId: p.subcategory_id,
-        image: p.image_url || p.image_path,
-        price: p.price || p.price_label || 'Sob Consulta',
-        specifications: p.specifications || {},
-        active: p.active !== false,
-        featured: p.featured || false,
-        slug: p.slug
-      }));
-
-      // Salvar no localStorage como cache (best-effort)
+      const products = supabaseProducts.map(toSiteProduct);
       const cached = safeSetItem(STORAGE_KEY, JSON.stringify(products));
       if (!cached) {
         console.warn('⚠️ Não foi possível salvar produtos no localStorage (quota). Exibindo sem cache.');
       }
-
-      // IMPORTANTE: mesmo sem cache, retorna os produtos carregados
       return products;
     }
   } catch (error) {
@@ -139,18 +147,12 @@ export const loadProducts = async () => {
  * Salva produtos no localStorage
  */
 export const saveProducts = (products) => {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-    console.log('✅ Produtos salvos no localStorage:', products.length);
-    
-    // Disparar evento customizado para notificar outros componentes
-    window.dispatchEvent(new CustomEvent('productsUpdated', { detail: products }));
-    
-    return true;
-  } catch (e) {
-    console.error('❌ Erro ao salvar produtos:', e);
-    return false;
+  const cached = safeSetItem(STORAGE_KEY, JSON.stringify(products));
+  if (!cached) {
+    console.warn('⚠️ Não foi possível salvar produtos no localStorage (quota).');
   }
+  window.dispatchEvent(new CustomEvent('productsUpdated', { detail: products }));
+  return true;
 };
 
 /**

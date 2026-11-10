@@ -8,7 +8,7 @@ const AnalyticsSection = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#005563]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#26344D]"></div>
       </div>
     );
   }
@@ -85,7 +85,7 @@ const AnalyticsSection = () => {
               className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
             >
               <span className="text-gray-700">{page.path}</span>
-              <span className="font-semibold text-[#005563]">{page.views} views</span>
+              <span className="font-semibold text-[#26344D]">{page.views} views</span>
             </div>
           )) || (
             <p className="text-gray-400 text-center py-4">Nenhum dado disponível</p>

@@ -52,6 +52,7 @@ const ProductsPage = () => {
 
   // Sincronizar quando produtos forem atualizados no admin
   useProductsSync((updatedProducts) => {
+    if (!Array.isArray(updatedProducts)) return;
     setProducts(updatedProducts);
   });
 
@@ -140,7 +141,7 @@ const ProductsPage = () => {
       <div className="bg-white border-b pt-20 lg:pt-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
           <div className="flex items-center gap-2 text-sm">
-            <button onClick={() => navigate('/')} className="flex items-center gap-1 text-[#005563] hover:text-[#FFD027] transition-colors">
+            <button onClick={() => navigate('/')} className="flex items-center gap-1 text-[#26344D] hover:text-[#FFD027] transition-colors">
               <Home className="w-4 h-4" />
               {productsPageContent?.breadcrumbHome || 'Home'}
             </button>
@@ -170,7 +171,7 @@ const ProductsPage = () => {
           {/* Sidebar - Categorias */}
           <aside className="lg:w-72 flex-shrink-0">
             <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden sticky top-24">
-              <div className="bg-[#005563] text-white px-6 py-4">
+              <div className="bg-[#26344D] text-white px-6 py-4">
                 <h2 className="text-xl font-bold">{productsPageContent?.categoriesTitle || 'Categorias'}</h2>
               </div>
               <div className="p-4">
@@ -180,11 +181,11 @@ const ProductsPage = () => {
                       onClick={() => handleCategoryClick(category.id)}
                       className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${
                         selectedCategory === category.id
-                          ? 'bg-[#005563] text-white font-semibold shadow-md'
+                          ? 'bg-[#26344D] text-white font-semibold shadow-md'
                           : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
                       }`}
                     >
-                      {category.icon && <span className={selectedCategory === category.id ? 'text-[#FFD027]' : 'text-[#005563]'}>{category.icon}</span>}
+                      {category.icon && <span className={selectedCategory === category.id ? 'text-[#FFD027]' : 'text-[#26344D]'}>{category.icon}</span>}
                       <span>{category.name}</span>
                     </button>
                     
@@ -197,8 +198,8 @@ const ProductsPage = () => {
                             onClick={() => setSelectedCategory(subcategory.id)}
                             className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-all ${
                               selectedCategory === subcategory.id
-                                ? 'bg-[#FFD027] text-[#005563] font-semibold'
-                                : 'text-gray-600 hover:bg-gray-50 hover:text-[#005563]'
+                                ? 'bg-[#FFD027] text-[#26344D] font-semibold'
+                                : 'text-gray-600 hover:bg-gray-50 hover:text-[#26344D]'
                             }`}
                           >
                             {subcategory.name}
@@ -210,7 +211,7 @@ const ProductsPage = () => {
                 ))}
                 <button
                   onClick={openKitApplication}
-                  className="mt-4 flex w-full items-center justify-between gap-3 border border-[#005563]/20 bg-[#005563]/5 px-4 py-4 text-left text-[#005563] transition-colors hover:bg-[#005563]/10"
+                  className="mt-4 flex w-full items-center justify-between gap-3 border border-[#26344D]/20 bg-[#26344D]/5 px-4 py-4 text-left text-[#26344D] transition-colors hover:bg-[#26344D]/10"
                 >
                   <span className="flex items-center gap-3">
                     <Info className="h-5 w-5" aria-hidden="true" />
@@ -243,7 +244,7 @@ const ProductsPage = () => {
                 >
                   {/* Product Image */}
                   <Link to={`/produtos/${product.id}`}>
-                    <div className="relative h-64 bg-gradient-to-br from-[#005563]/5 to-[#005563]/10 flex items-center justify-center p-8 hover:from-[#005563]/10 hover:to-[#005563]/20 transition-all cursor-pointer">
+                    <div className="relative h-64 bg-gradient-to-br from-[#26344D]/5 to-[#26344D]/10 flex items-center justify-center p-8 hover:from-[#26344D]/10 hover:to-[#26344D]/20 transition-all cursor-pointer">
                       {product.image ? (
                         <img
                           src={product.image}
@@ -251,11 +252,11 @@ const ProductsPage = () => {
                           className="w-full h-full object-contain hover:scale-105 transition-transform"
                         />
                       ) : (
-                        <div className="text-[#005563]/20 text-8xl">
+                        <div className="text-[#26344D]/20 text-8xl">
                           {getCategoryIcon(product.category)}
                         </div>
                       )}
-                      <div className="absolute top-3 left-3 bg-[#005563] text-white text-xs font-bold px-3 py-1 rounded-full">
+                      <div className="absolute top-3 left-3 bg-[#26344D] text-white text-xs font-bold px-3 py-1 rounded-full">
                         {categories.find(c => c.id === product.categoryId || c.id === product.categoryName)?.name || product.categoryName || productsPageContent?.categoryFallback || 'Kit'}
                       </div>
                     </div>
@@ -264,7 +265,7 @@ const ProductsPage = () => {
                   {/* Product Info */}
                   <div className="p-6">
                     <Link to={`/produtos/${product.id}`}>
-                      <h3 className="text-xl font-bold text-gray-900 mb-3 min-h-[3.5rem] line-clamp-2 hover:text-[#005563] transition-colors cursor-pointer">
+                      <h3 className="text-xl font-bold text-gray-900 mb-3 min-h-[3.5rem] line-clamp-2 hover:text-[#26344D] transition-colors cursor-pointer">
                         {product.name}
                       </h3>
                     </Link>
@@ -273,7 +274,7 @@ const ProductsPage = () => {
                       {product.description}
                     </p>
 
-                    <p className="text-lg font-bold text-[#005563] mb-4">
+                    <p className="text-lg font-bold text-[#26344D] mb-4">
                       {product.price}
                     </p>
 
@@ -290,7 +291,7 @@ const ProductsPage = () => {
                         </span>
                       )}
                       {product.specifications?.capacity && (
-                        <span className="bg-[#FFD027]/20 text-[#005563] text-xs font-medium px-3 py-1 rounded-full">
+                        <span className="bg-[#FFD027]/20 text-[#26344D] text-xs font-medium px-3 py-1 rounded-full">
                           {product.specifications.capacity}
                         </span>
                       )}
@@ -304,7 +305,7 @@ const ProductsPage = () => {
                         className={`flex-1 px-4 py-3 rounded-lg text-sm font-bold transition-colors flex items-center justify-center gap-2 shadow-md ${
                           isInCart(product.id)
                             ? 'bg-green-500 text-white cursor-not-allowed'
-                            : 'bg-[#005563] text-white hover:bg-[#004450] hover:shadow-lg'
+                            : 'bg-[#26344D] text-white hover:bg-[#1B2740] hover:shadow-lg'
                         }`}
                       >
                         <ShoppingCart className="w-5 h-5" />
@@ -336,7 +337,7 @@ const ProductsPage = () => {
                 </p>
                 <button
                   onClick={() => setSelectedCategory('todos')}
-                  className="bg-[#005563] text-white px-8 py-3 rounded-lg font-bold hover:bg-[#004450] transition-colors"
+                  className="bg-[#26344D] text-white px-8 py-3 rounded-lg font-bold hover:bg-[#1B2740] transition-colors"
                 >
                   {productsPageContent?.emptyButtonText || 'Ver todos os produtos'}
                 </button>

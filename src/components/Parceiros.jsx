@@ -72,10 +72,10 @@ const Parceiros = () => {
     >
       <div className="max-w-6xl mx-auto px-5">
         <motion.div className="text-center mb-16" variants={titleVariants}>
-          <p className="text-[#005563] font-semibold text-lg mb-2 uppercase tracking-wide">
+          <p className="text-[#26344D] font-semibold text-lg mb-2 uppercase tracking-wide">
             {parceirosContent.kicker}
           </p>
-          <h2 className="text-4xl md:text-5xl font-bold text-[#005563] mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-[#26344D] mb-4">
             {parceirosContent.title}
           </h2>
           <p className="text-xl text-gray-600 mb-6">

@@ -44,7 +44,7 @@ const ProductDetailPage = () => {
         <Header />
         <div className="flex items-center justify-center min-h-[60vh] pt-24">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#005563] mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#26344D] mx-auto mb-4"></div>
             <p className="text-gray-600">{productDetailContent?.loadingText || 'Carregando produto...'}</p>
           </div>
         </div>
@@ -62,7 +62,7 @@ const ProductDetailPage = () => {
             <h1 className="text-4xl font-bold text-slate-900 mb-4">{productDetailContent?.notFoundTitle || 'Produto não encontrado'}</h1>
             <Link 
               to="/produtos" 
-              className="inline-flex items-center gap-2 text-[#005563] hover:text-[#003d47] transition-colors"
+              className="inline-flex items-center gap-2 text-[#26344D] hover:text-[#1B2740] transition-colors"
             >
               <ArrowLeft size={20} />
               {productDetailContent?.backToProducts || 'Voltar para produtos'}
@@ -122,7 +122,7 @@ const ProductDetailPage = () => {
           <div className="mb-8">
             <Link 
               to="/produtos" 
-              className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-[#005563] transition-colors"
+              className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-[#26344D] transition-colors"
             >
               <ArrowLeft size={16} />
               {productDetailContent?.backToProducts || 'Voltar para produtos'}
@@ -157,7 +157,7 @@ const ProductDetailPage = () => {
                       key={index}
                       onClick={() => openImageModal(index)}
                       className={`aspect-square bg-white rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${
-                        selectedImage === index ? 'border-[#005563]' : 'border-slate-200 hover:border-slate-300'
+                        selectedImage === index ? 'border-[#26344D]' : 'border-slate-200 hover:border-slate-300'
                       }`}
                     >
                       <img src={img} alt={`${product.name} - ${index + 1}`} className="w-full h-full object-contain p-2" />
@@ -176,7 +176,7 @@ const ProductDetailPage = () => {
               <h1 className="text-5xl font-bold text-slate-900 mb-4">{product.name}</h1>
               
               <div className="flex items-center gap-4 mb-6">
-                <span className="text-3xl font-bold text-[#005563]">{product.price}</span>
+                <span className="text-3xl font-bold text-[#26344D]">{product.price}</span>
               </div>
 
               <p className="text-lg text-slate-700 mb-8 leading-relaxed">
@@ -208,7 +208,7 @@ const ProductDetailPage = () => {
                   className={`flex-1 px-8 py-4 rounded-xl font-semibold text-lg transition-all ${
                     isInCart(product.id)
                       ? 'bg-green-500 text-white cursor-not-allowed'
-                      : 'bg-[#005563] text-white hover:bg-[#003d47] hover:shadow-lg'
+                      : 'bg-[#26344D] text-white hover:bg-[#1B2740] hover:shadow-lg'
                   }`}
                 >
                   {isInCart(product.id) ? (
@@ -226,7 +226,7 @@ const ProductDetailPage = () => {
 
                 <Link
                   to="/#contato"
-                  className="px-8 py-4 bg-white border-2 border-[#005563] text-[#005563] rounded-xl font-semibold text-lg hover:bg-[#005563] hover:text-white transition-all text-center"
+                  className="px-8 py-4 bg-white border-2 border-[#26344D] text-[#26344D] rounded-xl font-semibold text-lg hover:bg-[#26344D] hover:text-white transition-all text-center"
                 >
                   {productDetailContent?.requestQuote || 'Solicitar Cotação'}
                 </Link>
@@ -238,7 +238,7 @@ const ProductDetailPage = () => {
                 <ul className="space-y-2">
                   {specsArray.map((spec, index) => (
                     <li key={index} className="flex items-start gap-3 text-slate-700">
-                      <span className="text-[#005563] mt-1">•</span>
+                      <span className="text-[#26344D] mt-1">•</span>
                       <span className="text-sm">{spec}</span>
                     </li>
                   ))}
@@ -250,7 +250,7 @@ const ProductDetailPage = () => {
 
               {/* What's Included */}
               {product.includes && product.includes.length > 0 && (
-                <div className="bg-gradient-to-br from-[#005563] to-[#003d47] rounded-xl p-6 text-white">
+                <div className="bg-gradient-to-br from-[#26344D] to-[#1B2740] rounded-xl p-6 text-white">
                   <h3 className="text-lg font-semibold mb-4">{productDetailContent?.includesTitle || 'O que está incluído:'}</h3>
                   <ul className="space-y-2">
                     {product.includes.map((item, index) => (

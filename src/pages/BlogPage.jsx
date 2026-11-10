@@ -45,7 +45,7 @@ const BlogPage = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#005563] to-[#003840] text-white pt-28 pb-16">
+      <section className="bg-gradient-to-br from-[#26344D] to-[#1B2740] text-white pt-28 pb-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -73,7 +73,7 @@ const BlogPage = () => {
                 placeholder={blogContent?.searchPlaceholder || 'Buscar artigos...'}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#005563]"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#26344D]"
               />
             </div>
 
@@ -85,7 +85,7 @@ const BlogPage = () => {
                   onClick={() => setSelectedCategory(category)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     selectedCategory === category
-                      ? 'bg-[#005563] text-white'
+                      ? 'bg-[#26344D] text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
@@ -110,17 +110,17 @@ const BlogPage = () => {
                 className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
               >
                 <a href={`/blog/${post.slug}`} className="block">
-                  <div className="relative h-48 bg-gradient-to-br from-[#005563] to-[#003840] overflow-hidden">
+                  <div className="relative h-48 bg-gradient-to-br from-[#26344D] to-[#1B2740] overflow-hidden">
                     <div className="absolute inset-0 flex items-center justify-center text-white text-6xl opacity-20">
                       {post.icon}
                     </div>
-                    <div className="absolute top-4 right-4 bg-[#FFD027] text-[#005563] px-3 py-1 rounded-full text-xs font-bold">
+                    <div className="absolute top-4 right-4 bg-[#FFD027] text-[#26344D] px-3 py-1 rounded-full text-xs font-bold">
                       {post.category}
                     </div>
                   </div>
                   
                   <div className="p-6">
-                    <h2 className="text-xl font-bold text-gray-900 mb-3 hover:text-[#005563] transition-colors">
+                    <h2 className="text-xl font-bold text-gray-900 mb-3 hover:text-[#26344D] transition-colors">
                       {post.title}
                     </h2>
                     
@@ -139,7 +139,7 @@ const BlogPage = () => {
                       </span>
                     </div>
                     
-                    <div className="flex items-center text-[#005563] font-semibold text-sm">
+                    <div className="flex items-center text-[#26344D] font-semibold text-sm">
                       {blogContent?.readMore || 'Ler mais'}
                       <ArrowRight className="w-4 h-4 ml-1" />
                     </div>

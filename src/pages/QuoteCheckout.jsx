@@ -134,7 +134,7 @@ const QuoteCheckout = () => {
             </p>
             <button
               onClick={() => navigate('/produtos')}
-              className="bg-[#005563] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#003d47] transition-colors"
+              className="bg-[#26344D] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#1B2740] transition-colors"
             >
               {quoteContent?.cartEmptyButton || 'Ver Produtos'}
             </button>
@@ -187,9 +187,9 @@ const QuoteCheckout = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Passo 01 - Produtos */}
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-            <div className="bg-[#005563] text-white px-6 py-4">
+            <div className="bg-[#26344D] text-white px-6 py-4">
               <h2 className="text-xl font-bold flex items-center gap-2">
-                <span className="bg-white text-[#005563] px-3 py-1 rounded text-sm font-bold">
+                <span className="bg-white text-[#26344D] px-3 py-1 rounded text-sm font-bold">
                   {quoteContent?.step01Label || 'Passo 01'}
                 </span>
                 {quoteContent?.step01Title || 'Confira e preencha a quantidade de cada produto adicionado'}
@@ -241,7 +241,7 @@ const QuoteCheckout = () => {
               <button
                 type="button"
                 onClick={() => navigate('/produtos')}
-                className="mt-6 text-[#005563] font-semibold hover:text-[#003d47] transition-colors"
+                className="mt-6 text-[#26344D] font-semibold hover:text-[#1B2740] transition-colors"
               >
                 {quoteContent?.continueShopping || 'Continuar Orçando'}
               </button>
@@ -250,9 +250,9 @@ const QuoteCheckout = () => {
 
           {/* Passo 02 - Dados */}
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-            <div className="bg-[#005563] text-white px-6 py-4">
+            <div className="bg-[#26344D] text-white px-6 py-4">
               <h2 className="text-xl font-bold flex items-center gap-2">
-                <span className="bg-white text-[#005563] px-3 py-1 rounded text-sm font-bold">
+                <span className="bg-white text-[#26344D] px-3 py-1 rounded text-sm font-bold">
                   {quoteContent?.step02Label || 'Passo 02'}
                 </span>
                 {quoteContent?.step02Title || 'Preencha seus dados abaixo e envie o orçamento'}
@@ -287,7 +287,7 @@ const QuoteCheckout = () => {
                     value={formData.nomeCompleto}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   />
                 </div>
 
@@ -302,7 +302,7 @@ const QuoteCheckout = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   />
                 </div>
 
@@ -316,7 +316,7 @@ const QuoteCheckout = () => {
                     name="empresa"
                     value={formData.empresa}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   />
                 </div>
 
@@ -334,7 +334,7 @@ const QuoteCheckout = () => {
                       required
                       maxLength="3"
                       placeholder={quoteContent?.dddPlaceholder || '11'}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                     />
                   </div>
                   <div className="col-span-2">
@@ -348,7 +348,7 @@ const QuoteCheckout = () => {
                       onChange={handleChange}
                       required
                       placeholder={quoteContent?.phonePlaceholder || '99999-9999'}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -363,7 +363,7 @@ const QuoteCheckout = () => {
                     name="endereco"
                     value={formData.endereco}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   />
                 </div>
 
@@ -377,7 +377,7 @@ const QuoteCheckout = () => {
                     name="complemento"
                     value={formData.complemento}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   />
                 </div>
 
@@ -391,7 +391,7 @@ const QuoteCheckout = () => {
                     name="bairro"
                     value={formData.bairro}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   />
                 </div>
 
@@ -405,7 +405,7 @@ const QuoteCheckout = () => {
                     name="cidade"
                     value={formData.cidade}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   />
                 </div>
 
@@ -420,7 +420,7 @@ const QuoteCheckout = () => {
                     value={formData.cep}
                     onChange={handleChange}
                     placeholder={quoteContent?.zipPlaceholder || '00000-000'}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   />
                 </div>
 
@@ -433,7 +433,7 @@ const QuoteCheckout = () => {
                     name="estado"
                     value={formData.estado}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   >
                     <option value="">{quoteContent?.stateSelectPlaceholder || 'Selecione'}</option>
                     {(() => {
@@ -470,7 +470,7 @@ const QuoteCheckout = () => {
                   name="comentarios"
                   rows="5"
                   placeholder={quoteContent?.commentsPlaceholder || 'Informações adicionais sobre o orçamento...'}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent resize-none"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent resize-none"
                   defaultValue={formatProductsForComment()}
                 ></textarea>
               </div>

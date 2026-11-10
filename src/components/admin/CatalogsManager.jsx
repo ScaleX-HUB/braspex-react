@@ -308,7 +308,7 @@ const CatalogsManager = () => {
             </button>
             <button
               onClick={handleSave}
-              className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740] transition-colors flex items-center gap-2"
             >
               <Plus size={20} />
               {currentCatalog ? 'Atualizar' : 'Criar'}
@@ -325,7 +325,7 @@ const CatalogsManager = () => {
               type="text"
               value={formData.title}
               onChange={(e) => setFormData((p) => ({ ...p, title: e.target.value }))}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               placeholder="Ex.: Linha Pex Braspex"
             />
           </div>
@@ -351,7 +351,7 @@ const CatalogsManager = () => {
                     href={formData.cover_url}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-sm text-[#005563] hover:underline"
+                    className="text-sm text-[#26344D] hover:underline"
                   >
                     Ver capa atual
                   </a>
@@ -400,7 +400,7 @@ const CatalogsManager = () => {
                     }}
                     target={pdfFile ? undefined : '_blank'}
                     rel={pdfFile ? undefined : 'noreferrer'}
-                    className="text-sm text-[#005563] hover:underline"
+                    className="text-sm text-[#26344D] hover:underline"
                   >
                     {pdfFile ? 'Pré-visualizar PDF' : 'Ver PDF atual'}
                   </a>
@@ -409,7 +409,7 @@ const CatalogsManager = () => {
 
               <div className="mt-4 bg-gray-50 border border-gray-200 rounded-xl p-4">
                 <div className="flex items-center gap-3">
-                  <FileText size={28} className="text-[#005563]" />
+                  <FileText size={28} className="text-[#26344D]" />
                   <div className="flex-1">
                     <div className="font-semibold text-gray-900">
                       {pdfFile ? pdfFile.name : (formData.pdf_url ? 'PDF atual configurado' : 'Nenhum PDF selecionado')}
@@ -430,7 +430,7 @@ const CatalogsManager = () => {
                 type="number"
                 value={formData.order_index}
                 onChange={(e) => setFormData((p) => ({ ...p, order_index: e.target.value }))}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
               <p className="text-xs text-gray-500 mt-1">Menor aparece primeiro</p>
             </div>
@@ -476,7 +476,7 @@ const CatalogsManager = () => {
         </div>
         <button
           onClick={handleNew}
-          className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
+          className="px-4 py-2 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740] transition-colors flex items-center gap-2"
         >
           <Plus size={20} />
           Novo Catálogo

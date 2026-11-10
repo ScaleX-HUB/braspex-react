@@ -186,7 +186,7 @@ const QuotesManager = () => {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Mail size={28} className="text-[#005563]" />
+              <Mail size={28} className="text-[#26344D]" />
               Cotações Recebidas
             </h2>
             <p className="text-gray-600 mt-1">
@@ -195,7 +195,7 @@ const QuotesManager = () => {
           </div>
           <button
             onClick={exportToCSV}
-            className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
+            className="px-4 py-2 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740] transition-colors flex items-center gap-2"
           >
             <Download size={20} />
             Exportar CSV
@@ -249,7 +249,7 @@ const QuotesManager = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Nome, email, telefone ou empresa..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
             />
           </div>
 
@@ -262,7 +262,7 @@ const QuotesManager = () => {
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
             >
               <option value="all">Todos os Status</option>
               <option value="pending">Pendente</option>
@@ -308,7 +308,7 @@ const QuotesManager = () => {
                   <select
                     value={quote.status}
                     onChange={(e) => handleStatusChange(quote.id, e.target.value)}
-                    className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                    className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   >
                     <option value="pending">Pendente</option>
                     <option value="contacted">Contatado</option>
@@ -327,17 +327,17 @@ const QuotesManager = () => {
               {/* Informações do Cliente */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                 <div className="flex items-center gap-2">
-                  <Mail size={18} className="text-[#005563]" />
+                  <Mail size={18} className="text-[#26344D]" />
                   <div>
                     <div className="text-xs text-gray-500">Email</div>
-                    <a href={`mailto:${quote.customer?.email}`} className="text-sm font-medium text-[#005563] hover:underline">
+                    <a href={`mailto:${quote.customer?.email}`} className="text-sm font-medium text-[#26344D] hover:underline">
                       {quote.customer?.email || '-'}
                     </a>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <Phone size={18} className="text-[#005563]" />
+                  <Phone size={18} className="text-[#26344D]" />
                   <div>
                     <div className="text-xs text-gray-500">Telefone</div>
                     <a href={`tel:${quote.customer?.phone}`} className="text-sm font-medium text-gray-900">
@@ -348,7 +348,7 @@ const QuotesManager = () => {
 
                 {quote.customer?.company && (
                   <div className="flex items-center gap-2">
-                    <Package size={18} className="text-[#005563]" />
+                    <Package size={18} className="text-[#26344D]" />
                     <div>
                       <div className="text-xs text-gray-500">Empresa</div>
                       <div className="text-sm font-medium text-gray-900">{quote.customer.company}</div>
@@ -358,7 +358,7 @@ const QuotesManager = () => {
 
                 {quote.customer?.city && (
                   <div className="flex items-center gap-2">
-                    <MapPin size={18} className="text-[#005563]" />
+                    <MapPin size={18} className="text-[#26344D]" />
                     <div>
                       <div className="text-xs text-gray-500">Localização</div>
                       <div className="text-sm font-medium text-gray-900">
@@ -406,7 +406,7 @@ const QuotesManager = () => {
               <div className="mt-4 pt-4 border-t flex gap-3">
                 <a
                   href={`mailto:${quote.customer?.email}?subject=Cotação Braspex - ${quote.id}`}
-                  className="flex-1 px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors text-center text-sm font-medium"
+                  className="flex-1 px-4 py-2 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740] transition-colors text-center text-sm font-medium"
                 >
                   Enviar Email
                 </a>

@@ -176,7 +176,7 @@ const Kits = () => {
                           <ul className="space-y-3">
                             {product.variations.map((variation, vIndex) => (
                               <li key={vIndex} className="flex items-center gap-3">
-                                <CheckCircle className="w-6 h-6 text-[#005563] flex-shrink-0" />
+                                <CheckCircle className="w-6 h-6 text-[#26344D] flex-shrink-0" />
                                 <span className="text-lg text-gray-700">{variation}</span>
                               </li>
                             ))}
@@ -213,7 +213,7 @@ const Kits = () => {
                           <ul className="space-y-2">
                             {product.variations.map((variation, vIndex) => (
                               <li key={vIndex} className="flex items-center gap-2 justify-center">
-                                <CheckCircle className="w-4 h-4 text-[#005563] flex-shrink-0" />
+                                <CheckCircle className="w-4 h-4 text-[#26344D] flex-shrink-0" />
                                 <span className="text-base text-gray-700">{variation}</span>
                               </li>
                             ))}

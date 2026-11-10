@@ -12,7 +12,7 @@ const DEFAULT_CATEGORIES = [
     name: 'pex',
     display_name: 'Linha PEX',
     icon: 'Package',
-    color: '#005563',
+    color: '#26344D',
     subcategories: [],
     active: true,
     order_index: 1
@@ -70,7 +70,7 @@ const CategoriesManager = () => {
     name: '',
     displayName: '',
     icon: 'Package',
-    color: '#005563',
+    color: '#26344D',
     subcategories: []
   });
 
@@ -108,7 +108,7 @@ const CategoriesManager = () => {
       name: '',
       displayName: '',
       icon: 'Package',
-      color: '#005563',
+      color: '#26344D',
       subcategories: []
     });
     setEditingCategory(null);
@@ -120,7 +120,7 @@ const CategoriesManager = () => {
       name: category.name,
       displayName: category.display_name || category.displayName,
       icon: category.icon || 'Package',
-      color: category.color || '#005563',
+      color: category.color || '#26344D',
       subcategories: category.subcategories || []
     });
     setEditingCategory(category);
@@ -243,7 +243,7 @@ const CategoriesManager = () => {
             </button>
             <button
               onClick={handleSaveCategory}
-              className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450]"
+              className="px-4 py-2 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740]"
             >
               Salvar Categoria
             </button>
@@ -271,7 +271,7 @@ const CategoriesManager = () => {
               type="text"
               value={formData.displayName}
               onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D]"
               placeholder="Ex: Linha Pex"
             />
           </div>
@@ -285,7 +285,7 @@ const CategoriesManager = () => {
               <select
                 value={formData.icon}
                 onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563]"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D]"
               >
                 <option value="Package">Package (Pacote)</option>
                 <option value="Flame">Flame (Fogo)</option>
@@ -321,7 +321,7 @@ const CategoriesManager = () => {
               </label>
               <button
                 onClick={handleAddSubcategory}
-                className="text-sm text-[#005563] hover:underline flex items-center gap-1"
+                className="text-sm text-[#26344D] hover:underline flex items-center gap-1"
               >
                 <Plus size={16} />
                 Adicionar Subcategoria
@@ -335,7 +335,7 @@ const CategoriesManager = () => {
                   value={sub.name}
                   onChange={(e) => handleSubcategoryChange(index, e.target.value)}
                   placeholder="Nome da subcategoria"
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563]"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D]"
                 />
                 <button
                   onClick={() => handleRemoveSubcategory(index)}
@@ -405,7 +405,7 @@ const CategoriesManager = () => {
         <button
           onClick={handleNewCategory}
           disabled={!isOnline}
-          className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-4 py-2 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740] flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           title={!isOnline ? 'Não disponível no modo offline' : ''}
         >
           <Plus size={20} />
@@ -416,7 +416,7 @@ const CategoriesManager = () => {
       {loading ? (
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#005563] mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#26344D] mx-auto mb-4"></div>
             <p className="text-gray-600">Carregando categorias...</p>
           </div>
         </div>
@@ -466,7 +466,7 @@ const CategoriesManager = () => {
                       <button
                         onClick={() => handleEditCategory(category)}
                         disabled={!isOnline}
-                        className="flex-1 px-3 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="flex-1 px-3 py-2 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         title={!isOnline ? 'Não disponível no modo offline' : ''}
                       >
                         <Pencil size={18} />
@@ -493,7 +493,7 @@ const CategoriesManager = () => {
               <button
                 onClick={handleNewCategory}
                 disabled={!isOnline}
-                className="mt-4 text-[#005563] hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+                className="mt-4 text-[#26344D] hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
                 title={!isOnline ? 'Não disponível no modo offline' : ''}
               >
                 Criar primeira categoria

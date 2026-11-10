@@ -213,7 +213,7 @@ const ClientsKanban = () => {
                     type="text"
                     value={stage.name}
                     onChange={(e) => handleUpdateStageConfig(stage.id, 'name', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   />
                 </div>
                 <div>
@@ -231,7 +231,7 @@ const ClientsKanban = () => {
                       type="text"
                       value={stage.color}
                       onChange={(e) => handleUpdateStageConfig(stage.id, 'color', e.target.value)}
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent font-mono text-sm"
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent font-mono text-sm"
                       placeholder="#000000"
                     />
                   </div>
@@ -243,7 +243,7 @@ const ClientsKanban = () => {
                   <select
                     value={stage.icon}
                     onChange={(e) => handleUpdateStageConfig(stage.id, 'icon', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                   >
                     <option value="User">👤 Usuário</option>
                     <option value="Filter">🔀 Funil</option>
@@ -260,7 +260,7 @@ const ClientsKanban = () => {
           <button
             type="button"
             onClick={handleSaveKanbanSettings}
-            className="flex-1 px-6 py-3 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center justify-center gap-2 font-semibold"
+            className="flex-1 px-6 py-3 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740] transition-colors flex items-center justify-center gap-2 font-semibold"
           >
             <Save size={20} />
             Salvar Configurações
@@ -304,7 +304,7 @@ const ClientsKanban = () => {
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                 placeholder="João Silva"
               />
             </div>
@@ -316,7 +316,7 @@ const ClientsKanban = () => {
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                 placeholder="joao@empresa.com"
               />
             </div>
@@ -332,7 +332,7 @@ const ClientsKanban = () => {
                 type="tel"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                 placeholder="(11) 98765-4321"
               />
             </div>
@@ -344,7 +344,7 @@ const ClientsKanban = () => {
                 type="text"
                 value={formData.company}
                 onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                 placeholder="Empresa Ltda"
               />
             </div>
@@ -359,7 +359,7 @@ const ClientsKanban = () => {
               type="text"
               value={formData.address}
               onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               placeholder="Rua Exemplo, 123"
             />
           </div>
@@ -374,7 +374,7 @@ const ClientsKanban = () => {
                 type="text"
                 value={formData.city}
                 onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                 placeholder="São Paulo"
               />
             </div>
@@ -386,7 +386,7 @@ const ClientsKanban = () => {
                 type="text"
                 value={formData.state}
                 onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                 placeholder="SP"
                 maxLength="2"
               />
@@ -399,7 +399,7 @@ const ClientsKanban = () => {
                 type="text"
                 value={formData.zipCode}
                 onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                 placeholder="01234-567"
               />
             </div>
@@ -414,7 +414,7 @@ const ClientsKanban = () => {
               <select
                 value={formData.stage}
                 onChange={(e) => setFormData({ ...formData, stage: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               >
                 {kanbanStages.map(stage => (
                   <option key={stage.id} value={stage.id}>{stage.name}</option>
@@ -427,7 +427,7 @@ const ClientsKanban = () => {
                   type="checkbox"
                   checked={formData.inactive}
                   onChange={(e) => setFormData({ ...formData, inactive: e.target.checked })}
-                  className="w-4 h-4 text-[#005563] focus:ring-[#005563] border-gray-300 rounded"
+                  className="w-4 h-4 text-[#26344D] focus:ring-[#26344D] border-gray-300 rounded"
                 />
                 <span className="text-sm font-medium text-gray-700">Marcar como inativo</span>
               </label>
@@ -443,7 +443,7 @@ const ClientsKanban = () => {
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               rows="4"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               placeholder="Notas sobre o cliente..."
             />
           </div>
@@ -453,7 +453,7 @@ const ClientsKanban = () => {
             <button
               type="button"
               onClick={handleSaveClient}
-              className="flex-1 px-6 py-3 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center justify-center gap-2 font-semibold"
+              className="flex-1 px-6 py-3 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740] transition-colors flex items-center justify-center gap-2 font-semibold"
             >
               <Save size={20} />
               Salvar Cliente
@@ -478,7 +478,7 @@ const ClientsKanban = () => {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <User size={28} className="text-[#005563]" />
+              <User size={28} className="text-[#26344D]" />
               Gerenciar Clientes
             </h2>
             <p className="text-gray-600 mt-1">
@@ -505,7 +505,7 @@ const ClientsKanban = () => {
             <button
               type="button"
               onClick={handleNewClient}
-              className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740] transition-colors flex items-center gap-2"
             >
               <Plus size={20} />
               Novo Cliente
@@ -548,7 +548,7 @@ const ClientsKanban = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Buscar por nome, email, empresa ou telefone..."
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
           />
         </div>
       </div>
@@ -618,7 +618,7 @@ const ClientsKanban = () => {
                       <select
                         value={client.stage}
                         onChange={(e) => handleMoveStage(client.id, e.target.value)}
-                        className="w-full text-xs px-2 py-1 border border-gray-300 rounded mb-2 focus:ring-1 focus:ring-[#005563]"
+                        className="w-full text-xs px-2 py-1 border border-gray-300 rounded mb-2 focus:ring-1 focus:ring-[#26344D]"
                       >
                         {kanbanStages.map(s => (
                           <option key={s.id} value={s.id}>{s.name}</option>
@@ -629,7 +629,7 @@ const ClientsKanban = () => {
                         <button
                           type="button"
                           onClick={() => handleEditClient(client)}
-                          className="flex-1 px-2 py-1 bg-[#005563] text-white text-xs rounded hover:bg-[#004450] transition-colors flex items-center justify-center gap-1"
+                          className="flex-1 px-2 py-1 bg-[#26344D] text-white text-xs rounded hover:bg-[#1B2740] transition-colors flex items-center justify-center gap-1"
                         >
                           <Pencil size={14} />
                           Editar
@@ -700,7 +700,7 @@ const ClientsKanban = () => {
                         <button
                           type="button"
                           onClick={() => handleEditClient(client)}
-                          className="text-[#005563] hover:text-[#004450] mr-3"
+                          className="text-[#26344D] hover:text-[#1B2740] mr-3"
                         >
                           <Pencil size={18} />
                         </button>
@@ -727,7 +727,7 @@ const ClientsKanban = () => {
               <button
                 type="button"
                 onClick={handleNewClient}
-                className="px-6 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors inline-flex items-center gap-2"
+                className="px-6 py-2 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740] transition-colors inline-flex items-center gap-2"
               >
               <Plus size={20} />
                 Criar Primeiro Cliente

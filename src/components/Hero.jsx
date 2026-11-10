@@ -34,7 +34,7 @@ const Hero = () => {
   ];
 
   return (
-    <section id="home" className="relative min-h-screen overflow-hidden bg-[#001f26]">
+    <section id="home" className="relative min-h-screen overflow-hidden bg-[#121A28]">
       <Motion.div
         className="absolute inset-0 bg-cover"
         style={{ backgroundImage: `url(${heroImage})`, backgroundPosition: 'center 44%' }}
@@ -42,7 +42,7 @@ const Hero = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 5.6, ease: [0.22, 1, 0.36, 1] }}
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/34 via-[#001f26]/18 to-black/72" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/34 via-[#121A28]/18 to-black/72" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/58 via-black/16 to-transparent" />
 
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col justify-center px-6 pb-12 pt-28 md:px-12 lg:px-16 lg:pb-44 lg:pt-32">

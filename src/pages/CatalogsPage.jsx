@@ -56,8 +56,8 @@ const CatalogsPage = () => {
 
         {!loading && !error && catalogs.length === 0 && (
           <div className="bg-white rounded-xl border border-gray-200 p-10 text-center">
-            <div className="mx-auto w-16 h-16 rounded-full bg-[#005563]/10 flex items-center justify-center mb-4">
-              <FileText size={32} className="text-[#005563]" />
+            <div className="mx-auto w-16 h-16 rounded-full bg-[#26344D]/10 flex items-center justify-center mb-4">
+              <FileText size={32} className="text-[#26344D]" />
             </div>
             <h2 className="text-xl font-bold text-gray-900">{catalogsContent?.emptyTitle || 'Nenhum catálogo publicado'}</h2>
             <p className="text-gray-600 mt-1">
@@ -91,7 +91,7 @@ const CatalogsPage = () => {
                         />
                       ) : (
                         <div className="text-center text-gray-500 p-8">
-                          <FileText size={48} className="mx-auto mb-3 text-[#005563]" />
+                          <FileText size={48} className="mx-auto mb-3 text-[#26344D]" />
                           <div className="font-semibold">{catalogsContent?.noCoverTitle || 'Sem capa'}</div>
                           <div className="text-sm">{catalogsContent?.noCoverSubtitle || 'Clique para abrir o PDF'}</div>
                         </div>
@@ -100,7 +100,7 @@ const CatalogsPage = () => {
                   </div>
 
                   <div className="px-6 pb-6">
-                    <div className="w-full text-center bg-[#005563] text-white font-bold py-3 rounded-xl group-hover:bg-[#004450] transition-colors">
+                    <div className="w-full text-center bg-[#26344D] text-white font-bold py-3 rounded-xl group-hover:bg-[#1B2740] transition-colors">
                       {catalogsContent?.openPdfButton || 'Abrir PDF'}
                     </div>
                   </div>

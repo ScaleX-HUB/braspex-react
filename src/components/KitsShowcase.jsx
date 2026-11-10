@@ -54,7 +54,7 @@ const KitsShowcase = () => {
         ...defaultFeatures[index],
         ...feature,
         Icon: defaultFeatures[index]?.Icon || PackageCheck,
-        color: defaultFeatures[index]?.color || 'text-[#007A86]'
+        color: defaultFeatures[index]?.color || 'text-[#26344D]'
       }))
     : defaultFeatures;
   const parsedBenefits = safeJsonParse(vantagensContent?.stepsJson, null);
@@ -90,10 +90,10 @@ const KitsShowcase = () => {
     <section id="kits-showcase" className="bg-[#f6f8f8] py-20">
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8">
         <div>
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-[#007A86]">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-[#26344D]">
             Nossos Kits
           </p>
-          <h2 className="text-3xl font-bold leading-tight text-[#001f26] md:text-5xl">
+          <h2 className="text-3xl font-bold leading-tight text-[#121A28] md:text-5xl">
             {unifiedTitle}
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-slate-600 md:text-lg">
@@ -102,21 +102,21 @@ const KitsShowcase = () => {
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
             {benefits.map(({ title, description, Icon }) => (
-              <div key={title} className="border border-[#007A86]/15 bg-white p-4 shadow-sm">
-                <div className="mb-3 flex h-10 w-10 items-center justify-center bg-[#007A86]/8">
+              <div key={title} className="border border-[#26344D]/15 bg-white p-4 shadow-sm">
+                <div className="mb-3 flex h-10 w-10 items-center justify-center bg-[#26344D]/8">
                   {React.createElement(Icon, {
-                    className: 'h-5 w-5 text-[#005563]',
+                    className: 'h-5 w-5 text-[#26344D]',
                     strokeWidth: 2.3,
                     'aria-hidden': 'true'
                   })}
                 </div>
-                <h3 className="text-sm font-bold uppercase text-[#001f26]">{title}</h3>
+                <h3 className="text-sm font-bold uppercase text-[#121A28]">{title}</h3>
                 <p className="mt-1 text-sm leading-relaxed text-slate-600">{description}</p>
               </div>
             ))}
           </div>
 
-          <p className="mt-8 text-xs font-bold uppercase tracking-[0.16em] text-[#007A86]">
+          <p className="mt-8 text-xs font-bold uppercase tracking-[0.16em] text-[#26344D]">
             Linhas de aplicação
           </p>
           <div className="mt-3 grid gap-3">
@@ -140,14 +140,14 @@ const KitsShowcase = () => {
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Link
               to="/produtos#aplicacao-kits"
-              className="inline-flex items-center justify-center gap-3 bg-[#005563] px-8 py-4 text-sm font-bold uppercase text-white shadow-lg transition-colors hover:bg-[#003d47]"
+              className="inline-flex items-center justify-center gap-3 bg-[#26344D] px-8 py-4 text-sm font-bold uppercase text-white shadow-lg transition-colors hover:bg-[#1B2740]"
             >
               Entender aplicação dos kits
               <ArrowRight className="h-5 w-5" aria-hidden="true" />
             </Link>
             <Link
               to="/produtos"
-              className="inline-flex items-center justify-center gap-3 border border-[#005563]/20 bg-white px-8 py-4 text-sm font-bold uppercase text-[#005563] transition-colors hover:bg-[#005563]/5"
+              className="inline-flex items-center justify-center gap-3 border border-[#26344D]/20 bg-white px-8 py-4 text-sm font-bold uppercase text-[#26344D] transition-colors hover:bg-[#26344D]/5"
             >
               Ver página de produtos
             </Link>
@@ -161,10 +161,10 @@ const KitsShowcase = () => {
               alt={applicationImage.alt}
               className="absolute inset-0 h-full w-full object-cover object-[45%_42%]"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#001f26]/46" />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#121A28]/46" />
             <div className="absolute left-5 top-5 flex items-center gap-2 bg-white/92 px-4 py-3 shadow-lg backdrop-blur">
-              <PackageCheck className="h-5 w-5 text-[#007A86]" aria-hidden="true" />
-              <span className="text-xs font-bold uppercase tracking-[0.14em] text-[#001f26]">
+              <PackageCheck className="h-5 w-5 text-[#26344D]" aria-hidden="true" />
+              <span className="text-xs font-bold uppercase tracking-[0.14em] text-[#121A28]">
                 {applicationBadge || 'Aplicação'}
               </span>
             </div>
@@ -183,10 +183,10 @@ const KitsShowcase = () => {
               className="aspect-[4/3] w-full bg-slate-50 object-cover object-center"
             />
             <div className="pt-5">
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#007A86]">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#26344D]">
                 {typesBadge || 'Sistemas'}
               </p>
-              <h3 className="mt-1 text-lg font-bold leading-tight text-[#001f26]">{typesTitle}</h3>
+              <h3 className="mt-1 text-lg font-bold leading-tight text-[#121A28]">{typesTitle}</h3>
               <p className="mt-2 text-sm leading-relaxed text-slate-600">{typesDescription}</p>
             </div>
           </div>

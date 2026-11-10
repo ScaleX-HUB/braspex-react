@@ -32,6 +32,31 @@ import { supabase } from '../lib/supabaseClient';
 
 const TABLE_NAME = 'products';
 
+const slugify = (name) => {
+  const slug = String(name || 'produto')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+  return slug || 'produto';
+};
+
+const normalizePrice = (value) => {
+  if (value === undefined || value === null || String(value).trim() === '') {
+    return { price: null, price_label: null };
+  }
+
+  const raw = String(value).trim();
+  if (/^-?\d+([.,]\d+)?$/.test(raw)) {
+    return { price: Number(raw.replace(',', '.')), price_label: raw };
+  }
+
+  return { price: null, price_label: raw };
+};
+
 export const productsAPI = {
   /**
    * Buscar todos os produtos
@@ -123,24 +148,23 @@ export const productsAPI = {
     try {
       console.log('🆕 Criando produto:', productData);
       
-      // Gerar slug se não fornecido
-      const slug = productData.slug || 
-        productData.name
-          .toLowerCase()
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .replace(/[^a-z0-9\s-]/g, '')
-          .replace(/\s+/g, '-');
+      const slug = productData.slug || slugify(productData.name);
+      const price = normalizePrice(productData.price);
 
       // Preparar dados básicos (colunas que sempre existem)
       const data = {
         name: productData.name,
         description: productData.description || null,
         category_id: productData.category_id || productData.categoryId || null,
+        category_name: productData.category_name || productData.categoryName || null,
+        subcategory_name: productData.subcategory_name || productData.subcategoryName || null,
         image_url: productData.image_url || productData.imageUrl || productData.image || null,
-        price: productData.price || null,
+        price: price.price,
+        price_label: productData.price_label || productData.priceLabel || price.price_label,
         specifications: productData.specifications || {},
         active: productData.active !== undefined ? productData.active : true,
+        featured: productData.featured === true,
+        order_index: productData.order_index || productData.orderIndex || 0,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       };
@@ -213,7 +237,11 @@ export const productsAPI = {
       if (productData.thumbnailUrl !== undefined) updateData.thumbnail_url = productData.thumbnailUrl;
       if (productData.gallery !== undefined) updateData.gallery = productData.gallery;
       
-      if (productData.price !== undefined) updateData.price = productData.price;
+      if (productData.price !== undefined) {
+        const price = normalizePrice(productData.price);
+        updateData.price = price.price;
+        updateData.price_label = price.price_label;
+      }
       if (productData.price_label !== undefined) updateData.price_label = productData.price_label;
       if (productData.priceLabel !== undefined) updateData.price_label = productData.priceLabel;
       if (productData.sku !== undefined) updateData.sku = productData.sku;

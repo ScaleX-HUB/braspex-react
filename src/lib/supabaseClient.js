@@ -9,25 +9,24 @@
  * - NÃO usar JOINs (fazer queries separadas)
  */
 
-// Detectar ambiente
-const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost';
-
-// Em alguns cenários (ex.: banco bloqueando anon por GRANT/RLS), é útil forçar o uso do proxy
-// mesmo em desenvolvimento, apontando para o domínio do deploy (HTTPS).
-const forceProxy = String(import.meta.env.VITE_SUPABASE_FORCE_PROXY || '').toLowerCase() === 'true';
+// O navegador fala com /api/supabase-proxy. A URL e as chaves ficam no servidor.
+// VITE_SUPABASE_DIRECT=true só para apontar o Vite direto ao PostgREST.
+const direct = String(import.meta.env.VITE_SUPABASE_DIRECT || '').toLowerCase() === 'true';
 const customProxyUrl = import.meta.env.VITE_SUPABASE_PROXY_URL || '/api/supabase-proxy';
+const useProxy = !direct;
 
-// URL base - em produção usa o proxy da Vercel
-const useProxy = !isDevelopment || forceProxy;
 const SUPABASE_BASE_URL = useProxy
   ? customProxyUrl
-  : (import.meta.env.VITE_SUPABASE_URL || 'http://173.249.32.99:54321');
+  : (import.meta.env.VITE_SUPABASE_URL || '');
 
-// Adicionar /rest/v1 apenas em desenvolvimento (proxy já inclui)
-const SUPABASE_URL = useProxy ? SUPABASE_BASE_URL : `${SUPABASE_BASE_URL}/rest/v1`;
+const SUPABASE_URL = useProxy
+  ? SUPABASE_BASE_URL
+  : (SUPABASE_BASE_URL ? `${SUPABASE_BASE_URL.replace(/\/$/, '')}/rest/v1` : '');
 
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzYwMDE1NTc0LCJleHAiOjIwNzUzNzU1NzR9.zOkNw3Bh2qhDjrOYK8Gptx7Kv_ADs-9x0732M9pLYoQ';
-const SUPABASE_SCHEMA = import.meta.env.VITE_SUPABASE_SCHEMA || 'braspex';
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const SUPABASE_SCHEMA = import.meta.env.VITE_SUPABASE_SCHEMA || 'public';
+
+const isDevelopment = Boolean(import.meta.env.DEV);
 
 console.log('🔧 Supabase Client Config:', {
   environment: isDevelopment ? 'development' : 'production',
@@ -49,11 +48,14 @@ class SupabaseClient {
    */
   getHeaders(isWrite = false) {
     const headers = {
-      'apikey': this.apiKey,
-      'Authorization': `Bearer ${this.apiKey}`,
       'Accept-Profile': this.schema,
       'Content-Profile': this.schema,
     };
+
+    if (this.apiKey) {
+      headers.apikey = this.apiKey;
+      headers.Authorization = `Bearer ${this.apiKey}`;
+    }
 
     if (isWrite) {
       headers['Content-Type'] = 'application/json';
@@ -104,6 +106,9 @@ class SupabaseClient {
    */
   async get(table, filters = {}, options = {}) {
     try {
+      if (!this.baseURL) {
+        throw new Error('Supabase não configurado.');
+      }
       const queryString = this.buildQueryString(filters, options);
       const url = `${this.baseURL}/${table}${queryString ? `?${queryString}` : ''}`;
 

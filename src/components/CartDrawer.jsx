@@ -58,7 +58,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
             className="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-50 flex flex-col"
           >
             {/* Header */}
-            <div className="bg-[#005563] text-white p-6 flex items-center justify-between">
+            <div className="bg-[#26344D] text-white p-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <ShoppingCart size={28} />
                 <div>
@@ -88,7 +88,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                   <Link
                     to="/produtos"
                     onClick={onClose}
-                    className="bg-[#005563] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#003d47] transition-colors"
+                    className="bg-[#26344D] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#1B2740] transition-colors"
                   >
                     {cartContent?.emptyButtonText || 'Ver Produtos'}
                   </Link>
@@ -122,7 +122,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                           <Link
                             to={`/produtos/${item.id}`}
                             onClick={onClose}
-                            className="font-semibold text-slate-900 hover:text-[#005563] transition-colors line-clamp-2 text-sm"
+                            className="font-semibold text-slate-900 hover:text-[#26344D] transition-colors line-clamp-2 text-sm"
                           >
                             {item.name}
                           </Link>
@@ -169,7 +169,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
               <div className="border-t border-slate-200 p-6 space-y-3">
                 <button
                   onClick={handleRequestQuote}
-                  className="flex w-full items-center justify-center gap-3 bg-[#005563] px-6 py-4 text-lg font-bold text-white shadow-lg transition-all hover:bg-[#003d47] hover:shadow-xl"
+                  className="flex w-full items-center justify-center gap-3 bg-[#26344D] px-6 py-4 text-lg font-bold text-white shadow-lg transition-all hover:bg-[#1B2740] hover:shadow-xl"
                 >
                   <ShoppingCart size={22} aria-hidden="true" />
                   {requestQuoteText}

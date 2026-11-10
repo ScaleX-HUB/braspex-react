@@ -14,7 +14,7 @@ const QRCodeSection = () => {
           width: 200,
           height: 200,
           color: {
-            dark: '#005563',
+            dark: '#26344D',
             light: '#FFFFFF'
           },
           margin: 2
@@ -29,7 +29,7 @@ const QRCodeSection = () => {
   }, []);
 
   return (
-    <section className="py-20 bg-gradient-to-br from-[#005563] to-[#007A8A]">
+    <section className="py-20 bg-gradient-to-br from-[#26344D] to-[#3D4E6E]">
       <div className="max-w-4xl mx-auto px-5 text-center">
         {/* Header */}
         <div className="mb-12">
@@ -57,7 +57,7 @@ const QRCodeSection = () => {
           <div className="text-white max-w-md">
             <div className="flex items-center gap-4 mb-6">
               <div className="w-12 h-12 bg-[#FFD027] rounded-full flex items-center justify-center">
-                <Smartphone className="w-6 h-6 text-[#005563]" />
+                <Smartphone className="w-6 h-6 text-[#26344D]" />
               </div>
               <div className="text-left">
                 <h3 className="text-xl font-bold mb-1">Como usar</h3>
@@ -67,7 +67,7 @@ const QRCodeSection = () => {
 
             <div className="flex items-center gap-4 mb-6">
               <div className="w-12 h-12 bg-[#FFD027] rounded-full flex items-center justify-center">
-                <span className="text-[#005563] font-bold text-lg">2</span>
+                <span className="text-[#26344D] font-bold text-lg">2</span>
               </div>
               <div className="text-left">
                 <h3 className="text-xl font-bold mb-1">Escaneie</h3>
@@ -77,7 +77,7 @@ const QRCodeSection = () => {
 
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-[#FFD027] rounded-full flex items-center justify-center">
-                <Play className="w-6 h-6 text-[#005563]" />
+                <Play className="w-6 h-6 text-[#26344D]" />
               </div>
               <div className="text-left">
                 <h3 className="text-xl font-bold mb-1">Assista</h3>

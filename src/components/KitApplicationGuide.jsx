@@ -84,12 +84,12 @@ const KitApplicationGuide = ({ compact = false }) => {
         <div className="grid items-center gap-10 lg:grid-cols-[1.04fr_0.96fr]">
           <div className="space-y-7">
             <div>
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-[#007A86]">
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-[#26344D]">
                 {guideContent.kicker || 'Aplicacao dos kits'}
               </p>
               <h2
                 id="kit-application-title"
-                className="max-w-3xl text-3xl font-bold leading-tight text-[#001f26] md:text-4xl"
+                className="max-w-3xl text-3xl font-bold leading-tight text-[#121A28] md:text-4xl"
               >
                 {guideContent.title || 'Kits prontos para acelerar a instalacao hidraulica da obra'}
               </h2>
@@ -118,7 +118,7 @@ const KitApplicationGuide = ({ compact = false }) => {
             <div className="space-y-3">
               {guideSteps.map((step) => (
                 <div key={step} className="flex gap-3 text-sm leading-relaxed text-slate-700 md:text-base">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#007A86]" aria-hidden="true" />
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#26344D]" aria-hidden="true" />
                   <span>{step}</span>
                 </div>
               ))}
@@ -127,7 +127,7 @@ const KitApplicationGuide = ({ compact = false }) => {
             {!compact && (
               <Link
                 to="/produtos"
-                className="inline-flex items-center gap-2 bg-[#005563] px-6 py-3 text-sm font-bold uppercase text-white transition-colors hover:bg-[#003d47]"
+                className="inline-flex items-center gap-2 bg-[#26344D] px-6 py-3 text-sm font-bold uppercase text-white transition-colors hover:bg-[#1B2740]"
               >
                 {guideContent.ctaButtonText || 'Ver produtos disponiveis'}
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -153,18 +153,18 @@ const KitApplicationGuide = ({ compact = false }) => {
                   }}
                 />
               </button>
-              <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-[#001f26]/14" />
+              <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-[#121A28]/14" />
 
               <div className="absolute left-5 top-5 border border-white/35 bg-white/92 px-4 py-3 shadow-lg backdrop-blur">
                 <div className="flex items-center gap-2">
-                  <PackageCheck className="h-5 w-5 text-[#007A86]" aria-hidden="true" />
-                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#001f26]">
+                  <PackageCheck className="h-5 w-5 text-[#26344D]" aria-hidden="true" />
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#121A28]">
                     {guideContent.imageBadge || 'Kit por ambiente'}
                   </p>
                 </div>
               </div>
 
-              <div className="absolute bottom-5 left-5 right-5 max-w-[430px] border border-white/30 bg-[#001f26]/90 px-4 py-3 text-white shadow-xl backdrop-blur">
+              <div className="absolute bottom-5 left-5 right-5 max-w-[430px] border border-white/30 bg-[#121A28]/90 px-4 py-3 text-white shadow-xl backdrop-blur">
                 <div className="mb-3 flex items-center justify-between gap-4">
                   <div>
                     <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#FFD027]">
@@ -199,7 +199,7 @@ const KitApplicationGuide = ({ compact = false }) => {
                         onClick={() => setZoomIndex(index)}
                         className={`h-10 border px-2 text-xs font-bold uppercase tracking-[0.08em] transition-colors ${
                           index === zoomIndex
-                            ? 'border-[#FFD027] bg-[#FFD027] text-[#001f26]'
+                            ? 'border-[#FFD027] bg-[#FFD027] text-[#121A28]'
                             : 'border-white/18 text-white/78 hover:border-[#FFD027] hover:text-[#FFD027]'
                         }`}
                       >
@@ -226,11 +226,11 @@ const KitApplicationGuide = ({ compact = false }) => {
                 alt={guideContent.secondaryImageAlt || 'Tipos de tubos Braspex para agua fria, agua quente e ar-condicionado'}
                 className="aspect-[16/9] w-full bg-slate-50 object-cover object-center"
               />
-              <div className="text-[#001f26]">
+              <div className="text-[#121A28]">
                 <div className="mb-3 flex h-10 w-10 items-center justify-center bg-[#FFD027]/18">
-                  <Gauge className="h-5 w-5 text-[#005563]" aria-hidden="true" />
+                  <Gauge className="h-5 w-5 text-[#26344D]" aria-hidden="true" />
                 </div>
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#007A86]">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#26344D]">
                   {guideContent.secondaryKicker || 'Sistemas integrados'}
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">

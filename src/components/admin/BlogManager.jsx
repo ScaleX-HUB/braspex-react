@@ -113,7 +113,7 @@ const BlogManager = () => {
             </button>
             <button
               onClick={handleSave}
-              className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740] transition-colors flex items-center gap-2"
             >
               <Plus size={20} />
               {currentPost ? 'Atualizar Post' : 'Criar Post'}
@@ -131,7 +131,7 @@ const BlogManager = () => {
               type="text"
               value={formData.title}
               onChange={(e) => handleTitleChange(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               placeholder="Digite o título do post"
             />
           </div>
@@ -145,7 +145,7 @@ const BlogManager = () => {
               type="text"
               value={formData.slug}
               onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               placeholder="slug-do-post"
             />
             <p className="text-sm text-gray-500 mt-1">
@@ -163,7 +163,7 @@ const BlogManager = () => {
                 type="text"
                 value={formData.author}
                 onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
             <div>
@@ -173,7 +173,7 @@ const BlogManager = () => {
               <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               >
                 <option value="Dicas">Dicas</option>
                 <option value="Produtos">Produtos</option>
@@ -194,7 +194,7 @@ const BlogManager = () => {
                 type="date"
                 value={formData.date}
                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
             <div>
@@ -205,7 +205,7 @@ const BlogManager = () => {
                 type="text"
                 value={formData.image}
                 onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                 placeholder="https://..."
               />
             </div>
@@ -220,7 +220,7 @@ const BlogManager = () => {
               value={formData.excerpt}
               onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
               rows={3}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               placeholder="Breve descrição do post (aparece na listagem)"
             />
           </div>
@@ -234,7 +234,7 @@ const BlogManager = () => {
               value={formData.content}
               onChange={(e) => setFormData({ ...formData, content: e.target.value })}
               rows={12}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent font-mono text-sm"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent font-mono text-sm"
               placeholder="Escreva o conteúdo completo do post aqui..."
             />
             <p className="text-sm text-gray-500 mt-1">
@@ -257,7 +257,7 @@ const BlogManager = () => {
         </div>
         <button
           onClick={handleNewPost}
-          className="px-4 py-2 bg-[#005563] text-white rounded-lg hover:bg-[#004450] transition-colors flex items-center gap-2"
+          className="px-4 py-2 bg-[#26344D] text-white rounded-lg hover:bg-[#1B2740] transition-colors flex items-center gap-2"
         >
           <Plus size={20} />
           Novo Post

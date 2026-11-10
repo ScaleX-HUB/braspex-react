@@ -127,7 +127,7 @@ const TextsEditorSection = () => {
                 type="text"
                 value={texts.hero.title}
                 onChange={(e) => handleChange('hero', 'title', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
             <div>
@@ -138,7 +138,7 @@ const TextsEditorSection = () => {
                 type="text"
                 value={texts.hero.subtitle}
                 onChange={(e) => handleChange('hero', 'subtitle', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
             <div>
@@ -149,7 +149,7 @@ const TextsEditorSection = () => {
                 type="text"
                 value={texts.hero.buttonText}
                 onChange={(e) => handleChange('hero', 'buttonText', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
           </div>
@@ -166,7 +166,7 @@ const TextsEditorSection = () => {
                 type="text"
                 value={texts.sobre.title}
                 onChange={(e) => handleChange('sobre', 'title', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
             <div>
@@ -177,7 +177,7 @@ const TextsEditorSection = () => {
                 value={texts.sobre.description}
                 onChange={(e) => handleChange('sobre', 'description', e.target.value)}
                 rows={6}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
           </div>
@@ -194,7 +194,7 @@ const TextsEditorSection = () => {
                 type="text"
                 value={texts.vantagens.title}
                 onChange={(e) => handleChange('vantagens', 'title', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
             
@@ -212,7 +212,7 @@ const TextsEditorSection = () => {
                         type="text"
                         value={item.title}
                         onChange={(e) => handleVantagemChange(index, 'title', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                       />
                     </div>
                     <div>
@@ -223,7 +223,7 @@ const TextsEditorSection = () => {
                         type="text"
                         value={item.description}
                         onChange={(e) => handleVantagemChange(index, 'description', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                       />
                     </div>
                   </div>
@@ -244,7 +244,7 @@ const TextsEditorSection = () => {
                 type="text"
                 value={texts.parceiros.title}
                 onChange={(e) => handleChange('parceiros', 'title', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
             <div>
@@ -255,7 +255,7 @@ const TextsEditorSection = () => {
                 type="text"
                 value={texts.parceiros.subtitle}
                 onChange={(e) => handleChange('parceiros', 'subtitle', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
           </div>
@@ -272,7 +272,7 @@ const TextsEditorSection = () => {
                 type="text"
                 value={texts.comparacao.title}
                 onChange={(e) => handleChange('comparacao', 'title', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
             <div>
@@ -283,7 +283,7 @@ const TextsEditorSection = () => {
                 type="text"
                 value={texts.comparacao.subtitle}
                 onChange={(e) => handleChange('comparacao', 'subtitle', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
           </div>
@@ -300,7 +300,7 @@ const TextsEditorSection = () => {
                 type="text"
                 value={texts.fluxo.title}
                 onChange={(e) => handleChange('fluxo', 'title', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
             <div>
@@ -311,7 +311,7 @@ const TextsEditorSection = () => {
                 type="text"
                 value={texts.fluxo.subtitle}
                 onChange={(e) => handleChange('fluxo', 'subtitle', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
           </div>
@@ -328,7 +328,7 @@ const TextsEditorSection = () => {
                 type="text"
                 value={texts.contato.title}
                 onChange={(e) => handleChange('contato', 'title', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
             <div>
@@ -339,7 +339,7 @@ const TextsEditorSection = () => {
                 type="text"
                 value={texts.contato.subtitle}
                 onChange={(e) => handleChange('contato', 'subtitle', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
             <div>
@@ -350,7 +350,7 @@ const TextsEditorSection = () => {
                 type="email"
                 value={texts.contato.email}
                 onChange={(e) => handleChange('contato', 'email', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
             <div>
@@ -361,7 +361,7 @@ const TextsEditorSection = () => {
                 type="tel"
                 value={texts.contato.phone}
                 onChange={(e) => handleChange('contato', 'phone', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
             <div>
@@ -372,7 +372,7 @@ const TextsEditorSection = () => {
                 type="text"
                 value={texts.contato.address}
                 onChange={(e) => handleChange('contato', 'address', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
               />
             </div>
           </div>
@@ -404,7 +404,7 @@ const TextsEditorSection = () => {
                 type="text"
                 value={texts.whatsapp.phoneNumber}
                 onChange={(e) => handleChange('whatsapp', 'phoneNumber', e.target.value.replace(/\D/g, ''))}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent font-mono"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent font-mono"
                 placeholder="5511999999999"
               />
               <p className="text-xs text-gray-500 mt-1">
@@ -420,7 +420,7 @@ const TextsEditorSection = () => {
                 value={texts.whatsapp.message}
                 onChange={(e) => handleChange('whatsapp', 'message', e.target.value)}
                 rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#005563] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#26344D] focus:border-transparent"
                 placeholder="Olá! Gostaria de mais informações..."
               />
               <p className="text-xs text-gray-500 mt-1">
@@ -469,7 +469,7 @@ const TextsEditorSection = () => {
             saved
               ? 'bg-green-600 text-white'
               : unsavedChanges
-              ? 'bg-[#005563] text-white hover:bg-[#004450]'
+              ? 'bg-[#26344D] text-white hover:bg-[#1B2740]'
               : 'bg-gray-300 text-gray-500 cursor-not-allowed'
           }`}
         >
@@ -497,7 +497,7 @@ const TextsEditorSection = () => {
                 onClick={() => setActiveSection(section.id)}
                 className={`px-6 py-4 font-medium whitespace-nowrap transition-colors ${
                   activeSection === section.id
-                    ? 'bg-[#005563] text-white border-b-2 border-[#005563]'
+                    ? 'bg-[#26344D] text-white border-b-2 border-[#26344D]'
                     : 'text-gray-600 hover:bg-gray-50'
                 }`}
               >

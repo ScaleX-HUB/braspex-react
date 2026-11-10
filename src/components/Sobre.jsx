@@ -63,7 +63,7 @@ const pickDifferential = (items, fallback) => {
 };
 
 const RegionalMap = () => (
-  <div className="relative overflow-hidden border border-[#007A86]/20 bg-[#f4fbfc] p-4 shadow-xl md:p-6">
+  <div className="relative overflow-hidden border border-[#26344D]/20 bg-[#F3F5F8] p-4 shadow-xl md:p-6">
     <svg
       viewBox="0 0 620 560"
       role="img"
@@ -76,11 +76,11 @@ const RegionalMap = () => (
       </desc>
       <defs>
         <linearGradient id="regionalFill" x1="130" y1="70" x2="470" y2="500" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#008896" stopOpacity="0.98" />
-          <stop offset="1" stopColor="#004a54" stopOpacity="0.98" />
+          <stop stopColor="#3D4E6E" stopOpacity="0.98" />
+          <stop offset="1" stopColor="#1B2740" stopOpacity="0.98" />
         </linearGradient>
         <pattern id="regionalGrid" width="34" height="34" patternUnits="userSpaceOnUse">
-          <path d="M34 0H0V34" fill="none" stroke="#005563" strokeOpacity="0.05" strokeWidth="1" />
+          <path d="M34 0H0V34" fill="none" stroke="#26344D" strokeOpacity="0.05" strokeWidth="1" />
         </pattern>
         <filter id="regionalGlow" x="-40%" y="-40%" width="180%" height="180%">
           <feGaussianBlur stdDeviation="4" result="blur" />
@@ -91,11 +91,11 @@ const RegionalMap = () => (
         </filter>
       </defs>
 
-      <rect width="620" height="560" fill="#f4fbfc" />
+      <rect width="620" height="560" fill="#F3F5F8" />
       <rect width="620" height="560" fill="url(#regionalGrid)" />
       <path
         d="M60 473 C125 445 182 459 250 446 C329 431 375 387 444 371 C516 354 555 375 590 410 L590 560 L60 560 Z"
-        fill="#d7edf0"
+        fill="#D5DCE6"
         opacity="0.45"
       />
       <circle cx="417.9" cy="240.7" r="48" fill="none" stroke="#FFD027" strokeOpacity="0.5" strokeWidth="2" />
@@ -108,7 +108,7 @@ const RegionalMap = () => (
             d={state.path}
             fill={state.active ? '#FFD027' : 'url(#regionalFill)'}
             fillOpacity={state.active ? '1' : '0.98'}
-            stroke={state.active ? '#001f26' : '#ffffff'}
+            stroke={state.active ? '#121A28' : '#ffffff'}
             strokeOpacity="1"
             strokeLinejoin="round"
             strokeWidth={state.active ? '2.8' : '1.35'}
@@ -125,14 +125,14 @@ const RegionalMap = () => (
               cx={state.label[0]}
               cy={state.label[1]}
               r={active ? '10' : '7.5'}
-              fill={active ? '#FFD027' : '#005563'}
-              stroke={active ? '#FFF6C7' : '#BFECEF'}
+              fill={active ? '#FFD027' : '#26344D'}
+              stroke={active ? '#FFF6C7' : '#C5CEDB'}
               strokeWidth={active ? '3' : '2'}
             />
             <text
               x={state.label[0] + 14}
               y={state.label[1] + 5}
-              fill={active ? '#001f26' : '#E7FBFD'}
+              fill={active ? '#121A28' : '#E6EAF1'}
               fontSize={active ? '17' : '13'}
               fontWeight="700"
             >
@@ -143,17 +143,17 @@ const RegionalMap = () => (
       })}
 
       <g>
-        <path d="M428 239 C468 229 491 222 518 208" fill="none" stroke="#001f26" strokeWidth="1.4" strokeDasharray="4 4" />
-        <rect x="515" y="174" width="78" height="48" fill="#001f26" />
+        <path d="M428 239 C468 229 491 222 518 208" fill="none" stroke="#121A28" strokeWidth="1.4" strokeDasharray="4 4" />
+        <rect x="515" y="174" width="78" height="48" fill="#121A28" />
         <text x="529" y="193" fill="#FFD027" fontSize="11" fontWeight="900" letterSpacing="1.4">MATRIZ</text>
         <text x="529" y="210" fill="#ffffff" fontSize="12" fontWeight="800">PE</text>
       </g>
 
       <g transform="translate(70 468)">
         <rect width="236" height="62" fill="#ffffff" stroke="#d6e7ea" />
-        <circle cx="22" cy="22" r="7" fill="#FFD027" stroke="#001f26" strokeWidth="1.2" />
-        <text x="42" y="27" fill="#001f26" fontSize="13" fontWeight="800">Sede - Pernambuco</text>
-        <circle cx="22" cy="44" r="7" fill="#007A86" />
+        <circle cx="22" cy="22" r="7" fill="#FFD027" stroke="#121A28" strokeWidth="1.2" />
+        <text x="42" y="27" fill="#121A28" fontSize="13" fontWeight="800">Sede - Pernambuco</text>
+        <circle cx="22" cy="44" r="7" fill="#26344D" />
         <text x="42" y="49" fill="#4f6870" fontSize="13" fontWeight="700">Atuacao regional</text>
       </g>
     </svg>
@@ -210,10 +210,10 @@ const Sobre = () => {
             </motion.div>
 
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
-              <motion.p variants={fadeUp} className="text-[#007A86] text-xs font-bold tracking-[0.2em] uppercase mb-3">
+              <motion.p variants={fadeUp} className="text-[#26344D] text-xs font-bold tracking-[0.2em] uppercase mb-3">
                 Quem Somos
               </motion.p>
-              <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-bold text-[#001f26] leading-tight max-w-xl">
+              <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-bold text-[#121A28] leading-tight max-w-xl">
                 {aboutTitle}
               </motion.h2>
               <motion.div variants={fadeUp} className="w-16 h-1 bg-[#FFD027] rounded-full mt-5" />
@@ -225,17 +225,17 @@ const Sobre = () => {
                 {aboutCards.map((item) => (
                   <motion.div key={item.title} variants={fadeUp}
                     className="bg-white rounded-lg p-5 border border-gray-100 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
-                    <div className="w-10 h-10 bg-[#005563]/10 rounded-lg flex items-center justify-center mb-3">
-                      <item.Icon className="w-5 h-5 text-[#005563]" strokeWidth={2} />
+                    <div className="w-10 h-10 bg-[#26344D]/10 rounded-lg flex items-center justify-center mb-3">
+                      <item.Icon className="w-5 h-5 text-[#26344D]" strokeWidth={2} />
                     </div>
-                    <h3 className="text-sm font-bold text-[#001f26] mb-1">{item.title}</h3>
+                    <h3 className="text-sm font-bold text-[#121A28] mb-1">{item.title}</h3>
                     <p className="text-xs text-gray-500 leading-relaxed">{item.description}</p>
                   </motion.div>
                 ))}
               </motion.div>
 
               <motion.button variants={fadeUp} onClick={() => scrollTo('contato')}
-                className="group mt-8 inline-flex items-center gap-2 text-[#005563] font-bold text-sm transition-colors hover:text-[#007A86]">
+                className="group mt-8 inline-flex items-center gap-2 text-[#26344D] font-bold text-sm transition-colors hover:text-[#26344D]">
                 Fale com a nossa equipe
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </motion.button>
@@ -245,7 +245,7 @@ const Sobre = () => {
       </div>
 
       {/* ── Part 2: How we work ─────────────────────────────────────────── */}
-      <div className="py-20 md:py-24 bg-[#001f26]" id="fluxo">
+      <div className="py-20 md:py-24 bg-[#121A28]" id="fluxo">
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="mb-14">
             <p className="text-[#FFD027] text-xs font-bold tracking-[0.2em] uppercase mb-3">Como Trabalhamos</p>
@@ -263,16 +263,16 @@ const Sobre = () => {
                 return (
                   <motion.button key={step.id} variants={fadeUp} onClick={() => setActiveStep(step.id)}
                     className={`w-full flex items-center gap-4 px-5 py-4 rounded-xl text-left transition-all duration-300 ${
-                      isActive ? 'bg-[#FFD027] text-[#001f26]' : 'bg-white/5 text-white/70 hover:bg-white/10 hover:text-white'
+                      isActive ? 'bg-[#FFD027] text-[#121A28]' : 'bg-white/5 text-white/70 hover:bg-white/10 hover:text-white'
                     }`}>
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold ${isActive ? 'bg-[#001f26] text-[#FFD027]' : 'bg-white/10 text-white/50'}`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold ${isActive ? 'bg-[#121A28] text-[#FFD027]' : 'bg-white/10 text-white/50'}`}>
                       {step.id}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className={`font-bold text-sm ${isActive ? 'text-[#001f26]' : 'text-white'}`}>{step.label}</div>
-                      <div className={`text-xs truncate ${isActive ? 'text-[#001f26]/70' : 'text-white/40'}`}>{step.timeframe}</div>
+                      <div className={`font-bold text-sm ${isActive ? 'text-[#121A28]' : 'text-white'}`}>{step.label}</div>
+                      <div className={`text-xs truncate ${isActive ? 'text-[#121A28]/70' : 'text-white/40'}`}>{step.timeframe}</div>
                     </div>
-                    <step.Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-[#001f26]' : 'text-white/30'}`} />
+                    <step.Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-[#121A28]' : 'text-white/30'}`} />
                   </motion.button>
                 );
               })}

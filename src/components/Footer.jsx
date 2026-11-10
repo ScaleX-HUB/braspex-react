@@ -8,15 +8,14 @@ const Footer = () => {
   const footerContent = content.footer || {};
   
   return (
-    <footer className="bg-[#005563] text-white pt-12 pb-6">
+    <footer className="bg-[#26344D] text-white pt-12 pb-6">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="col-span-1 md:col-span-2 flex flex-col items-center md:items-start">
           <div className="flex justify-center md:justify-start w-full mb-4">
             <img 
               src={logoBraspexBranca}
               alt={footerContent.logoAlt || 'BRASPEX Logo'}
-              className="h-16 w-auto object-contain brightness-0 invert"
-              style={{ filter: 'brightness(0) invert(1)' }}
+              className="h-14 w-auto object-contain"
             />
           </div>
           <p className="text-gray-300 text-sm leading-relaxed max-w-md text-center md:text-left">

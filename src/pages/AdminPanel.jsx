@@ -189,7 +189,7 @@ const AdminPanel = () => {
                   onClick={() => handleMenuClick(menu.id)}
                   className={`flex w-full items-center gap-3 rounded-lg px-4 py-3 font-semibold transition-all ${
                     activeMenu === menu.id
-                      ? 'bg-[#005563] text-white shadow-lg'
+                      ? 'bg-[#26344D] text-white shadow-lg'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
@@ -206,7 +206,7 @@ const AdminPanel = () => {
                         onClick={() => setActiveSubsection(sub.id)}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                           activeSubsection === sub.id
-                            ? 'bg-[#005563]/10 text-[#005563]'
+                            ? 'bg-[#26344D]/10 text-[#26344D]'
                             : 'text-gray-600 hover:bg-gray-50'
                         }`}
                       >

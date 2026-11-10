@@ -24,7 +24,7 @@ const Header = () => {
   const isLightBackground = location.pathname !== '/';
   
   // Cores do texto baseado no estado
-  const textColorClass = (isScrolled || isLightBackground) ? 'text-[#005563] hover:text-[#FFD027]' : 'text-white hover:text-[#FFD027]';
+  const textColorClass = (isScrolled || isLightBackground) ? 'text-[#26344D] hover:text-[#FFD027]' : 'text-white hover:text-[#FFD027]';
   const bgClass = (isScrolled || isLightBackground) ? 'bg-white shadow-md' : 'bg-transparent';
 
   // Carregar categorias
@@ -193,7 +193,7 @@ const Header = () => {
                                       <div key={sub.id}>{sub.name}</div>
                                     ))}
                                     {category.subcategories.length > 3 && (
-                                      <div className="text-[#005563] font-medium">+{category.subcategories.length - 3} mais</div>
+                                      <div className="text-[#26344D] font-medium">+{category.subcategories.length - 3} mais</div>
                                     )}
                                   </div>
                                 )}
@@ -205,7 +205,7 @@ const Header = () => {
                         {/* Link "Ver Todos" */}
                         <Link
                           to="/produtos"
-                          className="group p-4 rounded-lg bg-[#005563] hover:bg-[#004450] transition-all flex items-center justify-center"
+                          className="group p-4 rounded-lg bg-[#26344D] hover:bg-[#1B2740] transition-all flex items-center justify-center"
                         >
                           <div className="text-center text-white">
                             <Package size={32} className="mx-auto mb-2" />
@@ -245,7 +245,7 @@ const Header = () => {
                 onClick={() => setIsCartOpen(true)}
                 className="relative p-2 rounded-full bg-[#FFD027] hover:bg-[#FFB800] transition-colors"
               >
-                <ShoppingCart size={24} className="text-[#005563]" />
+                <ShoppingCart size={24} className="text-[#26344D]" />
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                     {cartCount}
@@ -260,7 +260,7 @@ const Header = () => {
                 onClick={() => setIsCartOpen(true)}
                 className="relative p-2 rounded-full bg-[#FFD027] hover:bg-[#FFB800] transition-colors"
               >
-                <ShoppingCart size={20} className="text-[#005563]" />
+                <ShoppingCart size={20} className="text-[#26344D]" />
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[10px]">
                     {cartCount}
@@ -286,10 +286,10 @@ const Header = () => {
         {isMenuOpen && (
           <div className="lg:hidden bg-white border-t border-gray-200">
             <nav className="px-6 py-4 space-y-2">
-              <a href="/" onClick={closeMenu} className="block py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors">
+              <a href="/" onClick={closeMenu} className="block py-3 text-[#26344D] hover:text-[#FFD027] font-semibold transition-colors">
                 Home
               </a>
-              <button onClick={() => { scrollToSection('sobre'); }} className="block w-full text-left py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors">
+              <button onClick={() => { scrollToSection('sobre'); }} className="block w-full text-left py-3 text-[#26344D] hover:text-[#FFD027] font-semibold transition-colors">
                 Quem Somos
               </button>
               
@@ -297,7 +297,7 @@ const Header = () => {
               <div>
                 <button 
                   onClick={() => setIsProductsOpen(!isProductsOpen)}
-                  className="flex items-center justify-between w-full py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors"
+                  className="flex items-center justify-between w-full py-3 text-[#26344D] hover:text-[#FFD027] font-semibold transition-colors"
                 >
                   Produtos
                   <ChevronDown size={16} className={`transition-transform ${isProductsOpen ? 'rotate-180' : ''}`} />
@@ -310,7 +310,7 @@ const Header = () => {
                         key={category.id}
                         to={`/produtos?categoria=${category.id}`}
                         onClick={closeMenu}
-                        className="flex items-center gap-3 py-2 text-gray-700 hover:text-[#005563] transition-colors"
+                        className="flex items-center gap-3 py-2 text-gray-700 hover:text-[#26344D] transition-colors"
                       >
                         <span style={{ color: category.color }}>
                           {renderIcon(category.icon, 20, "bold")}
@@ -321,7 +321,7 @@ const Header = () => {
                     <Link
                       to="/produtos"
                       onClick={closeMenu}
-                      className="flex items-center gap-3 py-2 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors"
+                      className="flex items-center gap-3 py-2 text-[#26344D] hover:text-[#FFD027] font-semibold transition-colors"
                     >
                       <Package size={20} />
                       Ver Todos os Produtos
@@ -330,13 +330,13 @@ const Header = () => {
                 )}
               </div>
 
-              <button onClick={() => { scrollToSection('fluxo'); }} className="block w-full text-left py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors">
+              <button onClick={() => { scrollToSection('fluxo'); }} className="block w-full text-left py-3 text-[#26344D] hover:text-[#FFD027] font-semibold transition-colors">
                 Como Funciona
               </button>
-              <button onClick={() => { scrollToSection('contato'); }} className="block w-full text-left py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors">
+              <button onClick={() => { scrollToSection('contato'); }} className="block w-full text-left py-3 text-[#26344D] hover:text-[#FFD027] font-semibold transition-colors">
                 Contato
               </button>
-              <a href="/blog" onClick={closeMenu} className="block py-3 text-[#005563] hover:text-[#FFD027] font-semibold transition-colors">
+              <a href="/blog" onClick={closeMenu} className="block py-3 text-[#26344D] hover:text-[#FFD027] font-semibold transition-colors">
                 Blog
               </a>
             </nav>

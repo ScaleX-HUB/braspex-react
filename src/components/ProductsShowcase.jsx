@@ -26,6 +26,7 @@ const ProductsShowcase = () => {
 
   // Sincronizar quando produtos forem atualizados
   useProductsSync((updatedProducts) => {
+    if (!Array.isArray(updatedProducts)) return;
     const activeProducts = updatedProducts.filter(p => p.active !== false);
     const featured = activeProducts.slice(0, 3);
     setFeaturedProducts(featured);
@@ -65,7 +66,7 @@ const ProductsShowcase = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <p className="text-[#005563] font-semibold text-lg mb-2 uppercase tracking-wide">
+          <p className="text-[#26344D] font-semibold text-lg mb-2 uppercase tracking-wide">
             {showcaseContent?.kicker || 'Produtos em Destaque'}
           </p>
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
@@ -93,7 +94,7 @@ const ProductsShowcase = () => {
               className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-200"
             >
               {/* Product Image */}
-              <div className="relative h-56 bg-gradient-to-br from-[#005563]/5 to-[#005563]/10 overflow-hidden">
+              <div className="relative h-56 bg-gradient-to-br from-[#26344D]/5 to-[#26344D]/10 overflow-hidden">
                 <img
                   src={product.image}
                   alt={product.name}
@@ -106,7 +107,7 @@ const ProductsShowcase = () => {
 
               {/* Product Info */}
               <div className="p-6 space-y-4">
-                <h3 className="text-2xl font-bold text-slate-900 group-hover:text-[#005563] transition-colors">
+                <h3 className="text-2xl font-bold text-slate-900 group-hover:text-[#26344D] transition-colors">
                   {product.name}
                 </h3>
                 <p className="text-slate-600 leading-relaxed line-clamp-2">
@@ -116,17 +117,17 @@ const ProductsShowcase = () => {
                 {/* Features/Specs */}
                 <div className="flex flex-wrap gap-2">
                   {product.specifications?.material && (
-                    <span className="px-3 py-1 bg-[#005563]/5 text-[#005563] text-xs font-medium rounded-full">
+                    <span className="px-3 py-1 bg-[#26344D]/5 text-[#26344D] text-xs font-medium rounded-full">
                       {product.specifications.material}
                     </span>
                   )}
                   {product.specifications?.acabamento && (
-                    <span className="px-3 py-1 bg-[#005563]/5 text-[#005563] text-xs font-medium rounded-full">
+                    <span className="px-3 py-1 bg-[#26344D]/5 text-[#26344D] text-xs font-medium rounded-full">
                       {product.specifications.acabamento}
                     </span>
                   )}
                   {product.specifications?.capacity && (
-                    <span className="px-3 py-1 bg-[#FFD027]/20 text-[#005563] text-xs font-medium rounded-full">
+                    <span className="px-3 py-1 bg-[#FFD027]/20 text-[#26344D] text-xs font-medium rounded-full">
                       {product.specifications.capacity}
                     </span>
                   )}
@@ -141,7 +142,7 @@ const ProductsShowcase = () => {
                 <div className="flex gap-3 pt-2">
                   <Link
                     to={`/produtos/${product.id}`}
-                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#005563] text-white font-semibold rounded-lg hover:bg-[#004450] transition-all shadow-md hover:shadow-lg"
+                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#26344D] text-white font-semibold rounded-lg hover:bg-[#1B2740] transition-all shadow-md hover:shadow-lg"
                   >
                     {showcaseContent?.detailsButtonText || 'Ver Detalhes'}
                     <ArrowRight className="w-5 h-5" />
@@ -155,7 +156,7 @@ const ProductsShowcase = () => {
                     className={`px-4 py-3 rounded-lg font-semibold transition-all shadow-md ${
                       isInCart(product.id)
                         ? 'bg-green-500 text-white cursor-not-allowed'
-                        : 'bg-[#FFD027] text-[#005563] hover:bg-[#FFB800] hover:shadow-lg'
+                        : 'bg-[#FFD027] text-[#26344D] hover:bg-[#FFB800] hover:shadow-lg'
                     }`}
                   >
                     <ShoppingCart size={20} />
@@ -176,7 +177,7 @@ const ProductsShowcase = () => {
         >
           <Link
             to="/produtos"
-            className="inline-flex items-center gap-3 bg-[#005563] text-white font-bold text-lg px-10 py-4 rounded-xl shadow-lg hover:bg-[#003d47] hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+            className="inline-flex items-center gap-3 bg-[#26344D] text-white font-bold text-lg px-10 py-4 rounded-xl shadow-lg hover:bg-[#1B2740] hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
           >
             <Package size={24} />
             {showcaseContent?.viewAllButtonText || 'Ver Todos os Produtos'}

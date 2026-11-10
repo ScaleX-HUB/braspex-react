@@ -99,7 +99,7 @@ export const productCategories = {
     id: 'outros',
     name: 'OUTROS',
     displayName: 'Outros Sistemas',
-    color: '#005563', // Cor principal do site
+    color: '#26344D', // Cor principal do site
     subcategories: [
       {
         id: 'outros-rayper',

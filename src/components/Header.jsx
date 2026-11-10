@@ -141,7 +141,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 border-b-2 border-[#FFD027] bg-[#007A86] text-white shadow-[0_10px_28px_rgba(0,31,38,0.22)]">
+      <header className="fixed inset-x-0 top-0 z-50 border-b-2 border-[#FFD027] bg-[#26344D] text-white shadow-[0_10px_28px_rgba(18,26,40,0.22)]">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link to="/" onClick={closeMenu} className="flex shrink-0 items-center" aria-label="Braspex">
             <img
@@ -159,7 +159,7 @@ const Header = () => {
             >
               <button
                 onClick={() => setIsProductsOpen((open) => !open)}
-                className="flex h-full items-center gap-2 px-3 text-sm font-bold uppercase tracking-normal transition-colors hover:bg-[#00626d]"
+                className="flex h-full items-center gap-2 px-3 text-sm font-bold uppercase tracking-normal transition-colors hover:bg-[#32425C]"
                 aria-expanded={isProductsOpen}
               >
                 {kitsMenuLabel}
@@ -178,7 +178,7 @@ const Header = () => {
                           <button
                             onClick={() => (isKitCategory(category) ? openKitsGuide() : selectCategory(category.id))}
                             className="mb-8 text-left font-display text-xl font-bold uppercase leading-none transition-opacity hover:opacity-75"
-                            style={{ color: category.color || '#005563' }}
+                            style={{ color: category.color || '#26344D' }}
                           >
                             {category.displayName}
                           </button>
@@ -189,16 +189,16 @@ const Header = () => {
                                 <button
                                   key={sub.id}
                                   onClick={() => selectCategory(sub.id)}
-                                  className="flex w-full items-center gap-2 text-left text-sm font-medium text-slate-600 transition-colors hover:text-[#007A86]"
+                                  className="flex w-full items-center gap-2 text-left text-sm font-medium text-slate-600 transition-colors hover:text-[#26344D]"
                                 >
-                                  <span className="text-base leading-none text-[#007A86]">›</span>
+                                  <span className="text-base leading-none text-[#26344D]">›</span>
                                   {sub.name}
                                 </button>
                               ))}
                               {category.subcategories.length > 4 && (
                                 <button
                                   onClick={() => selectCategory(category.id)}
-                                  className="pl-5 text-sm font-bold text-[#005563] transition-colors hover:text-[#007A86]"
+                                  className="pl-5 text-sm font-bold text-[#26344D] transition-colors hover:text-[#26344D]"
                                 >
                                   {moreLabel(category.subcategories.length - 4)}
                                 </button>
@@ -207,7 +207,7 @@ const Header = () => {
                           ) : (
                             <button
                               onClick={() => selectCategory(category.id)}
-                              className="text-sm font-medium text-slate-600 transition-colors hover:text-[#007A86]"
+                              className="text-sm font-medium text-slate-600 transition-colors hover:text-[#26344D]"
                             >
                               Ver kits
                             </button>
@@ -226,7 +226,7 @@ const Header = () => {
                       <Link
                         to="/produtos#aplicacao-kits"
                         onClick={closeMenu}
-                        className="bg-slate-500 px-8 py-3 text-sm font-bold text-white transition-colors hover:bg-[#007A86]"
+                        className="bg-slate-500 px-8 py-3 text-sm font-bold text-white transition-colors hover:bg-[#26344D]"
                       >
                         Clique e conheça os kits Braspex
                       </Link>
@@ -242,7 +242,7 @@ const Header = () => {
                   key={item.label}
                   to={item.to}
                   onClick={closeMenu}
-                  className="flex h-full items-center px-3 text-sm font-semibold uppercase tracking-normal transition-colors hover:bg-[#00626d]"
+                  className="flex h-full items-center px-3 text-sm font-semibold uppercase tracking-normal transition-colors hover:bg-[#32425C]"
                 >
                   {item.label}
                 </Link>
@@ -250,7 +250,7 @@ const Header = () => {
                 <button
                   key={item.label}
                   onClick={item.onClick}
-                  className="flex h-full items-center px-3 text-sm font-semibold uppercase tracking-normal transition-colors hover:bg-[#00626d]"
+                  className="flex h-full items-center px-3 text-sm font-semibold uppercase tracking-normal transition-colors hover:bg-[#32425C]"
                 >
                   {item.label}
                 </button>
@@ -294,7 +294,7 @@ const Header = () => {
                 <div className="mb-4 border-b border-slate-200 pb-4">
                   <button
                     onClick={() => setIsProductsOpen((open) => !open)}
-                    className="flex w-full items-center justify-between px-3 py-3 text-left text-sm font-bold uppercase text-[#007A86] transition-colors hover:bg-slate-50"
+                    className="flex w-full items-center justify-between px-3 py-3 text-left text-sm font-bold uppercase text-[#26344D] transition-colors hover:bg-slate-50"
                     aria-expanded={isProductsOpen}
                   >
                     {kitsMenuLabel}
@@ -309,7 +309,7 @@ const Header = () => {
                         <button
                           key={category.id}
                           onClick={() => (isKitCategory(category) ? openKitsGuide() : selectCategory(category.id))}
-                          className="block w-full px-3 py-2 text-left text-sm font-semibold uppercase text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#007A86]"
+                          className="block w-full px-3 py-2 text-left text-sm font-semibold uppercase text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#26344D]"
                         >
                           {category.displayName}
                         </button>
@@ -317,7 +317,7 @@ const Header = () => {
                       <Link
                         to="/produtos"
                         onClick={closeMenu}
-                        className="block px-3 py-2 text-sm font-bold uppercase text-[#005563] transition-colors hover:bg-slate-50"
+                        className="block px-3 py-2 text-sm font-bold uppercase text-[#26344D] transition-colors hover:bg-slate-50"
                       >
                         {mobileViewAllKitsLabel}
                       </Link>
@@ -334,7 +334,7 @@ const Header = () => {
                         key={item.label}
                         to={item.to}
                         onClick={closeMenu}
-                        className="block px-3 py-3 text-sm font-semibold uppercase text-[#005563] transition-colors hover:bg-slate-50"
+                        className="block px-3 py-3 text-sm font-semibold uppercase text-[#26344D] transition-colors hover:bg-slate-50"
                       >
                         {item.label}
                       </Link>
@@ -342,7 +342,7 @@ const Header = () => {
                       <button
                         key={item.label}
                         onClick={item.onClick}
-                        className="block w-full px-3 py-3 text-left text-sm font-semibold uppercase text-[#005563] transition-colors hover:bg-slate-50"
+                        className="block w-full px-3 py-3 text-left text-sm font-semibold uppercase text-[#26344D] transition-colors hover:bg-slate-50"
                       >
                         {item.label}
                       </button>
@@ -353,7 +353,7 @@ const Header = () => {
                       closeMenu();
                       setIsCartOpen(true);
                     }}
-                    className="mt-3 flex w-full items-center gap-2 bg-[#FFD027] px-3 py-3 text-left text-sm font-bold uppercase text-[#005563] transition-colors hover:bg-[#FFB800]"
+                    className="mt-3 flex w-full items-center gap-2 bg-[#FFD027] px-3 py-3 text-left text-sm font-bold uppercase text-[#26344D] transition-colors hover:bg-[#FFB800]"
                   >
                     <ShoppingCart className="h-5 w-5" strokeWidth={2.4} aria-hidden="true" />
                     {cartCount > 0 ? `${quoteLabel} (${cartCount})` : quoteLabel}

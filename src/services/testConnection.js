@@ -120,7 +120,7 @@ export const quickTest = async () => {
 };
 
 // Testar autenticação
-export const testAuth = async (username = 'admin', password = 'Braspex2025!') => {
+export const testAuth = async (username, password) => {
   try {
     console.log(`🔐 Testando login com usuário "${username}"...`);
     const result = await usersAPI.login(username, password);
